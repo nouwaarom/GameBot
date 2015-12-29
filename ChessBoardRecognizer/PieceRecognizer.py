@@ -26,7 +26,7 @@ while(True):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # Mask
-    mask = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    #mask = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # Section Edge Detection
     #gray = cv2.Canny(gray, 50, 250, apertureSize=3, L2gradient=True)
