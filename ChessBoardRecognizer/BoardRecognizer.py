@@ -1,152 +1,114 @@
 #!/usr/bin/env python
 
-from __future__ import division
-import sys
 import numpy as np
 import cv2
 
-def line(p1, p2):
-    A = (p1[1] - p2[1])
-    B = (p2[0] - p1[0])
-    C = (p1[0]*p2[1] - p2[0]*p1[1])
-    return A, B, -C
-
-def intersection (L1, L2):
-    D  = L1[0] * L2[1] - L1[1] * L2[0]
-    Dx = L1[2] * L2[1] - L1[1] * L2[2]
-    Dy = L1[0] * L2[2] - L1[2] * L2[0]
-    if D != 0:
-        x = Dx / D
-        y = Dy / D
-        return x,y
-    else:
-        return False
-
-def parallel (L1, L2, p1):
-    A = (L1[0]+L2[0]) / 2
-    B = (L1[1]+L2[1]) / 2
-    C = A*p1[1] + B*p1[2]
-    return A, B, C
-
-def divideAndConquer(points):
+def findPiecesOnBoard(image, points):
 
     points1 = np.float32(points)
-    points2 = np.float32([[0,0],[500,0],[0,500],[500,500]])
+    points2 = np.float32([[0,0],[400,0],[0,400],[400,400]])
 
     M = cv2.getPerspectiveTransform(points1,points2)
 
-    destination = cv2.warpPerspective(frame, M, (500,500))
+    board = cv2.warpPerspective(image, M, (400,400))
 
-    # Normalized
-    cv2.namedWindow('norm', cv2.WINDOW_AUTOSIZE)
-    cv2.imshow('norm', destination)
+    #board = cv2.adaptiveThreshold(board, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+    #board = cv2.Canny(board, 90, 270)
 
-    #diagonal lines
-    #cv2.line(frame, points[0], points[2], (255,0,0), 1)
-    #cv2.line(frame, points[1], points[3], (255,0,0), 1)
+    # Split the board into pieces
+    for i in range(8):
+        row = board[(i*50):((i+1)*50)]
 
-    # Calculate the point of intersection
-    #middle = intersection(line(points[0], points[2]), line(points[1], points[3]))
+        for j in range(8):
+            tile = row[0:50,(j*50):((j+1)*50)]
 
-    #if middle is not None:
-    #    cv2.circle(frame, (int(middle[0]), int(middle[1])), 5, (0,0,200), -1)
-
-    #horizontal lines
-    #cv2.line(frame, points[0], points[3], (0,0,255), 2)
-    #cv2.line(frame, points[1], points[2], (0,0,255), 2)
-
-    #vertical lines
-    #cv2.line(frame, points[0], points[1], (0,0,255), 2)
-    #cv2.line(frame, points[2], points[3], (0,0,255), 2)
-
-#initialize cap
-cap = cv2.VideoCapture(1)
-
-cap.set(cv2.cv.CV_CAP_PROP_FPS, 2)
-cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 2000)
-cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 2000)
-
-print "Frame Size: ", cap.get(3), "x", cap.get(4)
+            mean = cv2.mean(tile)
+            if mean[0] < 100:
+                print "Black piece on: {},{}".format(chr(i+ord('a')),j+1)
+                #cv2.putText(frame,'Black',(i[0],i[1]), font, 2, (0,0, 0),2)
+            #else:
+            #    print "White piece on: {},{}".format(chr(i+ord('a')),j)
+                #cv2.putText(frame,'White',(i[0],i[1]), font, 2, (0,0, 0),2)
 
 
-while(True):
-    #capture frame by frame
-    _, frame = cap.read()
+    cv2.namedWindow('board', cv2.WINDOW_AUTOSIZE)
+    cv2.imshow('board', board)
 
-    # Smoothing
-    frame = cv2.bilateralFilter(frame, 12, 50, 50)
+def initCapture(n):
+    #initialize cap
+    cap = cv2.VideoCapture(n)
 
-    # Color space conversions
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    hsv  = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    cap.set(cv2.cv.CV_CAP_PROP_FPS, 1)
+    cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 2000)
+    cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 2000)
 
-    # Color filtering
-    lower_green = np.array([50, 70, 70])
-    upper_green = np.array([75, 255, 255])
+    print "Using Camera{}".format(n)
+    print "Frame Size: ", cap.get(3), "x", cap.get(4)
 
-    mask = cv2.inRange(hsv, lower_green, upper_green)
+    return cap
 
-    #mask = cv2.dilate(mask, np.ones((5,5), np.uint8), iterations = 4)
-    #mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((5,5), np.uint8));
-
-    # Section Edge Detection
-    #mask = cv2.Canny(mask, 50, 250, apertureSize=3, L2gradient=True)
-
-    # Section Line Detection
-    #minLineLength = 100
-    #maxLineGap = 30
-    #lines = cv2.HoughLinesP(mask,1,np.pi/180,100,minLineLength,maxLineGap)
-    #for x1,y1,x2,y2 in lines[0]:
-    #    cv2.line(frame,(x1,y1),(x2,y2),(0,255,0),2)
-
-    # Section Contour Detection
-    # Waterfall threshold
-    #ret, thresh = cv2.threshold(mask, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
-    # Adaptive threshold
-    #thresh = cv2.adaptiveThreshold(mask, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 13, 2)
-
-    thresh = mask.copy()
-    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+def endProgram(cap):
+    #when everyting is done release the frame
+    cap.release()
+    cv2.destroyAllWindows()
 
 
-    points = []
+def main():
+    cap = initCapture(1)
 
-    # Contour filter
-    for contour in contours:
-        area = cv2.contourArea(contour)
-        if area > 500:
-            M = cv2.moments(contour)
-            cx = int(M['m10']/M['m00'])
-            cy = int(M['m01']/M['m00'])
+    #videocapture loop
+    while(True):
+        #capture frame by frame
+        _, frame = cap.read()
 
-            points.append((cx, cy))
+        # Smoothing
+        frame = cv2.bilateralFilter(frame, 12, 50, 50)
 
-    if len(points) == 4:
-        divideAndConquer(points)
+        # Color space conversions
+        hsv  = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        # Color filtering
+        # 50 50 50
+        lower_green = np.array([50, 30, 20])
+        upper_green = np.array([85, 255, 255])
+
+        mask = cv2.inRange(hsv, lower_green, upper_green)
+
+        #copy the mask because findContours destroys the image
+        thresh = mask.copy()
+        contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+        #Board vertexes
+        points = []
+
+        # Contour filter
+        for contour in contours:
+            area = cv2.contourArea(contour)
+            if area > 500:
+                M = cv2.moments(contour)
+                cx = int(M['m10']/M['m00'])
+                cy = int(M['m01']/M['m00'])
+
+                points.append((cx, cy))
+
+        if len(points) == 4:
+            gray = frame[:,:,2]
+            findPiecesOnBoard(gray, points)
 
 
-    # Section Corner Detection
-    #corners = cv2.goodFeaturesToTrack(mask, 4, 0.05, 10)
-    #corners = np.int0(corners)
-    #for i in corners:
-    #    x, y = i.ravel()
-    #    cv2.circle(frame, (x,y), 3, 255, -1)
+        #display the resulting frame
+        cv2.namedWindow('frame', cv2.WINDOW_AUTOSIZE)
+        cv2.imshow('frame', frame)
 
-    #display the resulting frame
-    cv2.namedWindow('frame', cv2.WINDOW_AUTOSIZE)
-    cv2.imshow('frame', frame)
 
-    #and the gray
-    #cv2.namedWindow('gray', cv2.WINDOW_AUTOSIZE)
-    #cv2.imshow('gray', gray)
+        #and the mask
+        cv2.namedWindow('mask', cv2.WINDOW_AUTOSIZE)
+        cv2.imshow('mask', mask)
 
-    #and hsv
-    cv2.namedWindow('mask', cv2.WINDOW_AUTOSIZE)
-    cv2.imshow('mask', mask)
+        if cv2.waitKey(1) == ord('q'):
+            break;
 
-    if cv2.waitKey(1) == ord('q'):
-        break;
+    endProgram(cap)
 
-#when everyting is done release the frame
-cap.release()
-cv2.destroyAllWindows()
+if __name__ == "__main__":
+    main()
