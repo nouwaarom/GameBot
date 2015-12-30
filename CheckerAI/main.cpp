@@ -4,12 +4,13 @@
 #include "Validator.h"
 #include "AIPlayer.h"
 #include "HumanPlayer.h"
-#include "GUI.h"
+
+namespace std;
 
 //the main function manages the game
 int main(int argc, char **argv)
 {
-	std::cout << "Welcome to the chess program";
+	cout << "Welcome to the chess program";
 
 	//create a board
 	Board board;
@@ -22,7 +23,7 @@ int main(int argc, char **argv)
 	HumanPlayer human;
 
 	//decide which player is first
-	std::cout << "Who do you want to go first?";
+	cout << "Who do you want to go first?";
 
 	//now let the players make their move
 		//validate the move
