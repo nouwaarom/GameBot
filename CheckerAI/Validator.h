@@ -2,11 +2,12 @@
 #define VALIDATOR_H
 
 /*
-	A class that validates a move according to the chess rules
+ * Class that validates a move according to the chess rules
 */
 class Validator
 {
 private:
+    int getForcedMoves(int player, char board[10][10]);
 protected:
 public:
 	Validator();

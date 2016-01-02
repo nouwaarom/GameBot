@@ -8,6 +8,7 @@ class HumanPlayer : public Player
 private:
 protected:
 public:
+    Move* getMove(Board board);
 };
 
 #endif

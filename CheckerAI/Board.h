@@ -1,29 +1,34 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include "Validator.h"
-
-//create an enum for all the chess pieces
-
+#include <string>
 
 /*
- A general class that handles the data for the board
+ Class that handles the data for the board
  init: creates a board with standard setup
- or a saved setup: if specified
+ or a saved setup if specified
 */
 class Board
 {
 private:
-	char board[8][8];
-protected:
-	int movePieceBoard(int oldx, int oldy, int newx, int newy);
-	char getPieceAtLocation(int x, int y);
-	int *getPieceLocation(char piece);
+    //Board is actually 10 by 10 but half of the tiles are always empty
+	std::string board;
 
-	//for AI algorithms 
-	int *getBoard(void);
+protected:
+	int removePiece(int location);
+
+    int setPiece(int location, char piece);
+
+	char getPieceAtLocation(int location);
+
 public:
+    static const char WHITE = 'w';
+    static const char WHITE_CROWN = 'W';
+    static const char BLACK = 'b';
+    static const char BLACK_CROWN = 'B';
+
 	Board();
+    Board(std::string representation);
 };
 
 #endif

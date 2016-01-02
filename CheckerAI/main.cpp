@@ -1,31 +1,99 @@
+#include <vector>
+#include <string>
 #include <iostream>
+#include <boost/program_options.hpp>
 
 #include "Board.h"
 #include "Validator.h"
 #include "AIPlayer.h"
 #include "HumanPlayer.h"
 
-namespace std;
+using namespace std;
 
-//the main function manages the game
-int main(int argc, char **argv)
+namespace po = boost::program_options;
+
+/*
+ * Input AI difficulty
+ * Loop:
+ *  Input Board State
+ *  Output Move
+ */
+int main(int argc, char *argv[])
 {
-	cout << "Welcome to the chess program";
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help", "get help message")
+        ("start", po::value<int>(), "player to start: AI(1), Player(2)")
+        ("difficulty", po::value<int>(), "difficultiy of the AI (0-99)")
+        ("board", po::value< string >(), "board representation");
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    std::cout << "Hello, I am you opponent" << "\n";
+
+    if (vm.count("help")) {
+        std::cout << desc << "\n";
+        return 1;
+    }
+
+    if (vm.count("start")) {
+        std::cout << "Someone starts" << "\n";
+    }
+    else {
+        std::cout << "The game ended because nobody started." << "\n";
+        return 1;
+    }
+
+    if (vm.count("difficulty")) {
+        std::cout << "I will beat you" << "\n";
+    }
+    else {
+        std::cout << "I forgot how to play, sorry." << "\n";
+        return 1;
+    }
+
+    if (vm.count("board")) {
+        cout << "I can see the board now" << "\n";
+    }
+    else {
+        std::cout << "Without a board I cant play" << "\n";
+        return 1;
+    }
 
 	//create a board
-	Board board;
-
-	//create a validator
-	Validator validator;
+	Board* board = new Board(vm["board"].as< string >());
 
 	//create two players
-	AIPlayer ai;
-	HumanPlayer human;
+	AIPlayer* ai = new AIPlayer(board);
+	HumanPlayer* human = new HumanPlayer();
 
-	//decide which player is first
-	cout << "Who do you want to go first?";
+    Player *whitePlayer, *blackPlayer;
+
+    if (vm["start"].as<int>() == 1) {
+        *whitePlayer = &ai;
+        *blackPlayer = &human;
+    }
+    else {
+        *whitePlayer = &human;
+        *blackPlayer = &ai;
+    }
 
 	//now let the players make their move
-		//validate the move
+    /*while (no winner)
+        move = whitePlayer->getMove()
+        if move->isWinning(board)
+            break;
+
+        blackPlayer->opponentMove(move)
+        move = blackPlayer->getMove()
+        if move->isWinning(board)
+            break;
+
+        whitePlayer->opponentMove(move)
+    */
+
+    return 1;
 
 }
