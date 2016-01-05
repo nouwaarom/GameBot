@@ -2,17 +2,19 @@
 
 #include <iostream>
 
-using namespace std;
-
-Move* HumanPlayer::getMove(Board board)
+Move* HumanPlayer::getMove()
 {
-    int oldPosition, newPosition;
+    std::cout << "{\"request\": \"player-move\"}";
 
-    cout << "Player: ";
-    cin >> oldPosition;
-    cin >> newPosition;
+    std::string json;
+    std::cin >> json;
 
-    Move* move = new Move(oldPosition, newPosition);
+    return new Move(json);
+}
 
-    return move;
+void HumanPlayer::setOpponentMove(Move* move)
+{
+    std::cout << move->getJson();
+
+    return;
 }

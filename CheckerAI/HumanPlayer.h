@@ -8,7 +8,8 @@ class HumanPlayer : public Player
 private:
 protected:
 public:
-    Move* getMove(Board board);
+    Move* getMove();
+    void setOpponentMove(Move* move);
 };
 
 #endif

@@ -4,7 +4,7 @@
 #include <boost/program_options.hpp>
 
 #include "Board.h"
-#include "Validator.h"
+#include "Move.h"
 #include "AIPlayer.h"
 #include "HumanPlayer.h"
 
@@ -72,27 +72,34 @@ int main(int argc, char *argv[])
     Player *whitePlayer, *blackPlayer;
 
     if (vm["start"].as<int>() == 1) {
-        *whitePlayer = &ai;
-        *blackPlayer = &human;
+        whitePlayer = ai;
+        blackPlayer = human;
     }
     else {
-        *whitePlayer = &human;
-        *blackPlayer = &ai;
+        whitePlayer = human;
+        blackPlayer = ai;
     }
 
-	//now let the players make their move
-    /*while (no winner)
-        move = whitePlayer->getMove()
-        if move->isWinning(board)
+	//let the players make their moves
+    Move* move;
+    while (true)
+    {
+        move = whitePlayer->getMove();
+        board->doMove(move);
+        if (board->isEnd())
             break;
 
-        blackPlayer->opponentMove(move)
-        move = blackPlayer->getMove()
-        if move->isWinning(board)
+        blackPlayer->setOpponentMove(move);
+        move = blackPlayer->getMove();
+        board->doMove(move);
+        if (board->isEnd())
             break;
 
-        whitePlayer->opponentMove(move)
-    */
+        whitePlayer->setOpponentMove(move);
+    }
+
+    std::cout << "Goodbye" << "\n";
+
 
     return 1;
 

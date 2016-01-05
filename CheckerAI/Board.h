@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include <string>
+#include "Move.h"
 
 /*
  Class that handles the data for the board
@@ -15,11 +16,6 @@ private:
 	std::string board;
 
 protected:
-	int removePiece(int location);
-
-    int setPiece(int location, char piece);
-
-	char getPieceAtLocation(int location);
 
 public:
     static const char WHITE = 'w';
@@ -27,8 +23,12 @@ public:
     static const char BLACK = 'b';
     static const char BLACK_CROWN = 'B';
 
-	Board();
     Board(std::string representation);
+
+    std::string getBoardRepresentation();
+
+    virtual void doMove(Move* move);
+    bool isEnd();
 };
 
 #endif

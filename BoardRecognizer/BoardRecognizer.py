@@ -69,7 +69,7 @@ def main():
 
         # Color filtering
         # 50 50 50
-        lower_green = np.array([50, 30, 20])
+        lower_green = np.array([30, 30, 20])
         upper_green = np.array([85, 255, 255])
 
         mask = cv2.inRange(hsv, lower_green, upper_green)

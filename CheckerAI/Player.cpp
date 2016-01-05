@@ -1,6 +1,11 @@
 #include "Player.h"
 
-Move* Player::getMove(Board board)
+Move* Player::getMove()
 {
-    return new Move();
+    return 0;
+}
+
+void Player::setOpponentMove(Move* move)
+{
+    return;
 }
