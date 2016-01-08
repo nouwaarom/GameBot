@@ -2,6 +2,7 @@
 
 import sys
 import cv2
+import json
 import random
 import subprocess
 
@@ -50,11 +51,10 @@ def main():
                           stderr = subprocess.PIPE,
                           )
 
-    ai_output, ai_error = ai.communicate()
+    ai_output, ai_error = ai.communicate('{ "response": {"move": {{"newPos": 1},{"newType":c}}}}')
 
     print ai_output
     print ai_error
-
 
 if __name__ == "__main__":
     main()

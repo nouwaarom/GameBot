@@ -2,6 +2,7 @@
 #define AIBOARD_H
 
 #include <string>
+#include <vector>
 #include "Board.h"
 
 class AIBoard : public Board
@@ -11,12 +12,13 @@ protected:
 public:
     AIBoard(std::string representation);
 
-    Move* getMoves();
+    std::vector<Move> getForcedMoves();
+    std::vector<Move> getMoves();
 
-    void doMove(Move* move);
-    void undoMove(Move* move);
+    void doMove(Move move);
+    void undoMove(Move move);
 
-    int getUtility();
+    int getScore();
 };
 
 #endif

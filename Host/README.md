@@ -5,6 +5,7 @@ It also has the role of arbitrator
 
 ## Specifictation of comunication between Host and AI
 * Host initialzes AI with a difficulty(0-99), start(1=AI/2=PLAYER), board(string boardRepresentation)
+* Host and AI communicate using JSON
 
 Loop:
     * Host sends PlayerMove (oldLocation to newLocation)
