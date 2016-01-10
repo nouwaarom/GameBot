@@ -6,6 +6,10 @@ import json
 import random
 import subprocess
 
+from board      import Board
+from move       import Move
+from arbitrator import Arbitrator
+
 AI_PROGRAM_PATH = "../CheckerAI/chess"
 
 def main():
@@ -25,24 +29,20 @@ def main():
 
     difficulty = random.randint(0,99)
 
-
     print "Starting Board Recognizer ..."
     # TODO start recognition program
+    # TODO check if pieces are on the right tiles and move them if neccessary
 
     print "Starting Arm Controller ..."
     # TODO start arm control program
 
     print "Setting up board .."
     #Setup board
-    board = ["x"] * 50
-    for i in range(20):
-        board[i] = 'w'
-        board[i+30] = 'b'
-
-    # TODO check if pieces are on the right tiles and move them if neccessary
+    board = Board()
+    board.setStartBoard()
 
     print "Starting AI ..."
-    ai_command = [AI_PROGRAM_PATH, "--start", str(userStarts), "--difficulty", str(difficulty), "--board", "".join(board)]
+    ai_command = [AI_PROGRAM_PATH, "--start", str(userStarts), "--difficulty", str(difficulty), "--board", "".join(board.getBoardString())]
 
     ai = subprocess.Popen(ai_command,
                           shell  = False,
@@ -55,6 +55,12 @@ def main():
 
     print ai_output
     print ai_error
+
+    while(1):
+        board.showBoard()
+
+        if cv2.waitKey(1) == ord('q'):
+            return
 
 if __name__ == "__main__":
     main()
