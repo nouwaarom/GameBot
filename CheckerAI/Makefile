@@ -1,8 +1,8 @@
 CC=g++
 CFLAGS=-Wall -g -I /usr/include/boost -std=c++11 -c
-LDFLAGS=-L /usr/lib/boost/lib
-LIBRARIES=-lboost_program_options
-SOURCES=main.cpp Board.cpp Move.cpp Player.cpp AIBoard.cpp AIPlayer.cpp HumanPlayer.cpp
+LDFLAGS=
+LIBRARIES=-lboost_program_options -lzmq
+SOURCES=main.cpp Board.cpp Move.cpp Player.cpp AIBoard.cpp AIPlayer.cpp HostConnector.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=chess
 

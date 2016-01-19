@@ -48,43 +48,61 @@ class Board:
     def loadBoard(self, name):
         print "Loading board from file"
 
-    def getBoardString(self):
-        return self.board
+    def getPiece(self, location):
+        return self.board[location]
+
+    #return a copy of the board representation
+    def getBoardRepresentation(self):
+        return list(self.board)
 
     def doMove(self, move):
-        print "Doing move"
+        newPiece = move.getNewPiece()
+        removedPieces = move.getRemovedPieces()
 
-    def getMoves(colors):
+        if self.board[newPiece[0]] == 'x':
+            self.board[newPiece[0]] = newPiece[1]
+
+        for removedPiece in removedPieces:
+            if self.board[removedPiece[0]] == removedPiece[1]:
+                self.board[removedPiece[0]] = 'x'
+
+    def getMoves(self, colors):
         moves = []
+        board = self.board
 
-        for key, tile in self.board:
+        for key, tile in enumerate(board):
             if tile in colors:
                 #check down
                 if key > 5:
                     #check left
                     if (key % 5) != 0:
                         if board[key-6] == 'x':
-                            moves.append(Move((key-6, tile), (key, tile)))
+                            moves.append(Move((key-6, tile), [(key, tile)]))
 
                     #check right
                     if ((key+1) % 5) != 0:
                         if board[key-4] == 'x':
-                            moves.append(Move((key-4, tile), (key, tile)))
+                            moves.append(Move((key-4, tile), [(key, tile)]))
 
                 #check up
                 if key < 45:
                     #check left
                     if (key % 5) != 0:
                         if board[key+4] == 'x':
-                            moves.append(Move((key+4, tile), (key, tile)))
+                            moves.append(Move((key+4, tile), [(key, tile)]))
 
                     #check right
                     if ((key+1) % 5) != 0:
                         if board[key+6] == 'x':
-                            moves.append(Move((key+6, tile), (key, tile)))
+                            moves.append(Move((key+6, tile), [(key, tile)]))
 
-    def getForcedMoves(colors, enemy):
-        for key, tile in self.board:
+        return moves
+
+    def getForcedMoves(self, colors, enemy):
+        moves = []
+        board = self.board
+
+        for key, tile in enumerate(self.board):
             if tile in colors:
                 #check down
                 if key > 10:
@@ -113,3 +131,5 @@ class Board:
                         if board[key+6] in enemy:
                             if board[key+11] == 'x':
                                 moves.append(Move((key+11, tile), [(key, tile), (key+6, board[key+6])]))
+
+        return move

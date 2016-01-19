@@ -1,6 +1,6 @@
 #include "AIPlayer.h"
 
-AIPlayer::AIPlayer(Board* startBoard)
+AIPlayer::AIPlayer(Board* startBoard, std::vector<char> pieces, std::vector<char> enemyPieces)
 {
     board = new AIBoard(startBoard->getBoardRepresentation());
 }

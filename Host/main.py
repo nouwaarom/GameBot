@@ -1,16 +1,50 @@
 #!/usr/bin/env python
 
-import sys
 import cv2
-import json
 import random
-import subprocess
 
-from board      import Board
-from move       import Move
-from arbitrator import Arbitrator
+from board       import Board
+from move        import Move
+from arbitrator  import Arbitrator
+from aiConnector import AIConnector
 
-AI_PROGRAM_PATH = "../CheckerAI/chess"
+AI_PLAYER = 0
+USER_PLAYER = 1
+
+def getUserMove(board):
+    print "You need to make a move"
+
+    potentialMoves = board.getMoves(['w'])
+
+    return random.choice(potentialMoves)
+
+def setUserMove(board, move):
+    print "They AI made a move"
+
+def takeTurn(board, player, arbitrator, ai):
+
+    if player == AI_PLAYER:
+        move = ai.getMove()
+        if arbitrator.isMoveLegal(board, move):
+            board.doMove(move)
+            if arbitrator.didWin(board, player):
+                print "The AI won the game"
+            else:
+                setUserMove(board, move)
+        else:
+            print "The AI did an illegal move"
+
+    else:
+        move = getUserMove(board)
+        if arbitrator.isMoveLegal(board, move):
+            board.doMove(move)
+            if arbitrator.didWin(board, player):
+                print "The user won the game"
+            else:
+                ai.setMove(move)
+        else:
+            print "You did an illegal move"
+
 
 def main():
     print "Welcome, I am Hansel, I am the host for this game"
@@ -20,14 +54,12 @@ def main():
     userStarts = raw_input("Do you want to start?\n")
 
     if (userStarts == 'yes'):
-        userStarts = 1
+        player = USER_PLAYER
     elif (userStarts == 'no'):
-        userStarts = 2
+        player = AI_PLAYER
     else:
         print "Sorry, I dont understand you"
         return -1;
-
-    difficulty = random.randint(0,99)
 
     print "Starting Board Recognizer ..."
     # TODO start recognition program
@@ -41,26 +73,23 @@ def main():
     board = Board()
     board.setStartBoard()
 
+    arbitrator = Arbitrator()
+
     print "Starting AI ..."
-    ai_command = [AI_PROGRAM_PATH, "--start", str(userStarts), "--difficulty", str(difficulty), "--board", "".join(board.getBoardString())]
+    aiConnect = AIConnector(board, player)
 
-    ai = subprocess.Popen(ai_command,
-                          shell  = False,
-                          stdin  = subprocess.PIPE,
-                          stdout = subprocess.PIPE,
-                          stderr = subprocess.PIPE,
-                          )
+    # Start the game
+    while(True):
+        board = takeTurn(board, player, arbitrator, aiConnect)
 
-    ai_output, ai_error = ai.communicate('{ "response": {"move": {{"newPos": 1},{"newType":c}}}}')
+        if player == USER_PLAYER:
+            player = AI_PLAYER
+        else:
+            player = USER_PLAYER
 
-    print ai_output
-    print ai_error
-
-    while(1):
         board.showBoard()
 
-        if cv2.waitKey(1) == ord('q'):
-            return
+    cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     main()

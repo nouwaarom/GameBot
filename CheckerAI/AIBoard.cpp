@@ -13,7 +13,7 @@ std::vector<Move> getMoves()
 {
 }
 
-void AIBoard::doMove(Move* move)
+void AIBoard::doMove(Move move)
 {
     return;
 }
@@ -25,5 +25,5 @@ void undoMove(Move move)
 
 int getScore()
 {
-
+    return 5;
 }

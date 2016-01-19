@@ -1,12 +1,13 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <zmq.hpp>
 #include <boost/program_options.hpp>
 
 #include "Board.h"
 #include "Move.h"
 #include "AIPlayer.h"
-#include "HumanPlayer.h"
+#include "HostConnector.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ int main(int argc, char *argv[])
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help", "get help message")
-        ("start", po::value<int>(), "player to start: AI(1), Player(2)")
+        ("start", po::value<int>(), "player to start: AI(0), Player(1)")
         ("difficulty", po::value<int>(), "difficultiy of the AI (0-99)")
         ("board", po::value< string >(), "board representation");
 
@@ -31,75 +32,54 @@ int main(int argc, char *argv[])
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
 
-    std::cout << "Hello, I am you opponent" << "\n";
+    cout << "Hello, I am you opponent" << endl;
 
     if (vm.count("help")) {
-        std::cout << desc << "\n";
+        cout << desc << endl;
         return 1;
     }
 
-    if (vm.count("start")) {
-        std::cout << "Someone starts" << "\n";
-    }
-    else {
-        std::cout << "The game ended because nobody started." << "\n";
+    if (!vm.count("start")) {
+        cout << "The game ended because nobody started." << endl;
         return 1;
     }
 
-    if (vm.count("difficulty")) {
-        std::cout << "I will beat you" << "\n";
-    }
-    else {
-        std::cout << "I forgot how to play, sorry." << "\n";
+    if (!vm.count("difficulty")) {
+        cout << "I forgot how to play, sorry." << endl;
         return 1;
     }
 
-    if (vm.count("board")) {
-        cout << "I can see the board now" << "\n";
-    }
-    else {
-        std::cout << "Without a board I cant play" << "\n";
+    if (!vm.count("board")) {
+        cout << "Without a board I cant play" << endl;
         return 1;
     }
 
 	//create a board
 	Board* board = new Board(vm["board"].as< string >());
 
-	//create two players
-	AIPlayer* ai = new AIPlayer(board);
-	HumanPlayer* human = new HumanPlayer();
+	HostConnector* connector = new HostConnector();
 
-    Player *whitePlayer, *blackPlayer;
+    std::cout << "Please work now" << endl;
 
-    if (vm["start"].as<int>() == 1) {
-        whitePlayer = ai;
-        blackPlayer = human;
+	AIPlayer* ai;
+    if (vm["start"].as<int>() == 0) {
+        cout << "I start" << std::endl;
+        ai = new AIPlayer(board, {'w','W'}, {'b','B'});
     }
     else {
-        whitePlayer = human;
-        blackPlayer = ai;
+        cout << "You can start" << "\n";
+        ai = new AIPlayer(board, {'b','B'}, {'w','W'});
     }
+
+    connector->setAI(ai);
 
 	//let the players make their moves
-    Move* move;
     while (true)
     {
-        move = whitePlayer->getMove();
-        board->doMove(move);
-        if (board->isEnd())
-            break;
-
-        blackPlayer->setOpponentMove(move);
-        move = blackPlayer->getMove();
-        board->doMove(move);
-        if (board->isEnd())
-            break;
-
-        whitePlayer->setOpponentMove(move);
+        connector->getRequest();
     }
 
-    std::cout << "Goodbye" << "\n";
-
+    cout << "Goodbye" << "\n";
 
     return 1;
 

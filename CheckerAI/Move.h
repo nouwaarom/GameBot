@@ -22,8 +22,8 @@ private:
     std::vector<Piece> removedPieces;
 protected:
 public:
+    Move();
     Move(std::string json);
-
     Move(int oldPosition, int newPosition, std::string board);
     Move(Piece newPiece, std::vector<Piece> removedPieces);
 

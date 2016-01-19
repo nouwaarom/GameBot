@@ -1,11 +1,14 @@
 #include "Move.h"
 
+Move::Move()
+{
+}
+
 Move::Move(std::string json)
 {
     using boost::property_tree::ptree;
 
-    std::stringstream ss;
-    ss << json;
+    std::stringstream ss(json);
 
     ptree pt;
     boost::property_tree::read_json(ss, pt);
@@ -33,7 +36,6 @@ Move::Move(int oldPosition, int newPosition, std::string board)
 
     //remove the piece at the oldLocation
     removedPieces.push_back({oldPosition, board[oldPosition]});
-
 }
 
 Move::Move(Piece newPiece, std::vector<Piece> removedPieces)
