@@ -1,8 +1,7 @@
 import zmq
 import random
 import subprocess
-
-from move import Move
+import movemessage_pb2
 
 class AIConnector:
 
@@ -12,14 +11,7 @@ class AIConnector:
         difficulty = random.randint(0,99)
 
         aiCommand = [self.PROGRAM_PATH, "--start", str(userStarts), "--difficulty", str(difficulty), "--board", "".join(board.getBoardRepresentation())]
-        print aiCommand
-        #self.ai = subprocess.Popen(aiCommand, shell = False, stdin  = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-
-
-        #if aiError:
-        #    print aiError
-        #else:
-        #    print aiOutput
+        self.ai = subprocess.Popen(aiCommand, shell = False, stdin  = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 
         # Start the connection to the AI
         context = zmq.Context()
@@ -30,19 +22,37 @@ class AIConnector:
 
 
     def getMove(self):
-        print "Please send please"
-        self.socket.send(b"Please send please")
+        print "Requesting AI move ..."
+        move_request = movemessage_pb2.MoveMessage()
+        move_request.requesttype = movemessage_pb2.MoveMessage.GET_MOVE
 
-        print "waiting for response"
-        message = self.socket.recv()
+        self.socket.send(move_request.SerializeToString())
 
-        print ("AI send: %s" % message)
+        response = self.socket.recv()
+        print "Recieved response"
+
+        move_response = movemessage_pb2.MoveMessage()
+        move_response.ParseFromString(response[0:-1])
+
+        if move_response.responsetype == movemessage_pb2.MoveMessage.MOVE:
+            return move_response.move
+        else:
+            print("Shit happened")
 
     def setMove(self, move):
         print "User did clever move"
-        self.socket.send(b"User did super clever move")
+        move_request = movemessage_pb2.MoveMessage()
+        move_request.requesttype = movemessage_pb2.MoveMessage.SET_MOVE
 
-        print "waiting for response"
-        message = self.socket.recv()
-        print("AI send: %s" % message)
+        move_request.move.CopyFrom(move)
 
+        self.socket.send(move_request.SerializeToString())
+
+        response = self.socket.recv()
+        print "Recieved response"
+
+        move_response = movemessage_pb2.MoveMessage()
+        move_response.ParseFromString(response[0:-1])
+
+        if move_response.responsetype == movemessage_pb2.MoveMessage.OK:
+            print "Ai acknowledged move"

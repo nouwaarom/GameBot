@@ -4,28 +4,19 @@ Move::Move()
 {
 }
 
-Move::Move(std::string json)
+Move::Move(const aiconnector::MoveMessage::Move& move)
 {
-    using boost::property_tree::ptree;
+    newPiece.position = move.newpiece().location();
+    newPiece.type     = move.newpiece().type()[0];
 
-    std::stringstream ss(json);
-
-    ptree pt;
-    boost::property_tree::read_json(ss, pt);
-
-    BOOST_FOREACH(ptree::value_type &node, pt.get_child("response.move"))
+    int i;
+    for (i=0; i<move.removedpieces_size(); i++)
     {
-        int  newPosition = node.second.get<char>("newPos");
-        char newType     = node.second.get<int>("newType");
-        newPiece = {newPosition, newType};
+        Piece removedPiece;
+        removedPiece.position = move.removedpieces(i).location();
+        removedPiece.type     = move.removedpieces(i).type()[0];
 
-        //Loop over all removed nodes
-        BOOST_FOREACH(ptree::value_type &removedNode, node.second.get_child("removed"))
-        {
-            int  position = removedNode.second.get<char>("pos");
-            char type     = removedNode.second.get<int>("type");
-            removedPieces.push_back({position, type});
-        }
+        removedPieces.push_back(removedPiece);
     }
 }
 
@@ -54,36 +45,19 @@ std::vector<Piece> Move::getRemovedPieces()
     return removedPieces;
 }
 
-std::string Move::getJson()
+void Move::serialize(aiconnector::MoveMessage::Move* move)
 {
-    using boost::property_tree::ptree;
+    move->mutable_newpiece()->set_location(newPiece.position);
+    std::string pieceType = std::string(newPiece.type, 1);
+    move->mutable_newpiece()->set_type(pieceType);
 
-    ptree propertyTree;
-    ptree removedPiecesTree;
-
-    propertyTree.put("newPos", newPiece.position);
-    propertyTree.put("newType",    newPiece.type);
-
-    //auto
-    for (Piece &removedPiece : removedPieces)
+    unsigned int i;
+    for (i=0; i<removedPieces.size(); i++)
     {
-        ptree removedPieceTree, removedPosition, removedType;
-        removedPosition.put("", removedPiece.position);
-        removedType.put("", removedPiece.position);
-        removedPieceTree.push_back(std::make_pair("pos", removedPosition));
-        removedPieceTree.push_back(std::make_pair("type", removedType));
-
-        removedPiecesTree.push_back(std::make_pair("", removedPieceTree));
+        aiconnector::MoveMessage::Piece* removedPiece = move->add_removedpieces();
+        removedPiece->set_location(removedPieces[i].position);
+        std::string pieceType = std::string(removedPieces[i].type, 1);
+        removedPiece->set_type(pieceType);
 
     }
-
-    propertyTree.add_child("removed", removedPiecesTree);
-
-    std::stringstream stringStream;
-    boost::property_tree::read_json(stringStream, propertyTree);
-
-    std::string json;
-    stringStream >> json;
-
-    return json;
 }

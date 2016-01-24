@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
 
-from move import Move
+from movemessage_pb2 import Move
+from move_helper import helperCreateMove
 
 class Board:
 
@@ -28,8 +29,8 @@ class Board:
         for j in range(10):
             for i in range(10):
                 if ((i+j) % 2 == 0):
-                    if self.board:
-                        char = self.board.pop()
+                    if board:
+                        char = board.pop()
 
                         if (char == 'b'):
                             cv2.circle(self.frame, (50*i+25, 50*j+25), 20, (255,0,0), 2)
@@ -56,19 +57,19 @@ class Board:
         return list(self.board)
 
     def doMove(self, move):
-        newPiece = move.getNewPiece()
-        removedPieces = move.getRemovedPieces()
+        newPiece = move.newpiece
+        removedPieces = move.removedpieces
 
-        if self.board[newPiece[0]] == 'x':
-            self.board[newPiece[0]] = newPiece[1]
+        if self.board[newPiece.location] == 'x':
+            self.board[newPiece.location] = newPiece.type
 
         for removedPiece in removedPieces:
-            if self.board[removedPiece[0]] == removedPiece[1]:
-                self.board[removedPiece[0]] = 'x'
+            if self.board[removedPiece.location] == removedPiece.type:
+                self.board[removedPiece.location] = 'x'
 
     def getMoves(self, colors):
         moves = []
-        board = self.board
+        board = list(self.board)
 
         for key, tile in enumerate(board):
             if tile in colors:
@@ -77,24 +78,24 @@ class Board:
                     #check left
                     if (key % 5) != 0:
                         if board[key-6] == 'x':
-                            moves.append(Move((key-6, tile), [(key, tile)]))
+                            moves.append(helperCreateMove((key-6, tile), [(key, tile)]))
 
                     #check right
                     if ((key+1) % 5) != 0:
                         if board[key-4] == 'x':
-                            moves.append(Move((key-4, tile), [(key, tile)]))
+                            moves.append(helperCreateMove((key-4, tile), [(key, tile)]))
 
                 #check up
                 if key < 45:
                     #check left
                     if (key % 5) != 0:
                         if board[key+4] == 'x':
-                            moves.append(Move((key+4, tile), [(key, tile)]))
+                            moves.append(helperCreateMove((key+4, tile), [(key, tile)]))
 
                     #check right
                     if ((key+1) % 5) != 0:
                         if board[key+6] == 'x':
-                            moves.append(Move((key+6, tile), [(key, tile)]))
+                            moves.append(helperCreateMove((key+6, tile), [(key, tile)]))
 
         return moves
 
@@ -110,13 +111,13 @@ class Board:
                     if ((key-1) % 5) != 0:
                         if board[key-6] in enemy:
                             if board[key-11] == 'x':
-                                moves.append(Move((key-11, tile), [(key, tile), (key-6, board[key-6])]))
+                                moves.append(helperCreateMove((key-11, tile), [(key, tile), (key-6, board[key-6])]))
 
                     #check right
                     if ((key+2) % 5) != 0:
                         if board[key-4] in enemy:
                             if board[key-9] == 'x':
-                                moves.append(Move((key-9, tile), [(key, tile), (key-4, board[key-4])]))
+                                moves.append(helperCreateMove((key-9, tile), [(key, tile), (key-4, board[key-4])]))
 
                 #check up
                 if key < 40:
@@ -124,12 +125,12 @@ class Board:
                     if ((key-1) % 5) != 0:
                         if board[key+4] in enemy:
                             if board[key+9] == 'x':
-                                moves.append(Move((key+9, tile), [(key, tile), (key+4, board[key+4])]))
+                                moves.append(helperCreateMove((key+9, tile), [(key, tile), (key+4, board[key+4])]))
 
                     #check right
                     if ((key+2) % 5) != 0:
                         if board[key+6] in enemy:
                             if board[key+11] == 'x':
-                                moves.append(Move((key+11, tile), [(key, tile), (key+6, board[key+6])]))
+                                moves.append(helperCreateMove((key+11, tile), [(key, tile), (key+6, board[key+6])]))
 
         return move

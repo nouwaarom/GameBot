@@ -16,7 +16,10 @@ def getUserMove(board):
 
     potentialMoves = board.getMoves(['w'])
 
-    return random.choice(potentialMoves)
+    if len(potentialMoves) > 0:
+        return random.choice(potentialMoves)
+    else:
+        print "User couldnt come up with a move"
 
 def setUserMove(board, move):
     print "They AI made a move"
@@ -27,10 +30,9 @@ def takeTurn(board, player, arbitrator, ai):
         move = ai.getMove()
         if arbitrator.isMoveLegal(board, move):
             board.doMove(move)
+            setUserMove(board, move)
             if arbitrator.didWin(board, player):
                 print "The AI won the game"
-            else:
-                setUserMove(board, move)
         else:
             print "The AI did an illegal move"
 
@@ -80,7 +82,7 @@ def main():
 
     # Start the game
     while(True):
-        board = takeTurn(board, player, arbitrator, aiConnect)
+        takeTurn(board, player, arbitrator, aiConnect)
 
         if player == USER_PLAYER:
             player = AI_PLAYER

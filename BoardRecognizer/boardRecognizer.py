@@ -95,18 +95,16 @@ def main():
             gray = frame[:,:,2]
             findPiecesOnBoard(gray, points)
 
-
         #display the resulting frame
         cv2.namedWindow('frame', cv2.WINDOW_AUTOSIZE)
         cv2.imshow('frame', frame)
-
 
         #and the mask
         cv2.namedWindow('mask', cv2.WINDOW_AUTOSIZE)
         cv2.imshow('mask', mask)
 
         if cv2.waitKey(1) == ord('q'):
-            break;
+            break
 
     endProgram(cap)
 

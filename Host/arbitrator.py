@@ -7,15 +7,15 @@ class Arbitrator:
         print "Arbitrator Initializing"
 
     def isMoveLegal(self, board, move):
-        newPiece = move.getNewPiece()
-        removedPieces = move.getRemovedPieces()
+        newPiece = move.newpiece
+        removedPieces = move.removedpieces
 
-        if board.getPiece(newPiece[0]) != 'x':
+        if board.getPiece(newPiece.location) != 'x':
             return False
 
         for removedPiece in removedPieces:
 
-            if board.getPiece(removedPiece[0]) != removedPiece[1]:
+            if board.getPiece(removedPiece.location) != removedPiece.type:
                 return False
 
         return True

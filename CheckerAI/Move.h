@@ -1,14 +1,10 @@
 #ifndef MOVE_H
 #define MOVE_H
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
-#include <exception>
-#include <cassert>
-#include <sstream>
 #include <string>
 #include <vector>
+
+#include "movemessage.pb.h"
 
 struct Piece {
     int  position;
@@ -23,14 +19,15 @@ private:
 protected:
 public:
     Move();
-    Move(std::string json);
+    Move(const aiconnector::MoveMessage::Move& move);
+
     Move(int oldPosition, int newPosition, std::string board);
     Move(Piece newPiece, std::vector<Piece> removedPieces);
 
     Piece getNewPiece();
     std::vector<Piece> getRemovedPieces();
 
-    std::string getJson();
+    void serialize(aiconnector::MoveMessage::Move* move);
 };
 
 #endif

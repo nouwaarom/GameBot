@@ -3,3 +3,8 @@
 *.o
 *.pyc
 
+Host/host
+Host/protoc_middleman
+
+CheckerAI/chess
+CheckerAI/protoc_middleman
