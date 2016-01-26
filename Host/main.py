@@ -40,10 +40,9 @@ def takeTurn(board, player, arbitrator, ai):
         move = getUserMove(board)
         if arbitrator.isMoveLegal(board, move):
             board.doMove(move)
+            ai.setMove(move)
             if arbitrator.didWin(board, player):
                 print "The user won the game"
-            else:
-                ai.setMove(move)
         else:
             print "You did an illegal move"
 
