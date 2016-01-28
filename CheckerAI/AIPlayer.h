@@ -14,7 +14,7 @@ protected:
 public:
     AIPlayer(Board* startBoard, std::vector<char> pieces, std::vector<char> enemyPieces);
 
-    Move* getMove();
+    Move getMove();
     void setOpponentMove(Move* move);
 };
 

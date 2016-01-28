@@ -1,4 +1,4 @@
-from move  import Move
+from movemessage_pb2  import Move
 from board import Board
 
 class Arbitrator:
@@ -11,11 +11,12 @@ class Arbitrator:
         removedPieces = move.removedpieces
 
         if board.getPiece(newPiece.location) != 'x':
+            print "NewPiece location (%d) is not empty" % newPiece.location
             return False
 
         for removedPiece in removedPieces:
-
             if board.getPiece(removedPiece.location) != removedPiece.type:
+                print "RemovedPiece type is not correct"
                 return False
 
         return True

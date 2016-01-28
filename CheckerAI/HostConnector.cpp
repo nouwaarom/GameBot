@@ -35,10 +35,14 @@ void HostConnector::handleGetMove(aiconnector::MoveMessage& request)
 {
     std::cout << "Get Move" << std::endl;
 
-    Move* move = ai->getMove();
+    Move move = ai->getMove();
 
-    move->serialize(request.mutable_move());
+    move.serialize(request.mutable_move());
     request.set_responsetype(aiconnector::MoveMessage::MOVE);
+
+    std::cout << "newPiece location: " << request.move().newpiece().location() << std::endl;
+    std::cout << "removedPiece location: " << request.move().removedpieces(0).location() << std::endl;
+    std::cout << "removedPiece type: " << request.move().removedpieces(0).type() << std::endl;
 
     return;
 }

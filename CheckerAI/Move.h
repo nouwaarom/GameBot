@@ -19,15 +19,15 @@ private:
 protected:
 public:
     Move();
-    Move(const aiconnector::MoveMessage::Move& move);
+    Move(const aiconnector::Move& move);
 
-    Move(int oldPosition, int newPosition, std::string board);
+    Move(int newPosition, int oldPosition, std::string board);
     Move(Piece newPiece, std::vector<Piece> removedPieces);
 
     Piece getNewPiece();
     std::vector<Piece> getRemovedPieces();
 
-    void serialize(aiconnector::MoveMessage::Move* move);
+    void serialize(aiconnector::Move* move);
 };
 
 #endif

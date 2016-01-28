@@ -1,8 +1,8 @@
 #include "Player.h"
 
-Move* Player::getMove()
+Move Player::getMove()
 {
-    return 0;
+    return Move();
 }
 
 void Player::setOpponentMove(Move* move)

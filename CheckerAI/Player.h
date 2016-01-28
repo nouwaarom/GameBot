@@ -11,7 +11,7 @@ private:
    std::vector<char> enemyTypes;
 protected:
 public:
-    virtual Move* getMove();
+    virtual Move getMove();
     virtual void setOpponentMove(Move* move);
 };
 

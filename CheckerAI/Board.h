@@ -12,10 +12,10 @@
 class Board
 {
 private:
-    //Board is actually 10 by 10 but half of the tiles are always empty
-	std::string board;
 
 protected:
+    //Board is actually 10 by 10 but half of the tiles are always empty
+	std::string board;
 
 public:
     static const char WHITE = 'w';

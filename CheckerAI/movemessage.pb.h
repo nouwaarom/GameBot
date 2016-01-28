@@ -37,9 +37,9 @@ void protobuf_AddDesc_movemessage_2eproto();
 void protobuf_AssignDesc_movemessage_2eproto();
 void protobuf_ShutdownFile_movemessage_2eproto();
 
+class Move;
 class MoveMessage;
-class MoveMessage_Move;
-class MoveMessage_Piece;
+class Move_Piece;
 
 enum MoveMessage_RequestType {
   MoveMessage_RequestType_GET_MOVE = 0,
@@ -86,32 +86,32 @@ inline bool MoveMessage_ResponseType_Parse(
 }
 // ===================================================================
 
-class MoveMessage_Piece : public ::google::protobuf::Message {
+class Move_Piece : public ::google::protobuf::Message {
  public:
-  MoveMessage_Piece();
-  virtual ~MoveMessage_Piece();
+  Move_Piece();
+  virtual ~Move_Piece();
 
-  MoveMessage_Piece(const MoveMessage_Piece& from);
+  Move_Piece(const Move_Piece& from);
 
-  inline MoveMessage_Piece& operator=(const MoveMessage_Piece& from) {
+  inline Move_Piece& operator=(const Move_Piece& from) {
     CopyFrom(from);
     return *this;
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const MoveMessage_Piece& default_instance();
+  static const Move_Piece& default_instance();
 
-  void Swap(MoveMessage_Piece* other);
+  void Swap(Move_Piece* other);
 
   // implements Message ----------------------------------------------
 
-  inline MoveMessage_Piece* New() const { return New(NULL); }
+  inline Move_Piece* New() const { return New(NULL); }
 
-  MoveMessage_Piece* New(::google::protobuf::Arena* arena) const;
+  Move_Piece* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const MoveMessage_Piece& from);
-  void MergeFrom(const MoveMessage_Piece& from);
+  void CopyFrom(const Move_Piece& from);
+  void MergeFrom(const Move_Piece& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -126,7 +126,7 @@ class MoveMessage_Piece : public ::google::protobuf::Message {
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(MoveMessage_Piece* other);
+  void InternalSwap(Move_Piece* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _internal_metadata_.arena();
@@ -159,7 +159,7 @@ class MoveMessage_Piece : public ::google::protobuf::Message {
   ::google::protobuf::int32 location() const;
   void set_location(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:aiconnector.MoveMessage.Piece)
+  // @@protoc_insertion_point(class_scope:aiconnector.Move.Piece)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -172,36 +172,36 @@ class MoveMessage_Piece : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_movemessage_2eproto();
 
   void InitAsDefaultInstance();
-  static MoveMessage_Piece* default_instance_;
+  static Move_Piece* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class MoveMessage_Move : public ::google::protobuf::Message {
+class Move : public ::google::protobuf::Message {
  public:
-  MoveMessage_Move();
-  virtual ~MoveMessage_Move();
+  Move();
+  virtual ~Move();
 
-  MoveMessage_Move(const MoveMessage_Move& from);
+  Move(const Move& from);
 
-  inline MoveMessage_Move& operator=(const MoveMessage_Move& from) {
+  inline Move& operator=(const Move& from) {
     CopyFrom(from);
     return *this;
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const MoveMessage_Move& default_instance();
+  static const Move& default_instance();
 
-  void Swap(MoveMessage_Move* other);
+  void Swap(Move* other);
 
   // implements Message ----------------------------------------------
 
-  inline MoveMessage_Move* New() const { return New(NULL); }
+  inline Move* New() const { return New(NULL); }
 
-  MoveMessage_Move* New(::google::protobuf::Arena* arena) const;
+  Move* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const MoveMessage_Move& from);
-  void MergeFrom(const MoveMessage_Move& from);
+  void CopyFrom(const Move& from);
+  void MergeFrom(const Move& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -216,7 +216,7 @@ class MoveMessage_Move : public ::google::protobuf::Message {
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(MoveMessage_Move* other);
+  void InternalSwap(Move* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _internal_metadata_.arena();
@@ -230,43 +230,45 @@ class MoveMessage_Move : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
+  typedef Move_Piece Piece;
+
   // accessors -------------------------------------------------------
 
-  // optional .aiconnector.MoveMessage.Piece newpiece = 1;
+  // optional .aiconnector.Move.Piece newpiece = 1;
   bool has_newpiece() const;
   void clear_newpiece();
   static const int kNewpieceFieldNumber = 1;
-  const ::aiconnector::MoveMessage_Piece& newpiece() const;
-  ::aiconnector::MoveMessage_Piece* mutable_newpiece();
-  ::aiconnector::MoveMessage_Piece* release_newpiece();
-  void set_allocated_newpiece(::aiconnector::MoveMessage_Piece* newpiece);
+  const ::aiconnector::Move_Piece& newpiece() const;
+  ::aiconnector::Move_Piece* mutable_newpiece();
+  ::aiconnector::Move_Piece* release_newpiece();
+  void set_allocated_newpiece(::aiconnector::Move_Piece* newpiece);
 
-  // repeated .aiconnector.MoveMessage.Piece removedpieces = 2;
+  // repeated .aiconnector.Move.Piece removedpieces = 2;
   int removedpieces_size() const;
   void clear_removedpieces();
   static const int kRemovedpiecesFieldNumber = 2;
-  const ::aiconnector::MoveMessage_Piece& removedpieces(int index) const;
-  ::aiconnector::MoveMessage_Piece* mutable_removedpieces(int index);
-  ::aiconnector::MoveMessage_Piece* add_removedpieces();
-  ::google::protobuf::RepeatedPtrField< ::aiconnector::MoveMessage_Piece >*
+  const ::aiconnector::Move_Piece& removedpieces(int index) const;
+  ::aiconnector::Move_Piece* mutable_removedpieces(int index);
+  ::aiconnector::Move_Piece* add_removedpieces();
+  ::google::protobuf::RepeatedPtrField< ::aiconnector::Move_Piece >*
       mutable_removedpieces();
-  const ::google::protobuf::RepeatedPtrField< ::aiconnector::MoveMessage_Piece >&
+  const ::google::protobuf::RepeatedPtrField< ::aiconnector::Move_Piece >&
       removedpieces() const;
 
-  // @@protoc_insertion_point(class_scope:aiconnector.MoveMessage.Move)
+  // @@protoc_insertion_point(class_scope:aiconnector.Move)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
-  ::aiconnector::MoveMessage_Piece* newpiece_;
-  ::google::protobuf::RepeatedPtrField< ::aiconnector::MoveMessage_Piece > removedpieces_;
+  ::aiconnector::Move_Piece* newpiece_;
+  ::google::protobuf::RepeatedPtrField< ::aiconnector::Move_Piece > removedpieces_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_movemessage_2eproto();
   friend void protobuf_AssignDesc_movemessage_2eproto();
   friend void protobuf_ShutdownFile_movemessage_2eproto();
 
   void InitAsDefaultInstance();
-  static MoveMessage_Move* default_instance_;
+  static Move* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -323,9 +325,6 @@ class MoveMessage : public ::google::protobuf::Message {
   ::google::protobuf::Metadata GetMetadata() const;
 
   // nested types ----------------------------------------------------
-
-  typedef MoveMessage_Piece Piece;
-  typedef MoveMessage_Move Move;
 
   typedef MoveMessage_RequestType RequestType;
   static const RequestType GET_MOVE = MoveMessage_RequestType_GET_MOVE;
@@ -390,14 +389,14 @@ class MoveMessage : public ::google::protobuf::Message {
   ::aiconnector::MoveMessage_ResponseType responsetype() const;
   void set_responsetype(::aiconnector::MoveMessage_ResponseType value);
 
-  // optional .aiconnector.MoveMessage.Move move = 3;
+  // optional .aiconnector.Move move = 3;
   bool has_move() const;
   void clear_move();
   static const int kMoveFieldNumber = 3;
-  const ::aiconnector::MoveMessage_Move& move() const;
-  ::aiconnector::MoveMessage_Move* mutable_move();
-  ::aiconnector::MoveMessage_Move* release_move();
-  void set_allocated_move(::aiconnector::MoveMessage_Move* move);
+  const ::aiconnector::Move& move() const;
+  ::aiconnector::Move* mutable_move();
+  ::aiconnector::Move* release_move();
+  void set_allocated_move(::aiconnector::Move* move);
 
   // @@protoc_insertion_point(class_scope:aiconnector.MoveMessage)
  private:
@@ -406,7 +405,7 @@ class MoveMessage : public ::google::protobuf::Message {
   bool _is_default_instance_;
   int requesttype_;
   int responsetype_;
-  ::aiconnector::MoveMessage_Move* move_;
+  ::aiconnector::Move* move_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_movemessage_2eproto();
   friend void protobuf_AssignDesc_movemessage_2eproto();
@@ -421,96 +420,96 @@ class MoveMessage : public ::google::protobuf::Message {
 // ===================================================================
 
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
-// MoveMessage_Piece
+// Move_Piece
 
 // optional string type = 1;
-inline void MoveMessage_Piece::clear_type() {
+inline void Move_Piece::clear_type() {
   type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& MoveMessage_Piece::type() const {
-  // @@protoc_insertion_point(field_get:aiconnector.MoveMessage.Piece.type)
+inline const ::std::string& Move_Piece::type() const {
+  // @@protoc_insertion_point(field_get:aiconnector.Move.Piece.type)
   return type_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void MoveMessage_Piece::set_type(const ::std::string& value) {
+inline void Move_Piece::set_type(const ::std::string& value) {
   
   type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:aiconnector.MoveMessage.Piece.type)
+  // @@protoc_insertion_point(field_set:aiconnector.Move.Piece.type)
 }
-inline void MoveMessage_Piece::set_type(const char* value) {
+inline void Move_Piece::set_type(const char* value) {
   
   type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:aiconnector.MoveMessage.Piece.type)
+  // @@protoc_insertion_point(field_set_char:aiconnector.Move.Piece.type)
 }
-inline void MoveMessage_Piece::set_type(const char* value, size_t size) {
+inline void Move_Piece::set_type(const char* value, size_t size) {
   
   type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:aiconnector.MoveMessage.Piece.type)
+  // @@protoc_insertion_point(field_set_pointer:aiconnector.Move.Piece.type)
 }
-inline ::std::string* MoveMessage_Piece::mutable_type() {
+inline ::std::string* Move_Piece::mutable_type() {
   
-  // @@protoc_insertion_point(field_mutable:aiconnector.MoveMessage.Piece.type)
+  // @@protoc_insertion_point(field_mutable:aiconnector.Move.Piece.type)
   return type_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* MoveMessage_Piece::release_type() {
+inline ::std::string* Move_Piece::release_type() {
   
   return type_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void MoveMessage_Piece::set_allocated_type(::std::string* type) {
+inline void Move_Piece::set_allocated_type(::std::string* type) {
   if (type != NULL) {
     
   } else {
     
   }
   type_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), type);
-  // @@protoc_insertion_point(field_set_allocated:aiconnector.MoveMessage.Piece.type)
+  // @@protoc_insertion_point(field_set_allocated:aiconnector.Move.Piece.type)
 }
 
 // optional int32 location = 2;
-inline void MoveMessage_Piece::clear_location() {
+inline void Move_Piece::clear_location() {
   location_ = 0;
 }
-inline ::google::protobuf::int32 MoveMessage_Piece::location() const {
-  // @@protoc_insertion_point(field_get:aiconnector.MoveMessage.Piece.location)
+inline ::google::protobuf::int32 Move_Piece::location() const {
+  // @@protoc_insertion_point(field_get:aiconnector.Move.Piece.location)
   return location_;
 }
-inline void MoveMessage_Piece::set_location(::google::protobuf::int32 value) {
+inline void Move_Piece::set_location(::google::protobuf::int32 value) {
   
   location_ = value;
-  // @@protoc_insertion_point(field_set:aiconnector.MoveMessage.Piece.location)
+  // @@protoc_insertion_point(field_set:aiconnector.Move.Piece.location)
 }
 
 // -------------------------------------------------------------------
 
-// MoveMessage_Move
+// Move
 
-// optional .aiconnector.MoveMessage.Piece newpiece = 1;
-inline bool MoveMessage_Move::has_newpiece() const {
+// optional .aiconnector.Move.Piece newpiece = 1;
+inline bool Move::has_newpiece() const {
   return !_is_default_instance_ && newpiece_ != NULL;
 }
-inline void MoveMessage_Move::clear_newpiece() {
+inline void Move::clear_newpiece() {
   if (GetArenaNoVirtual() == NULL && newpiece_ != NULL) delete newpiece_;
   newpiece_ = NULL;
 }
-inline const ::aiconnector::MoveMessage_Piece& MoveMessage_Move::newpiece() const {
-  // @@protoc_insertion_point(field_get:aiconnector.MoveMessage.Move.newpiece)
+inline const ::aiconnector::Move_Piece& Move::newpiece() const {
+  // @@protoc_insertion_point(field_get:aiconnector.Move.newpiece)
   return newpiece_ != NULL ? *newpiece_ : *default_instance_->newpiece_;
 }
-inline ::aiconnector::MoveMessage_Piece* MoveMessage_Move::mutable_newpiece() {
+inline ::aiconnector::Move_Piece* Move::mutable_newpiece() {
   
   if (newpiece_ == NULL) {
-    newpiece_ = new ::aiconnector::MoveMessage_Piece;
+    newpiece_ = new ::aiconnector::Move_Piece;
   }
-  // @@protoc_insertion_point(field_mutable:aiconnector.MoveMessage.Move.newpiece)
+  // @@protoc_insertion_point(field_mutable:aiconnector.Move.newpiece)
   return newpiece_;
 }
-inline ::aiconnector::MoveMessage_Piece* MoveMessage_Move::release_newpiece() {
+inline ::aiconnector::Move_Piece* Move::release_newpiece() {
   
-  ::aiconnector::MoveMessage_Piece* temp = newpiece_;
+  ::aiconnector::Move_Piece* temp = newpiece_;
   newpiece_ = NULL;
   return temp;
 }
-inline void MoveMessage_Move::set_allocated_newpiece(::aiconnector::MoveMessage_Piece* newpiece) {
+inline void Move::set_allocated_newpiece(::aiconnector::Move_Piece* newpiece) {
   delete newpiece_;
   newpiece_ = newpiece;
   if (newpiece) {
@@ -518,36 +517,36 @@ inline void MoveMessage_Move::set_allocated_newpiece(::aiconnector::MoveMessage_
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:aiconnector.MoveMessage.Move.newpiece)
+  // @@protoc_insertion_point(field_set_allocated:aiconnector.Move.newpiece)
 }
 
-// repeated .aiconnector.MoveMessage.Piece removedpieces = 2;
-inline int MoveMessage_Move::removedpieces_size() const {
+// repeated .aiconnector.Move.Piece removedpieces = 2;
+inline int Move::removedpieces_size() const {
   return removedpieces_.size();
 }
-inline void MoveMessage_Move::clear_removedpieces() {
+inline void Move::clear_removedpieces() {
   removedpieces_.Clear();
 }
-inline const ::aiconnector::MoveMessage_Piece& MoveMessage_Move::removedpieces(int index) const {
-  // @@protoc_insertion_point(field_get:aiconnector.MoveMessage.Move.removedpieces)
+inline const ::aiconnector::Move_Piece& Move::removedpieces(int index) const {
+  // @@protoc_insertion_point(field_get:aiconnector.Move.removedpieces)
   return removedpieces_.Get(index);
 }
-inline ::aiconnector::MoveMessage_Piece* MoveMessage_Move::mutable_removedpieces(int index) {
-  // @@protoc_insertion_point(field_mutable:aiconnector.MoveMessage.Move.removedpieces)
+inline ::aiconnector::Move_Piece* Move::mutable_removedpieces(int index) {
+  // @@protoc_insertion_point(field_mutable:aiconnector.Move.removedpieces)
   return removedpieces_.Mutable(index);
 }
-inline ::aiconnector::MoveMessage_Piece* MoveMessage_Move::add_removedpieces() {
-  // @@protoc_insertion_point(field_add:aiconnector.MoveMessage.Move.removedpieces)
+inline ::aiconnector::Move_Piece* Move::add_removedpieces() {
+  // @@protoc_insertion_point(field_add:aiconnector.Move.removedpieces)
   return removedpieces_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::aiconnector::MoveMessage_Piece >*
-MoveMessage_Move::mutable_removedpieces() {
-  // @@protoc_insertion_point(field_mutable_list:aiconnector.MoveMessage.Move.removedpieces)
+inline ::google::protobuf::RepeatedPtrField< ::aiconnector::Move_Piece >*
+Move::mutable_removedpieces() {
+  // @@protoc_insertion_point(field_mutable_list:aiconnector.Move.removedpieces)
   return &removedpieces_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::aiconnector::MoveMessage_Piece >&
-MoveMessage_Move::removedpieces() const {
-  // @@protoc_insertion_point(field_list:aiconnector.MoveMessage.Move.removedpieces)
+inline const ::google::protobuf::RepeatedPtrField< ::aiconnector::Move_Piece >&
+Move::removedpieces() const {
+  // @@protoc_insertion_point(field_list:aiconnector.Move.removedpieces)
   return removedpieces_;
 }
 
@@ -583,7 +582,7 @@ inline void MoveMessage::set_responsetype(::aiconnector::MoveMessage_ResponseTyp
   // @@protoc_insertion_point(field_set:aiconnector.MoveMessage.responsetype)
 }
 
-// optional .aiconnector.MoveMessage.Move move = 3;
+// optional .aiconnector.Move move = 3;
 inline bool MoveMessage::has_move() const {
   return !_is_default_instance_ && move_ != NULL;
 }
@@ -591,25 +590,25 @@ inline void MoveMessage::clear_move() {
   if (GetArenaNoVirtual() == NULL && move_ != NULL) delete move_;
   move_ = NULL;
 }
-inline const ::aiconnector::MoveMessage_Move& MoveMessage::move() const {
+inline const ::aiconnector::Move& MoveMessage::move() const {
   // @@protoc_insertion_point(field_get:aiconnector.MoveMessage.move)
   return move_ != NULL ? *move_ : *default_instance_->move_;
 }
-inline ::aiconnector::MoveMessage_Move* MoveMessage::mutable_move() {
+inline ::aiconnector::Move* MoveMessage::mutable_move() {
   
   if (move_ == NULL) {
-    move_ = new ::aiconnector::MoveMessage_Move;
+    move_ = new ::aiconnector::Move;
   }
   // @@protoc_insertion_point(field_mutable:aiconnector.MoveMessage.move)
   return move_;
 }
-inline ::aiconnector::MoveMessage_Move* MoveMessage::release_move() {
+inline ::aiconnector::Move* MoveMessage::release_move() {
   
-  ::aiconnector::MoveMessage_Move* temp = move_;
+  ::aiconnector::Move* temp = move_;
   move_ = NULL;
   return temp;
 }
-inline void MoveMessage::set_allocated_move(::aiconnector::MoveMessage_Move* move) {
+inline void MoveMessage::set_allocated_move(::aiconnector::Move* move) {
   delete move_;
   move_ = move;
   if (move) {

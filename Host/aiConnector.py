@@ -1,4 +1,5 @@
 import zmq
+import cv2
 import random
 import subprocess
 import movemessage_pb2
@@ -7,11 +8,18 @@ class AIConnector:
 
     PROGRAM_PATH = "../CheckerAI/chess"
 
-    def __init__(self, board, userStarts):
+    def __init__(self, board, userStarts, execute):
         difficulty = random.randint(0,99)
 
         aiCommand = [self.PROGRAM_PATH, "--start", str(userStarts), "--difficulty", str(difficulty), "--board", "".join(board.getBoardRepresentation())]
-        self.ai = subprocess.Popen(aiCommand, shell = False, stdin  = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+
+        if execute:
+            self.ai = subprocess.Popen(aiCommand, shell = False, stdin  = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        else:
+            print "Execute this command(press any key to continue): "
+            print ' '.join(aiCommand)
+
+            cv2.waitKey(0)
 
         # Start the connection to the AI
         context = zmq.Context()
@@ -20,6 +28,8 @@ class AIConnector:
 
         print "Successfully talking to the AI now"
 
+    def terminateAI(self):
+        self.ai.kill()
 
     def getMove(self):
         print "Requesting AI move ..."
@@ -33,6 +43,9 @@ class AIConnector:
 
         move_response = movemessage_pb2.MoveMessage()
         move_response.ParseFromString(response[0:-1])
+
+        print "AI response: "
+        print move_response
 
         if move_response.responsetype == movemessage_pb2.MoveMessage.MOVE:
             return move_response.move

@@ -32,6 +32,8 @@ class Board:
                     if board:
                         char = board.pop()
 
+                        cv2.putText(self.frame, str(len(board)), (50*i+15, 50*j+35), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
+
                         if (char == 'b'):
                             cv2.circle(self.frame, (50*i+25, 50*j+25), 20, (255,0,0), 2)
 
@@ -42,6 +44,7 @@ class Board:
                             cv2.circle(self.frame, (50*i+25, 50*j+25), 20, (0,0,0), 2)
 
         cv2.imshow('boardClass', self.frame)
+
 
     def saveBoard(self, name):
         print "Saving board to file"
@@ -60,12 +63,10 @@ class Board:
         newPiece = move.newpiece
         removedPieces = move.removedpieces
 
-        if self.board[newPiece.location] == 'x':
-            self.board[newPiece.location] = newPiece.type
+        self.board[newPiece.location] = newPiece.type
 
         for removedPiece in removedPieces:
-            if self.board[removedPiece.location] == removedPiece.type:
-                self.board[removedPiece.location] = 'x'
+            self.board[removedPiece.location] = 'x'
 
     def getMoves(self, colors):
         moves = []
