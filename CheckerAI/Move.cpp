@@ -9,41 +9,16 @@ Move::Move()
 Move::Move(const aiconnector::Move& move)
 {
     newPiece.position = move.newpiece().location();
-    newPiece.type     = move.newpiece().type()[0];
+    newPiece.type     = static_cast<pieceType>(move.newpiece().type()[0]);
 
     int i;
     for (i=0; i<move.removedpieces_size(); i++)
     {
         Piece removedPiece;
         removedPiece.position = move.removedpieces(i).location();
-        removedPiece.type     = move.removedpieces(i).type()[0];
+        removedPiece.type     = static_cast<pieceType>(move.removedpieces(i).type()[0]);
 
         removedPieces.push_back(removedPiece);
-    }
-}
-
-// TODO check if there are hits
-Move::Move(int newPosition, int oldPosition, std::string board)
-{
-    //piece goes to new position
-    newPiece = {newPosition, board[oldPosition]};
-
-    int oldRow = oldPosition / 5;
-    int oldCol = 2*(oldPosition % 5) + (oldRow % 2);
-
-    int newRow = newPosition / 5;
-    int newCol = 2*(newPosition % 5) + (newRow % 2);
-
-    int row = newRow;
-    int col = newCol;
-
-    int i;
-    for (i=0; i < abs(oldRow-newRow); i++) {
-
-        row += (oldRow-newRow)/abs(oldRow-newRow);
-        col += newCol + (oldCol-newCol)/abs(oldCol-newCol);
-
-        removedPieces.push_back({(5*row)+(col/2), board[(5*row)+(col/2)]});
     }
 }
 
@@ -58,9 +33,25 @@ Piece Move::getNewPiece()
     return newPiece;
 }
 
+
+void Move::setNewPiece(Piece piece)
+{
+    newPiece = piece;
+}
+
 std::vector<Piece> Move::getRemovedPieces()
 {
     return removedPieces;
+}
+
+void Move::setRemovedPieces(std::vector<Piece> pieces)
+{
+    removedPieces = pieces;
+}
+
+void Move::addRemovedPiece(Piece piece)
+{
+    removedPieces.push_back(piece);
 }
 
 void Move::serialize(aiconnector::Move* move)

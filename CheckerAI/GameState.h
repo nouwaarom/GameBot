@@ -5,13 +5,13 @@
 #include <vector>
 #include "Board.h"
 
-class AIBoard : public Board
+class GameState
 {
 private:
-    std::vector<char> friendPieces;
-    std::vector<char> enemyPieces;
+    std::vector<pieceType> friendPieces;
+    std::vector<pieceType> enemyPieces;
 
-    inline int getIndex(int row, int col);
+    Board* board;
 
     // Some ugly templates because std library doesnt have them
     template<typename T>
@@ -19,10 +19,7 @@ private:
 
 protected:
 public:
-    // This function is not in the right class
-    Move selectRandomly(std::vector<Move> v);
-
-    AIBoard(std::string representation, std::vector<char> _friendPieces, std::vector<char> _enemyPieces);
+    GameState(Board* startBoard, std::vector<pieceType> _friendPieces, std::vector<pieceType> _enemyPieces);
 
     std::vector<Move> getForcedMoves();
     std::vector<Move> getMoves();

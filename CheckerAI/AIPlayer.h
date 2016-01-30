@@ -3,16 +3,21 @@
 
 #include <vector>
 
-#include "Player.h"
-#include "AIBoard.h"
+#include "GameState.h"
+#include "Move.h"
 
-class AIPlayer : public Player
+class AIPlayer
 {
 private:
-    AIBoard* board;
+    GameState* state;
+
+    std::vector<pieceType> myTypes;
+    std::vector<pieceType> enemyTypes;
+
+    Move selectRandomly(std::vector<Move> v);
 protected:
 public:
-    AIPlayer(Board* startBoard, std::vector<char> pieces, std::vector<char> enemyPieces);
+    AIPlayer(Board* startBoard, std::vector<pieceType> pieces, std::vector<pieceType> enemyPieces);
 
     Move getMove();
     void setOpponentMove(Move* move);

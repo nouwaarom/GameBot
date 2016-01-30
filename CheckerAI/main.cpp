@@ -1,11 +1,10 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <zmq.hpp>
 #include <boost/program_options.hpp>
 
-#include "Board.h"
 #include "Move.h"
+#include "Board.h"
 #include "AIPlayer.h"
 #include "HostConnector.h"
 
@@ -59,16 +58,17 @@ int main(int argc, char *argv[])
 
 	HostConnector* connector = new HostConnector();
 
-    std::cout << "Please work now" << endl;
+    std::vector<pieceType> blacks = {pieceType::black, pieceType::black_crown};
+    std::vector<pieceType> whites = {pieceType::white, pieceType::white_crown};
 
 	AIPlayer* ai;
     if (vm["start"].as<int>() == 0) {
         cout << "I start" << std::endl;
-        ai = new AIPlayer(board, {'w','W'}, {'b','B'});
+        ai = new AIPlayer(board, whites, blacks);
     }
     else {
         cout << "You can start" << "\n";
-        ai = new AIPlayer(board, {'b','B'}, {'w','W'});
+        ai = new AIPlayer(board, blacks, whites);
     }
 
     connector->setAI(ai);

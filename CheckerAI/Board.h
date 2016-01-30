@@ -12,23 +12,26 @@
 class Board
 {
 private:
-
+    int getPosition(int row, int col);
 protected:
     //Board is actually 10 by 10 but half of the tiles are always empty
-	std::string board;
+	std::vector<pieceType> board;
 
 public:
-    static const char WHITE = 'w';
-    static const char WHITE_CROWN = 'W';
-    static const char BLACK = 'b';
-    static const char BLACK_CROWN = 'B';
-
     Board(std::string representation);
 
-    std::string getBoardRepresentation();
+    std::vector<pieceType>::iterator getBegin();
+    std::vector<pieceType>::iterator getEnd();
+
+    pieceType getPiece(int position);
+    pieceType getPiece(int row, int col);
+
+    void setPiece(int position, pieceType type);
+
+    Move createMove(int newPosition, int oldPosition);
+    Move createMove(int newRow, int newCol, int oldRow, int oldCol);
 
     virtual void doMove(Move* move);
-    bool isEnd();
 };
 
 #endif
