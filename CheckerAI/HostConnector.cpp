@@ -4,14 +4,13 @@
 
 HostConnector::HostConnector()
 {
-    std::cout << "Starting server" << std::endl;
 
     context = new zmq::context_t(1);
     socket = new zmq::socket_t(*context, ZMQ_REP);
 
     socket->bind("tcp://127.0.0.1:5555");
 
-    std::cout << "Started server" << std::endl;
+    std::cout << "I am listening for the host" << std::endl;
 }
 
 void HostConnector::setAI(AIPlayer* aiPlayer)
@@ -24,7 +23,7 @@ void HostConnector::handleSetMove(aiconnector::MoveMessage& request)
     std::cout << "Set Move" << std::endl;
 
     //Set the move
-    ai->setOpponentMove(new Move(request.move()));
+    ai->setOpponentMove(Move(request.move()));
 
     request.set_responsetype(aiconnector::MoveMessage::OK);
 

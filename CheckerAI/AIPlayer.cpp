@@ -1,6 +1,7 @@
 #include "AIPlayer.h"
 
 #include <algorithm>
+#include <iostream>
 
 AIPlayer::AIPlayer(Board* startBoard, std::vector<pieceType> friendPieces, std::vector<pieceType> enemyPieces)
 {
@@ -35,15 +36,22 @@ Move AIPlayer::getMove()
     }
     else {
         moves = state->getMoves();
-        move =  selectRandomly(moves);
+
+        if (!moves.empty())
+        {
+            move =  selectRandomly(moves);
+        }
+        else {
+            std::cout << "I am Unable to make a move" << std::endl;
+        }
     }
 
-    state->doMove(&move);
+    state->doMove(move);
 
     return move;
 }
 
-void AIPlayer::setOpponentMove(Move* move)
+void AIPlayer::setOpponentMove(Move move)
 {
     state->doMove(move);
 }

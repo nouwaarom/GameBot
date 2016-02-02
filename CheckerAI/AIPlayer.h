@@ -17,10 +17,10 @@ private:
     Move selectRandomly(std::vector<Move> v);
 protected:
 public:
-    AIPlayer(Board* startBoard, std::vector<pieceType> pieces, std::vector<pieceType> enemyPieces);
+    AIPlayer(Board* startBoard, std::vector<pieceType> friendPieces, std::vector<pieceType> enemyPieces);
 
     Move getMove();
-    void setOpponentMove(Move* move);
+    void setOpponentMove(Move move);
 };
 
 #endif

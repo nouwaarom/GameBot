@@ -31,7 +31,8 @@ public:
     Move createMove(int newPosition, int oldPosition);
     Move createMove(int newRow, int newCol, int oldRow, int oldCol);
 
-    virtual void doMove(Move* move);
+    void doMove(Move move);
+    void undoMove(Move move);
 };
 
 #endif

@@ -12,3 +12,5 @@ The goal of this project is to create an artificial agent you can play checkers 
  * And a Host program that starts all other programs
     Manages the communication between the other programs
     And has the role of an arbitrator
+
+    Communication between programs works using zeroMq and google protobuf

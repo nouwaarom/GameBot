@@ -3,7 +3,7 @@
 Board::Board(std::string representation)
 {
     for (char& c : representation) {
-        board.insert(board.begin(), static_cast<pieceType>(c));
+        board.push_back(static_cast<pieceType>(c));
     }
 }
 
@@ -39,29 +39,13 @@ void Board::setPiece(int position, pieceType type)
 
 Move Board::createMove(int newPosition, int oldPosition)
 {
-    Move move;
-    //piece goes to new position
-    move.setNewPiece({newPosition, board[oldPosition]});
-
     int oldRow = oldPosition / 5;
     int oldCol = 2*(oldPosition % 5) + (oldRow % 2);
 
     int newRow = newPosition / 5;
     int newCol = 2*(newPosition % 5) + (newRow % 2);
 
-    int row = newRow;
-    int col = newCol;
-
-    int i;
-    for (i=0; i < abs(oldRow-newRow); i++) {
-
-        row += (oldRow-newRow)/abs(oldRow-newRow);
-        col += newCol + (oldCol-newCol)/abs(oldCol-newCol);
-
-        move.addRemovedPiece({(5*row)+(col/2), board[(5*row)+(col/2)]});
-    }
-
-    return move;
+    return createMove(newRow, newCol, oldRow, oldCol);
 }
 
 Move Board::createMove(int newRow, int newCol, int oldRow, int oldCol)
@@ -77,7 +61,7 @@ Move Board::createMove(int newRow, int newCol, int oldRow, int oldCol)
     for (i=0; i < abs(oldRow-newRow); i++) {
 
         row += (oldRow-newRow)/abs(oldRow-newRow);
-        col += newCol + (oldCol-newCol)/abs(oldCol-newCol);
+        col += (oldCol-newCol)/abs(oldCol-newCol);
 
         move.addRemovedPiece({getPosition(row, col), getPiece(row, col)});
     }
@@ -85,7 +69,33 @@ Move Board::createMove(int newRow, int newCol, int oldRow, int oldCol)
     return move;
 }
 
-void Board::doMove(Move* move)
+void Board::doMove(Move move)
 {
+    Piece newPiece = move.getNewPiece();
+    std::vector<Piece> removedPieces = move.getRemovedPieces();
 
+    setPiece(newPiece.position, newPiece.type);
+
+    unsigned int i;
+    for (i=0; i<removedPieces.size(); i++) {
+        setPiece(removedPieces[i].position, pieceType::empty);
+    }
+
+    return;
+}
+
+void Board::undoMove(Move move)
+{
+    Piece newPiece = move.getNewPiece();
+    std::vector<Piece> removedPieces = move.getRemovedPieces();
+
+    setPiece(newPiece.position, pieceType::empty);
+
+    unsigned int i;
+    for (i=0; i<removedPieces.size(); i++)
+    {
+        setPiece(removedPieces[i].position, removedPieces[i].type);
+    }
+
+    return;
 }

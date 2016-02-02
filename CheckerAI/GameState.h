@@ -8,13 +8,20 @@
 class GameState
 {
 private:
+    Board* board;
+
     std::vector<pieceType> friendPieces;
     std::vector<pieceType> enemyPieces;
 
-    Board* board;
+    std::vector<Move> mergeMoves(Move first, std::vector<Move> second);
+    std::vector<Move> appendMoves(std::vector<Move> first, std::vector<Move> second);
 
-    // Some ugly templates because std library doesnt have them
-    template<typename T>
+    std::vector<Move> getSuccessiveMoves(Move move);
+
+    std::vector<Move> getMovesAtPosition(int position);
+    std::vector<Move> getForcedMovesAtPosition(int position);
+
+    template <typename T>
     bool vectorContains(std::vector<T> v, T x);
 
 protected:
@@ -24,8 +31,7 @@ public:
     std::vector<Move> getForcedMoves();
     std::vector<Move> getMoves();
 
-    void doMove(Move* move);
-    void undoMove(Move move);
+    void doMove(Move move);
 
     int getScore();
 };

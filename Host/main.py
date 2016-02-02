@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import cv2
+import sys
 import random
 
 from board         import Board
@@ -31,6 +32,7 @@ def takeTurn(board, player, arbitrator, ai, user):
                 print "The AI won the game"
             else:
                 print "The User won the game"
+            sys.exit()
     else:
         print "Illegal move"
 
@@ -67,7 +69,7 @@ def main():
     arbitrator = Arbitrator()
 
     print "Starting AI ..."
-    aiConnect = AIConnector(board, player, True)
+    aiConnect = AIConnector(board, player, False)
 
     userConnect = UserConnector(player)
 

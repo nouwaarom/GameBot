@@ -58,7 +58,6 @@ void Move::serialize(aiconnector::Move* move)
 {
     move->mutable_newpiece()->set_location(newPiece.position);
 
-    std::cout << "newpiece type: " << newPiece.type << std::endl;
     move->mutable_newpiece()->set_type(std::string(1, newPiece.type));
 
     unsigned int i;

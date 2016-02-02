@@ -6,7 +6,7 @@ import movemessage_pb2
 
 class AIConnector:
 
-    PROGRAM_PATH = "../CheckerAI/chess"
+    PROGRAM_PATH = "../CheckerAI/ai"
 
     def __init__(self, board, userStarts, execute):
         difficulty = random.randint(0,99)
