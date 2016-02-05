@@ -40,8 +40,14 @@ class Board:
                         elif (char == 'w'):
                             cv2.circle(self.frame, (50*i+25, 50*j+25), 20, (255,255,255), 2)
 
+                        elif (char == 'B'):
+                            cv2.circle(self.frame, (50*i+25, 50*j+25), 20, (255,0,0), 5)
+
+                        elif (char == 'W'):
+                            cv2.circle(self.frame, (50*i+25, 50*j+25), 20, (255,255,255), 5)
+
                         else:
-                            cv2.circle(self.frame, (50*i+25, 50*j+25), 20, (0,0,0), 2)
+                            cv2.circle(self.frame, (50*i+25, 50*j+25), 20, (0,0,0), 5)
 
         cv2.imshow('boardClass', self.frame)
 

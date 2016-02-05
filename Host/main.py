@@ -3,6 +3,7 @@
 import cv2
 import sys
 import random
+import time
 
 from board         import Board
 from arbitrator    import Arbitrator
@@ -15,6 +16,8 @@ USER_PLAYER = 1
 def takeTurn(board, player, arbitrator, ai, user):
 
     if player == AI_PLAYER:
+        # NOTE might want to remove this sometime
+        time.sleep(random.randint(1, 3))
         move = ai.getMove()
     else:
         move = user.getMove(board)
@@ -77,6 +80,8 @@ def main():
     while(True):
         takeTurn(board, player, arbitrator, aiConnect, userConnect)
         board.showBoard()
+
+
 
         if player == USER_PLAYER:
             player = AI_PLAYER

@@ -24,7 +24,13 @@ int Board::getPosition(int row, int col)
 
 pieceType Board::getPiece(int row, int col)
 {
-    return board[getPosition(row, col)];
+    if (row >= 0 && row < 10) {
+        if (col >= 0 && col < 10) {
+            return getPiece(getPosition(row, col));
+        }
+    }
+
+    return pieceType::invalid;
 }
 
 pieceType Board::getPiece(int position)
@@ -51,8 +57,16 @@ Move Board::createMove(int newPosition, int oldPosition)
 Move Board::createMove(int newRow, int newCol, int oldRow, int oldCol)
 {
     Move move;
-    //piece goes to new position
-    move.setNewPiece({getPosition(newRow, newCol), getPiece(oldRow, oldCol)});
+    // oldPiece goes to new location, gets crowned if it reached teh other side
+    pieceType oldPiece = getPiece(oldRow, oldCol);
+    if ((oldPiece == pieceType::white) && newRow == 9) {
+        oldPiece = pieceType::white_crown;
+    }
+    if ((oldPiece == pieceType::black) && newRow == 0) {
+        oldPiece = pieceType::black_crown;
+    }
+
+    move.setNewPiece({getPosition(newRow, newCol), oldPiece});
 
     int row = newRow;
     int col = newCol;

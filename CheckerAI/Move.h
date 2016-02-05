@@ -12,7 +12,8 @@ enum pieceType : char
     white_crown = 'W',
     black = 'b',
     black_crown = 'B',
-    empty = 'x'
+    empty = 'x',
+    invalid = '!',
 };
 
 struct Piece {

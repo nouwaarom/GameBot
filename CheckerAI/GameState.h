@@ -16,10 +16,10 @@ private:
     std::vector<Move> mergeMoves(Move first, std::vector<Move> second);
     std::vector<Move> appendMoves(std::vector<Move> first, std::vector<Move> second);
 
-    std::vector<Move> getSuccessiveMoves(Move move);
+    std::vector<Move> getSuccessiveForcedMoves(Move move);
 
-    std::vector<Move> getMovesAtPosition(int position);
-    std::vector<Move> getForcedMovesAtPosition(int position);
+    std::vector<Move> getMovesAtPosition(int row, int col);
+    std::vector<Move> getForcedMovesAtPosition(int row, int col);
 
     template <typename T>
     bool vectorContains(std::vector<T> v, T x);
