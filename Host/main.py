@@ -2,13 +2,18 @@
 
 import cv2
 import sys
-import random
 import time
+import random
+import argparse
 
-from board         import Board
-from arbitrator    import Arbitrator
-from aiConnector   import AIConnector
-from userConnector import UserConnector
+import config
+
+from board               import Board
+from arbitrator          import Arbitrator
+from aiConnector         import AIConnector
+from userConnector       import UserConnector
+from recognizerConnector import RecognizerConnector
+from outputManager       import OutputManager
 
 AI_PLAYER = 0
 USER_PLAYER = 1
@@ -32,19 +37,37 @@ def takeTurn(board, player, arbitrator, ai, user):
 
         if arbitrator.didWin(board, player):
             if player == AI_PLAYER:
-                print "The AI won the game"
+                config.output.say("The AI won the game")
             else:
-                print "The User won the game"
+                config.output.say("The User won the game")
             sys.exit()
     else:
-        print "Illegal move"
+        config.output.say("Illegal move")
 
     return
 
 def main():
-    print "Welcome, I am Hansel, I am the host for this game"
+    # Argument parsing is actually quite usefull
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--boardtest", help="run board recognizer only", action="store_true")
+    parser.add_argument("--startrecognizer", help="run board recognizer only", action="store_true")
+    parser.add_argument("--startai", help="run board recognizer only", action="store_true")
+    parser.add_argument("--withvoice", help="enable voice config.output", action="store_true")
 
-    #print "Do you want to start? (yes/no) "
+    args = parser.parse_args()
+
+    config.output = OutputManager(args.withvoice)
+
+    if args.boardtest:
+        config.output.say("Testing my eyesight")
+
+        recognizer = RecognizerConnector(args.startrecognizer)
+
+        return
+
+    config.output.say("Welcome, I am Hansel, I am the host for this game")
+
+    #config.output.say "Do you want to start? (yes/no) "
     #userStarts = sys.stdin.readline()
     userStarts = raw_input("Do you want to start?\n")
 
@@ -53,17 +76,17 @@ def main():
     elif (userStarts == 'no'):
         player = AI_PLAYER
     else:
-        print "Sorry, I dont understand you"
+        config.output.say("Sorry, I dont understand you")
         return -1;
 
-    print "Starting Board Recognizer ..."
+    config.output.say("Starting Board Recognizer ...")
     # TODO start recognition program
     # TODO check if pieces are on the right tiles and move them if neccessary
 
-    print "Starting Arm Controller ..."
+    config.output.say("Starting Arm Controller ...")
     # TODO start arm control program
 
-    print "Setting up board .."
+    config.output.say("Setting up board ..")
     #Setup board
     board = Board()
     board.setStartBoard()
@@ -71,8 +94,8 @@ def main():
 
     arbitrator = Arbitrator()
 
-    print "Starting AI ..."
-    aiConnect = AIConnector(board, player, False)
+    config.output.say("Starting AI ...")
+    aiConnect = AIConnector(board, player, args.startai)
 
     userConnect = UserConnector(player)
 
