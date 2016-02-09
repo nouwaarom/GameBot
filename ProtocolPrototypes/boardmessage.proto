@@ -1,0 +1,21 @@
+// [START declaration]
+syntax = "proto3";
+package aiconnector;
+// [END declaration]
+
+message BoardMessage {
+
+    enum RequestType {
+        GET_BOARD = 0;
+    }
+
+    enum ResponseType {
+        BOARD  = 0;
+        ERROR = 1;
+    }
+
+    RequestType  requesttype = 1;
+    ResponseType responsetype = 2;
+    string       board = 3;
+}
+// [END messages]

@@ -12,6 +12,9 @@ from board               import Board
 from arbitrator          import Arbitrator
 from aiConnector         import AIConnector
 from userConnector       import UserConnector
+
+from busConnector        import BusConnector
+
 from recognizerConnector import RecognizerConnector
 from outputManager       import OutputManager
 
@@ -58,10 +61,33 @@ def main():
 
     config.output = OutputManager(args.withvoice)
 
+    # Setup bus
+    bus = BusConnector(5555, 5556)
+
+    bus.startBus()
+
+    # Start publisher and subscriber
+    bus.startPublisher()
+    bus.startSubscriber()
+
     if args.boardtest:
         config.output.say("Testing my eyesight")
 
-        recognizer = RecognizerConnector(args.startrecognizer)
+        recognizer = RecognizerConnector(bus)
+
+        if args.startrecognizer:
+            recognizer.startBoardRecognizer()
+        else:
+            print recognizer.getCommand()
+            raw_input()
+
+        board = recognizer.getBoardState()
+
+        print board
+
+        bus.endBus()
+
+        print "Terminating"
 
         return
 
@@ -95,7 +121,7 @@ def main():
     arbitrator = Arbitrator()
 
     config.output.say("Starting AI ...")
-    aiConnect = AIConnector(board, player, args.startai)
+    aiConnect = AIConnector(board, player, args.startai, bus)
 
     userConnect = UserConnector(player)
 
@@ -103,8 +129,6 @@ def main():
     while(True):
         takeTurn(board, player, arbitrator, aiConnect, userConnect)
         board.showBoard()
-
-
 
         if player == USER_PLAYER:
             player = AI_PLAYER

@@ -8,3 +8,8 @@ Host/protoc_middleman
 
 CheckerAI/ai
 CheckerAI/protoc_middleman
+
+BoardRecognizer/recognizer
+BoardRecognizer/protoc_middleman
+
+Bus/bus
