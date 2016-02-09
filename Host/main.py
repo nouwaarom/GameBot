@@ -49,71 +49,25 @@ def takeTurn(board, player, arbitrator, ai, user):
 
     return
 
-def main():
-    # Argument parsing is actually quite usefull
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--boardtest", help="run board recognizer only", action="store_true")
-    parser.add_argument("--startrecognizer", help="run board recognizer only", action="store_true")
-    parser.add_argument("--startai", help="run board recognizer only", action="store_true")
-    parser.add_argument("--withvoice", help="enable voice config.output", action="store_true")
+def testRecognizer(bus):
+    config.output.say("Testing my eyesight")
 
-    args = parser.parse_args()
+    recognizer = RecognizerConnector(bus)
 
-    config.output = OutputManager(args.withvoice)
-
-    # Setup bus
-    bus = BusConnector(5555, 5556)
-
-    bus.startBus()
-
-    # Start publisher and subscriber
-    bus.startPublisher()
-    bus.startSubscriber()
-
-    if args.boardtest:
-        config.output.say("Testing my eyesight")
-
-        recognizer = RecognizerConnector(bus)
-
-        if args.startrecognizer:
-            recognizer.startBoardRecognizer()
-        else:
-            print recognizer.getCommand()
-            raw_input()
-
-        board = recognizer.getBoardState()
-
-        print board
-
-        bus.endBus()
-
-        print "Terminating"
-
-        return
-
-    config.output.say("Welcome, I am Hansel, I am the host for this game")
-
-    #config.output.say "Do you want to start? (yes/no) "
-    #userStarts = sys.stdin.readline()
-    userStarts = raw_input("Do you want to start?\n")
-
-    if (userStarts == 'yes'):
-        player = USER_PLAYER
-    elif (userStarts == 'no'):
-        player = AI_PLAYER
+    if args.startrecognizer:
+        recognizer.startBoardRecognizer()
     else:
-        config.output.say("Sorry, I dont understand you")
-        return -1;
+        print recognizer.getCommand()
+        raw_input()
 
-    config.output.say("Starting Board Recognizer ...")
-    # TODO start recognition program
-    # TODO check if pieces are on the right tiles and move them if neccessary
+    board = recognizer.getBoardState()
 
-    config.output.say("Starting Arm Controller ...")
-    # TODO start arm control program
+    print board
+    print "Terminating"
 
-    config.output.say("Setting up board ..")
-    #Setup board
+    return
+
+def startGame(bus, player, startai):
     board = Board()
     board.setStartBoard()
     board.showBoard()
@@ -121,26 +75,96 @@ def main():
     arbitrator = Arbitrator()
 
     config.output.say("Starting AI ...")
-    aiConnect = AIConnector(board, player, args.startai, bus)
+    aiConnect = AIConnector(board, player, bus)
+
+    if startai:
+        aiConnect.startAI()
+    else:
+        print aiConnect.getCommand()
+        raw_input()
 
     userConnect = UserConnector(player)
 
-    # Start the game
-    while(True):
-        takeTurn(board, player, arbitrator, aiConnect, userConnect)
-        board.showBoard()
+    try:
+        # Start the game
+        while(True):
+            takeTurn(board, player, arbitrator, aiConnect, userConnect)
+            board.showBoard()
 
-        if player == USER_PLAYER:
+            if player == USER_PLAYER:
+                player = AI_PLAYER
+            else:
+                player = USER_PLAYER
+
+            c = chr(cv2.waitKey(10) & 255)
+            if 'q' == c:
+                break
+    except Exception as e:
+        print "An error occured while playing game"
+        print e
+
+    if startai:
+        aiConnect.terminateAI()
+
+    return
+
+def getArgs():
+    # Argument parsing is actually quite usefull
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--boardtest", help="run board recognizer only", action="store_true")
+    parser.add_argument("--startrecognizer", help="run board recognizer only", action="store_true")
+    parser.add_argument("--startai", help="run board recognizer only", action="store_true")
+    parser.add_argument("--withvoice", help="enable voice config.output", action="store_true")
+
+    return parser.parse_args()
+
+def main():
+    args = getArgs()
+
+    config.output = OutputManager(args.withvoice)
+
+    # Setup bus
+    bus = BusConnector(5555, 5556)
+    bus.startBus()
+
+    # Start publisher and subscriber
+    bus.startPublisher()
+    bus.startSubscriber()
+
+    if args.boardtest:
+        testRecognizer(bus)
+
+    else:
+        config.output.say("Welcome, I am Hansel, I am the host for this game")
+
+        #config.output.say "Do you want to start? (yes/no) "
+        #userStarts = sys.stdin.readline()
+        userStarts = raw_input("Do you want to start?\n")
+
+        if (userStarts == 'yes'):
+            player = USER_PLAYER
+        elif (userStarts == 'no'):
             player = AI_PLAYER
         else:
-            player = USER_PLAYER
+            config.output.say("Sorry, I dont understand you")
+            bus.endBus()
+            return -1;
 
-        c = chr(cv2.waitKey(10) & 255)
-        if 'q' == c:
-            break
+        config.output.say("Starting Board Recognizer ...")
+        # TODO start recognition program
+        # TODO check if pieces are on the right tiles and move them if neccessary
 
+        config.output.say("Starting Arm Controller ...")
+        # TODO start arm control program
+
+        try:
+            startGame(bus, player, args.startai)
+        except Exception as e:
+            print "An Error occured: "
+            print e
+
+    bus.endBus()
     cv2.destroyAllWindows()
-    aiConnect.terminateAI()
 
 if __name__ == "__main__":
     main()

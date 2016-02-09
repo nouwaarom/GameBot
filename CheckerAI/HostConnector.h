@@ -2,17 +2,16 @@
 #define HOSTCONNECTOR_H
 
 #include <vector>
-#include <zmq.hpp>
 
 #include "AIPlayer.h"
 #include "movemessage.pb.h"
+#include "BusConnector.h"
 
 class HostConnector
 {
 private:
     AIPlayer* ai;
-    zmq::context_t* context;
-    zmq::socket_t* socket;
+    BusConnector* bus;
 protected:
     void handleSetMove(aiconnector::MoveMessage& request);
     void handleGetMove(aiconnector::MoveMessage& request);

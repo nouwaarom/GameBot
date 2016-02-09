@@ -4,13 +4,7 @@
 
 HostConnector::HostConnector()
 {
-
-    context = new zmq::context_t(1);
-    socket = new zmq::socket_t(*context, ZMQ_REP);
-
-    socket->bind("tcp://127.0.0.1:5555");
-
-    std::cout << "I am listening for the host" << std::endl;
+    bus = new BusConnector();
 }
 
 void HostConnector::setAI(AIPlayer* aiPlayer)
@@ -39,10 +33,6 @@ void HostConnector::handleGetMove(aiconnector::MoveMessage& request)
     move.serialize(request.mutable_move());
     request.set_responsetype(aiconnector::MoveMessage::MOVE);
 
-    std::cout << "newPiece location: " << request.move().newpiece().location() << std::endl;
-    std::cout << "removedPiece location: " << request.move().removedpieces(0).location() << std::endl;
-    std::cout << "removedPiece type: " << request.move().removedpieces(0).type() << std::endl;
-
     return;
 }
 
@@ -51,40 +41,39 @@ void HostConnector::getRequest()
     std::cout << "Waiting for host to ask for move" << std::endl;
 
     // Wait for a request
-    zmq::message_t zrequest;
-    socket->recv(&zrequest);
+    std::string request = bus->getRequest("ai");
 
     // Unserialize the request
     aiconnector::MoveMessage move_message;
-    if (!move_message.ParseFromString(std::string(static_cast<char*>(zrequest.data()), zrequest.size())))
+    if (!move_message.ParseFromString(std::string(request)))
     {
-      std::cerr << "Failed to parse request." << std::endl;
-      return;
+        std::cerr << "Failed to parse request." << std::endl;
+        move_message.set_responsetype(aiconnector::MoveMessage::ERROR);
+    }
+    else
+    {
+        // Process the request
+        switch (move_message.requesttype())
+        {
+            case aiconnector::MoveMessage::GET_MOVE:
+                handleGetMove(move_message);
+                break;
+
+            case aiconnector::MoveMessage::SET_MOVE:
+                handleSetMove(move_message);
+                break;
+
+            default:
+                std::cout << "Invalid Request" << std::endl;
+                move_message.set_responsetype(aiconnector::MoveMessage::ERROR);
+                break;
+        }
     }
 
-    // Process the request
-    switch (move_message.requesttype())
-    {
-        case aiconnector::MoveMessage::GET_MOVE:
-            handleGetMove(move_message);
-            break;
+    std::string response;
+    move_message.SerializeToString(&response);
 
-        case aiconnector::MoveMessage::SET_MOVE:
-            handleSetMove(move_message);
-            break;
-
-        default:
-            std::cout << "Invalid Request" << std::endl;
-            break;
-    }
-
-
-    std::string responseString;
-    move_message.SerializeToString(&responseString);
-
-    zmq::message_t response(responseString.length()+1);
-    memcpy ((void *) response.data(), responseString.c_str(), responseString.length());
-    socket->send(response);
+    bus->sendResponse("ai", response);
 
     std::cout << "Acknowledged" << std::endl;
 
