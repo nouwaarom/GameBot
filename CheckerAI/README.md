@@ -2,9 +2,6 @@
 
 
 ## Todo
-remove Move constructors
-make getMoves recursive
-merge getMoves and getForcedMoves
+remove Move movemessage constructors and serializer from move class
 
-add forced property to move
-
+make player class with pieces, enemypieces and enemy

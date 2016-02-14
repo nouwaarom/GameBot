@@ -11,7 +11,7 @@ clean:
 $(MESSAGES):
 	protoc --python_out=. $@
 
-host: main.py protoc_middleman
+host: main.py
 	@echo "Writing shortcut script host..."
 	@echo '#! /bin/sh' > host
 	@echo './main.py "$$@"' >> host

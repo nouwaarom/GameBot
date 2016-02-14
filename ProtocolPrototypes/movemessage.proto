@@ -7,7 +7,7 @@ package aiconnector;
 message Move {
 
     message Piece {
-        string type = 1;
+        bytes type = 1;
         int32  location = 2;
     }
 

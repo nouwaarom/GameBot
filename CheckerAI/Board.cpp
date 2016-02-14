@@ -43,6 +43,17 @@ void Board::setPiece(int position, pieceType type)
     board[position] = type;
 }
 
+int Board::getRow(int position)
+{
+    return position / 5;
+}
+
+int Board::getCol(int position)
+{
+    int row = position / 5;
+    return 2*(position % 5) + (row % 2);
+}
+
 Move Board::createMove(int newPosition, int oldPosition)
 {
     int oldRow = oldPosition / 5;

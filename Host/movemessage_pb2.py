@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='movemessage.proto',
   package='aiconnector',
   syntax='proto3',
-  serialized_pb=_b('\n\x11movemessage.proto\x12\x0b\x61iconnector\"\x8a\x01\n\x04Move\x12)\n\x08newpiece\x18\x01 \x01(\x0b\x32\x17.aiconnector.Move.Piece\x12.\n\rremovedpieces\x18\x02 \x03(\x0b\x32\x17.aiconnector.Move.Piece\x1a\'\n\x05Piece\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x10\n\x08location\x18\x02 \x01(\x05\"\xfe\x01\n\x0bMoveMessage\x12\x39\n\x0brequesttype\x18\x01 \x01(\x0e\x32$.aiconnector.MoveMessage.RequestType\x12;\n\x0cresponsetype\x18\x02 \x01(\x0e\x32%.aiconnector.MoveMessage.ResponseType\x12\x1f\n\x04move\x18\x03 \x01(\x0b\x32\x11.aiconnector.Move\")\n\x0bRequestType\x12\x0c\n\x08GET_MOVE\x10\x00\x12\x0c\n\x08SET_MOVE\x10\x01\"+\n\x0cResponseType\x12\x08\n\x04MOVE\x10\x00\x12\x06\n\x02OK\x10\x01\x12\t\n\x05\x45RROR\x10\x02\x62\x06proto3')
+  serialized_pb=_b('\n\x11movemessage.proto\x12\x0b\x61iconnector\"\x8a\x01\n\x04Move\x12)\n\x08newpiece\x18\x01 \x01(\x0b\x32\x17.aiconnector.Move.Piece\x12.\n\rremovedpieces\x18\x02 \x03(\x0b\x32\x17.aiconnector.Move.Piece\x1a\'\n\x05Piece\x12\x0c\n\x04type\x18\x01 \x01(\x0c\x12\x10\n\x08location\x18\x02 \x01(\x05\"\xfe\x01\n\x0bMoveMessage\x12\x39\n\x0brequesttype\x18\x01 \x01(\x0e\x32$.aiconnector.MoveMessage.RequestType\x12;\n\x0cresponsetype\x18\x02 \x01(\x0e\x32%.aiconnector.MoveMessage.ResponseType\x12\x1f\n\x04move\x18\x03 \x01(\x0b\x32\x11.aiconnector.Move\")\n\x0bRequestType\x12\x0c\n\x08GET_MOVE\x10\x00\x12\x0c\n\x08SET_MOVE\x10\x01\"+\n\x0cResponseType\x12\x08\n\x04MOVE\x10\x00\x12\x06\n\x02OK\x10\x01\x12\t\n\x05\x45RROR\x10\x02\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -83,8 +83,8 @@ _MOVE_PIECE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='type', full_name='aiconnector.Move.Piece.type', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),

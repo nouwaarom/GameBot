@@ -4,6 +4,8 @@
 
 Move::Move()
 {
+    newPiece.position = 0;
+    newPiece.type = pieceType::invalid;
 }
 
 Move::Move(const aiconnector::Move& move)

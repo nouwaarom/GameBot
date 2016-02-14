@@ -24,8 +24,6 @@ USER_PLAYER = 1
 def takeTurn(board, player, arbitrator, ai, user):
 
     if player == AI_PLAYER:
-        # NOTE might want to remove this sometime
-        time.sleep(random.randint(1, 3))
         move = ai.getMove()
     else:
         move = user.getMove(board)

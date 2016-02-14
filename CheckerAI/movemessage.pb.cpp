@@ -134,7 +134,7 @@ void protobuf_AddDesc_movemessage_2eproto() {
     "\n\021movemessage.proto\022\013aiconnector\"\212\001\n\004Mov"
     "e\022)\n\010newpiece\030\001 \001(\0132\027.aiconnector.Move.P"
     "iece\022.\n\rremovedpieces\030\002 \003(\0132\027.aiconnecto"
-    "r.Move.Piece\032\'\n\005Piece\022\014\n\004type\030\001 \001(\t\022\020\n\010l"
+    "r.Move.Piece\032\'\n\005Piece\022\014\n\004type\030\001 \001(\014\022\020\n\010l"
     "ocation\030\002 \001(\005\"\376\001\n\013MoveMessage\0229\n\013request"
     "type\030\001 \001(\0162$.aiconnector.MoveMessage.Req"
     "uestType\022;\n\014responsetype\030\002 \001(\0162%.aiconne"
@@ -254,15 +254,11 @@ bool Move_Piece::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional string type = 1;
+      // optional bytes type = 1;
       case 1: {
         if (tag == 10) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_type()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->type().data(), this->type().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "aiconnector.Move.Piece.type"));
         } else {
           goto handle_unusual;
         }
@@ -309,13 +305,9 @@ failure:
 void Move_Piece::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:aiconnector.Move.Piece)
-  // optional string type = 1;
+  // optional bytes type = 1;
   if (this->type().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->type().data(), this->type().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aiconnector.Move.Piece.type");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
       1, this->type(), output);
   }
 
@@ -330,14 +322,10 @@ void Move_Piece::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Move_Piece::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:aiconnector.Move.Piece)
-  // optional string type = 1;
+  // optional bytes type = 1;
   if (this->type().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->type().data(), this->type().length(),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "aiconnector.Move.Piece.type");
     target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
         1, this->type(), target);
   }
 
@@ -353,10 +341,10 @@ void Move_Piece::SerializeWithCachedSizes(
 int Move_Piece::ByteSize() const {
   int total_size = 0;
 
-  // optional string type = 1;
+  // optional bytes type = 1;
   if (this->type().size() > 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->type());
   }
 
@@ -689,7 +677,7 @@ void Move::InternalSwap(Move* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // Move_Piece
 
-// optional string type = 1;
+// optional bytes type = 1;
 void Move_Piece::clear_type() {
   type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -707,7 +695,7 @@ void Move_Piece::clear_type() {
   type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:aiconnector.Move.Piece.type)
 }
- void Move_Piece::set_type(const char* value, size_t size) {
+ void Move_Piece::set_type(const void* value, size_t size) {
   
   type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));

@@ -25,8 +25,10 @@ public:
 
     pieceType getPiece(int position);
     pieceType getPiece(int row, int col);
-
     void setPiece(int position, pieceType type);
+
+    int getRow(int position);
+    int getCol(int position);
 
     Move createMove(int newPosition, int oldPosition);
     Move createMove(int newRow, int newCol, int oldRow, int oldCol);

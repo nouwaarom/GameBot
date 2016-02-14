@@ -4,7 +4,7 @@ CC=g++
 CFLAGS=-Wall -g -I /usr/include/boost -pthread -std=c++11 -c
 LDFLAGS=
 LIBRARIES=-lboost_program_options -lzmq -lpthread -lprotobuf
-SOURCES=main.cpp Board.cpp Move.cpp GameState.cpp AIPlayer.cpp BusConnector.cpp HostConnector.cpp movemessage.pb.cpp
+SOURCES=main.cpp Board.cpp Move.cpp Player.cpp GameState.cpp AIPlayer.cpp BusConnector.cpp HostConnector.cpp movemessage.pb.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=ai
 

@@ -142,13 +142,13 @@ class Move_Piece : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // optional string type = 1;
+  // optional bytes type = 1;
   void clear_type();
   static const int kTypeFieldNumber = 1;
   const ::std::string& type() const;
   void set_type(const ::std::string& value);
   void set_type(const char* value);
-  void set_type(const char* value, size_t size);
+  void set_type(const void* value, size_t size);
   ::std::string* mutable_type();
   ::std::string* release_type();
   void set_allocated_type(::std::string* type);
@@ -422,7 +422,7 @@ class MoveMessage : public ::google::protobuf::Message {
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // Move_Piece
 
-// optional string type = 1;
+// optional bytes type = 1;
 inline void Move_Piece::clear_type() {
   type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -440,7 +440,7 @@ inline void Move_Piece::set_type(const char* value) {
   type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:aiconnector.Move.Piece.type)
 }
-inline void Move_Piece::set_type(const char* value, size_t size) {
+inline void Move_Piece::set_type(const void* value, size_t size) {
   
   type_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));

@@ -23,24 +23,26 @@ struct Piece {
 
 class Move
 {
-private:
-    Piece newPiece;
-    std::vector<Piece> removedPieces;
-protected:
-public:
-    Move();
-    Move(const aiconnector::Move& move);
+    private:
+        Piece newPiece;
+        std::vector<Piece> removedPieces;
 
-    Move(Piece newPiece, std::vector<Piece> removedPieces);
+    protected:
 
-    Piece getNewPiece();
-    void setNewPiece(Piece piece);
+    public:
+        Move();
+        Move(const aiconnector::Move& move);
 
-    std::vector<Piece> getRemovedPieces();
-    void setRemovedPieces(std::vector<Piece> pieces);
-    void addRemovedPiece(Piece piece);
+        Move(Piece newPiece, std::vector<Piece> removedPieces);
 
-    void serialize(aiconnector::Move* move);
+        Piece getNewPiece();
+        void setNewPiece(Piece piece);
+
+        std::vector<Piece> getRemovedPieces();
+        void setRemovedPieces(std::vector<Piece> pieces);
+        void addRemovedPiece(Piece piece);
+
+        void serialize(aiconnector::Move* move);
 };
 
 #endif
