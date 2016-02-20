@@ -7,11 +7,13 @@ message BoardMessage {
 
     enum RequestType {
         GET_BOARD = 0;
+        SET_BOARD = 1;
     }
 
     enum ResponseType {
         BOARD  = 0;
-        ERROR = 1;
+        OK    = 1;
+        ERROR = 2;
     }
 
     RequestType  requesttype = 1;

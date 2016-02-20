@@ -3,11 +3,15 @@
 *.o
 *.pyc
 
+
 Host/host
 Host/protoc_middleman
 
 CheckerAI/ai
 CheckerAI/protoc_middleman
+
+ArmController/controller
+ArmController/protoc_middleman
 
 BoardRecognizer/recognizer
 BoardRecognizer/protoc_middleman
