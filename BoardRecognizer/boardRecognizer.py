@@ -1,7 +1,7 @@
-#!/usr/bin/env python
-
 import numpy as np
 import cv2
+
+from pieceRecognizer import PieceRecognizer
 
 class BoardRecognizer:
 
@@ -10,36 +10,7 @@ class BoardRecognizer:
 
         self.initCapture(n)
 
-    def findPiecesOnBoard(self, image, points):
-
-        points1 = np.float32(points)
-        points2 = np.float32([[0,0],[400,0],[0,400],[400,400]])
-
-        M = cv2.getPerspectiveTransform(points1,points2)
-
-        board = cv2.warpPerspective(image, M, (400,400))
-
-        #board = cv2.adaptiveThreshold(board, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
-        #board = cv2.Canny(board, 90, 270)
-
-        # Split the board into pieces
-        for i in range(8):
-            row = board[(i*50):((i+1)*50)]
-
-            for j in range(8):
-                tile = row[0:50,(j*50):((j+1)*50)]
-
-                mean = cv2.mean(tile)
-                if mean[0] < 100:
-                    print "Black piece on: {},{}".format(chr(i+ord('a')),j+1)
-                    #cv2.putText(frame,'Black',(i[0],i[1]), font, 2, (0,0, 0),2)
-                #else:
-                #    print "White piece on: {},{}".format(chr(i+ord('a')),j)
-                    #cv2.putText(frame,'White',(i[0],i[1]), font, 2, (0,0, 0),2)
-
-
-        cv2.namedWindow('board', cv2.WINDOW_AUTOSIZE)
-        cv2.imshow('board', board)
+        self.piecerecognizer = PieceRecognizer()
 
     def initCapture(self, n):
         #initialize cap
@@ -53,6 +24,8 @@ class BoardRecognizer:
         print "Frame Size: ", cap.get(3), "x", cap.get(4)
 
         self.cap = cap
+
+        return cap.isOpened()
 
     def endProgram(self):
         #when everyting is done release the frame
@@ -98,9 +71,16 @@ class BoardRecognizer:
 
                 points.append((cx, cy))
 
+        #If the board is found we can try and recognize the pieces
         if len(points) == 4:
             gray = frame[:,:,2]
-            pieces = findPiecesOnBoard(gray, points)
+
+            points1 = np.float32(points)
+            points2 = np.float32([[0,0],[400,0],[0,400],[400,400]])
+            M = cv2.getPerspectiveTransform(points1,points2)
+            board = cv2.warpPerspective(gray, M, (400,400))
+
+            pieces = self.piecerecognizer.findPiecesOnBoard(board)
 
         #display the resulting frame
         cv2.namedWindow('frame', cv2.WINDOW_AUTOSIZE)
