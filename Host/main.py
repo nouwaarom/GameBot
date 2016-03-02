@@ -52,43 +52,7 @@ def takeTurn(board, player, arbitrator, ai, user):
 
     return
 
-def testRecognizer(bus, startrecognizer, boardsize):
-    config.output.say("Testing my eyesight")
-
-    recognizer = RecognizerConnector(bus, boardsize)
-
-    if startrecognizer:
-        recognizer.startBoardRecognizer()
-    else:
-        print recognizer.getCommand()
-        raw_input()
-
-    board = recognizer.getBoardState()
-
-    print board
-    print "Terminating"
-
-    return
-
-def testController(bus, startcontroller, boardsize):
-    config.output.say("Testing my arm")
-
-    controller = ControllerConnector(bus, boardsize)
-
-    if startcontroller:
-        controller.startArmController()
-    else:
-        print controller.getCommand()
-        raw_input()
-
-    board = "wwwwwxxxxbbbbb"
-
-    controller.setBoardState(board)
-
-    print "Terminating"
-    return
-
-def playGame(bus, player, startai, boardsize):
+def playGame(bus, startai, boardsize):
     config.output.say("Welcome, I am Hansel, I am the host for this game")
 
     userStarts = raw_input("Do you want to start?\n")
@@ -161,8 +125,6 @@ def startBus():
 def getArgs():
     # Argument parsing is actually quite usefull
     parser = argparse.ArgumentParser()
-    parser.add_argument("--boardtest", help="run board recognizer only", action="store_true")
-    parser.add_argument("--armtest", help="run arm controller only", action="store_true")
 
     parser.add_argument("--startrecognizer", help="start recognizer program", action="store_true")
     parser.add_argument("--startcontroller", help="start controller program", action="store_true")
@@ -186,21 +148,10 @@ def main():
 
     bus = startBus()
 
-    # Test board recognizer program
-    if args.boardtest:
-        testRecognizer(bus, args.startrecognizer, args.boardsize)
-
-    # Test arm controller
-    if args.armtest:
-        testController(bus, args.startcontroller, args.boardsize)
-
-    # Normal game
-    else:
-        try:
-            playGame(bus, player, args.startai, args.boardsize)
-        except Exception as e:
-            print "An Error occured: "
-            print e
+    try:
+        playGame(bus, args.startai, args.boardsize)
+    except Exception as e:
+        print "An Error occured: %s" % e
 
     bus.endBus()
     cv2.destroyAllWindows()

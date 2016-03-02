@@ -6,28 +6,30 @@ from move_helper import helperCreateMove
 
 class Board:
 
-    def __init__(self):
+    def __init__(self, boardsize):
         # Create new window for the board
+        cv2.startWindowThread()
         cv2.namedWindow('boardClass', cv2.WINDOW_AUTOSIZE)
 
-        self.frame = np.zeros((500, 500, 3), np.uint8)
+        self.boardsize = boardsize
+        self.frame = np.zeros((50*boardsize, 50*boardsize, 3), np.uint8)
 
-        for i in range(10):
-            for j in range(10):
+        for i in range(self.boardsize):
+            for j in range(self.boardsize):
                 cv2.rectangle(self.frame, (i*50,j*50),((i+1)*50-1,(j+1)*50-1), (255,255,255), 1)
 
     def setStartBoard(self):
         self.board = ["x"] * 50
-        for i in range(20):
+        for i in range(2 * self.boardsize):
             self.board[i] = 'w'
-            self.board[i+30] = 'b'
+            self.board[i+3*self.boardsize] = 'b'
 
     def showBoard(self):
         # Copy the board
         board = list(self.board)
 
-        for j in range(10):
-            for i in range(10):
+        for j in range(self.boardsize):
+            for i in range(self.boardsize):
                 if ((i+j) % 2 == 0):
                     if board:
                         char = board.pop()
@@ -60,6 +62,9 @@ class Board:
 
     def getPiece(self, location):
         return self.board[location]
+
+    def getSize(self):
+        return self.boardsize;
 
     #return a copy of the board representation
     def getBoardRepresentation(self):

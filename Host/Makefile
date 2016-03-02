@@ -2,7 +2,7 @@
 
 MESSAGES=movemessage.proto boardmessage.proto
 
-all: $(MESSAGES) host
+all: $(MESSAGES) host config
 
 clean:
 	rm -f host
@@ -16,3 +16,9 @@ host: main.py
 	@echo '#! /bin/sh' > host
 	@echo './main.py "$$@"' >> host
 	@chmod +x host
+
+config: config.py
+	@echo "Writing shortcut script config..."
+	@echo '#! /bin/sh' > config
+	@echo './config.py "$$@"' >> config
+	@chmod +x config

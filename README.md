@@ -1,5 +1,5 @@
 ﻿# Gamebot
-The goal of this project is to create an artificial agent you can play games with.
+The goal of this project is to create a general game playing agent.
 Currently there is only a simple draughts AI available
 
 ## License
@@ -38,6 +38,8 @@ This software is licensed under GPLv3. See LICENSE
 * execute make in Host, CheckerAI and BoardRecognizer directories
 
 now Host/host is the program you want to execute
+note that the host spawns other processes and
+that they may not be killed correctly in case of an exception.
 
 ### Other platforms
 * I havent tested on any other platfrom
@@ -45,10 +47,11 @@ now Host/host is the program you want to execute
 ## TODO
 * finish board recognizer
 * implement arm controller
-* create chess AI
+* create general game playing AI
 * write documentation
 * make tests
 * Create a design for the robot arm
+* move to python3?
 
 ## Documentation
 For short summaries of each project read the README's in the directories

@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='boardmessage.proto',
   package='aiconnector',
   syntax='proto3',
-  serialized_pb=_b('\n\x12\x62oardmessage.proto\x12\x0b\x61iconnector\"\xdb\x01\n\x0c\x42oardMessage\x12:\n\x0brequesttype\x18\x01 \x01(\x0e\x32%.aiconnector.BoardMessage.RequestType\x12<\n\x0cresponsetype\x18\x02 \x01(\x0e\x32&.aiconnector.BoardMessage.ResponseType\x12\r\n\x05\x62oard\x18\x03 \x01(\t\"\x1c\n\x0bRequestType\x12\r\n\tGET_BOARD\x10\x00\"$\n\x0cResponseType\x12\t\n\x05\x42OARD\x10\x00\x12\t\n\x05\x45RROR\x10\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x12\x62oardmessage.proto\x12\x0b\x61iconnector\"\xf2\x01\n\x0c\x42oardMessage\x12:\n\x0brequesttype\x18\x01 \x01(\x0e\x32%.aiconnector.BoardMessage.RequestType\x12<\n\x0cresponsetype\x18\x02 \x01(\x0e\x32&.aiconnector.BoardMessage.ResponseType\x12\r\n\x05\x62oard\x18\x03 \x01(\t\"+\n\x0bRequestType\x12\r\n\tGET_BOARD\x10\x00\x12\r\n\tSET_BOARD\x10\x01\",\n\x0cResponseType\x12\t\n\x05\x42OARD\x10\x00\x12\x06\n\x02OK\x10\x01\x12\t\n\x05\x45RROR\x10\x02\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -35,11 +35,15 @@ _BOARDMESSAGE_REQUESTTYPE = _descriptor.EnumDescriptor(
       name='GET_BOARD', index=0, number=0,
       options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='SET_BOARD', index=1, number=1,
+      options=None,
+      type=None),
   ],
   containing_type=None,
   options=None,
   serialized_start=189,
-  serialized_end=217,
+  serialized_end=232,
 )
 _sym_db.RegisterEnumDescriptor(_BOARDMESSAGE_REQUESTTYPE)
 
@@ -54,14 +58,18 @@ _BOARDMESSAGE_RESPONSETYPE = _descriptor.EnumDescriptor(
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='ERROR', index=1, number=1,
+      name='OK', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ERROR', index=2, number=2,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=219,
-  serialized_end=255,
+  serialized_start=234,
+  serialized_end=278,
 )
 _sym_db.RegisterEnumDescriptor(_BOARDMESSAGE_RESPONSETYPE)
 
@@ -109,7 +117,7 @@ _BOARDMESSAGE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=36,
-  serialized_end=255,
+  serialized_end=278,
 )
 
 _BOARDMESSAGE.fields_by_name['requesttype'].enum_type = _BOARDMESSAGE_REQUESTTYPE

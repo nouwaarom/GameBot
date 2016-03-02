@@ -1,6 +1,5 @@
 import subprocess
 import time
-import config
 
 from boardmessage_pb2 import BoardMessage
 
@@ -15,7 +14,7 @@ class ControllerConnector:
         self.boardsize = boardsize
 
     def startArmController(self):
-        config.output.say("Starting arm controller")
+        print("Starting arm controller")
         self.armcontroller = subprocess.Popen(self.command, shell = False, stdin  = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
         time.sleep(1)
 
