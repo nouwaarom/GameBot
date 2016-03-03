@@ -8,7 +8,6 @@ class Board:
 
     def __init__(self, boardsize):
         # Create new window for the board
-        cv2.startWindowThread()
         cv2.namedWindow('boardClass', cv2.WINDOW_AUTOSIZE)
 
         self.boardsize = boardsize

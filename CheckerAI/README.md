@@ -1,7 +1,9 @@
 # AI Documentation
+The Draughts AI is based on alpha beta pruning
+https://en.wikipedia.org/wiki/Alpha-beta_pruning
 
 
 ## Todo
 remove Move movemessage constructors and serializer from move class
 
-make player class with pieces, enemypieces and enemy
+move alpha beta pruning and getscore to the AI

@@ -17,4 +17,4 @@ to make the board recognizer and arm controller work. (WIP)
 # Todo
 * Improve and standardize logging
 
-# Uses pyflite and flite for voice output
+# Uses pyflite and flite for voice output (CURRENTLY DISABLED)

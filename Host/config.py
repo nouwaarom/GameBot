@@ -85,9 +85,8 @@ def main():
     elif args.armtest:
         testController(bus, args.startcontroller, args.boardsize)
 
+    bus.endBus()
+
 # TODO remove evil else (output is outputmanager object, see main.py)
 if __name__ == "__main__":
     main()
-else:
-    #global output object
-    output = 0

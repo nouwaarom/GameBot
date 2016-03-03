@@ -6,8 +6,6 @@ import time
 import random
 import argparse
 
-import config
-
 from board               import Board
 from arbitrator          import Arbitrator
 from aiConnector         import AIConnector
@@ -39,12 +37,12 @@ def takeTurn(board, player, arbitrator, ai, user):
 
         if arbitrator.didWin(board, player):
             if player == AI_PLAYER:
-                config.output.say("The AI won the game")
+                print("The AI won the game")
             else:
-                config.output.say("The User won the game")
+                print("The User won the game")
             sys.exit()
     else:
-        config.output.say("Illegal move")
+        print("Illegal move")
 
         # Let the user try again
         if player == AI_PLAYER:
@@ -53,7 +51,7 @@ def takeTurn(board, player, arbitrator, ai, user):
     return
 
 def playGame(bus, startai, boardsize):
-    config.output.say("Welcome, I am Hansel, I am the host for this game")
+    print("Welcome, I am Hansel, I am the host for this game")
 
     userStarts = raw_input("Do you want to start?\n")
 
@@ -62,14 +60,14 @@ def playGame(bus, startai, boardsize):
     elif (userStarts == 'no'):
         player = AI_PLAYER
     else:
-        config.output.say("Sorry, I dont understand you")
+        print("Sorry, I dont understand you")
         return
 
-    config.output.say("Starting Board Recognizer ...")
+    print("Starting Board Recognizer ...")
     # TODO start recognition program
     # TODO check if pieces are on the right tiles and move them if neccessary
 
-    config.output.say("Starting Arm Controller ...")
+    print("Starting Arm Controller ...")
     # TODO start arm control program
 
     board = Board(boardsize)
@@ -78,7 +76,7 @@ def playGame(bus, startai, boardsize):
 
     arbitrator = Arbitrator()
 
-    config.output.say("Starting AI ...")
+    print("Starting AI ...")
     aiConnect = AIConnector(board, player, bus)
 
     if startai:
@@ -130,7 +128,7 @@ def getArgs():
     parser.add_argument("--startcontroller", help="start controller program", action="store_true")
     parser.add_argument("--startai", help="run board recognizer only", action="store_true")
 
-    parser.add_argument("--withvoice", help="enable voice config.output", action="store_true")
+    #parser.add_argument("--withvoice", help="enable voice config.output", action="store_true")
 
     parser.add_argument("--boardsize", help="set the board size", type=int)
 
@@ -144,7 +142,7 @@ def getArgs():
 def main():
     args = getArgs()
 
-    config.output = OutputManager(args.withvoice)
+    #config.output = OutputManager(args.withvoice)
 
     bus = startBus()
 

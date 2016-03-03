@@ -309,10 +309,10 @@ std::pair<int, Move> GameState::alphaBeta(int depth, int alpha, int beta, Player
             if (pair.first > bestValue) {
                 bestValue = pair.first;
                 bestMove = move;
-            }
 
-            if (bestValue > alpha) {
-                alpha = bestValue;
+                if (bestValue > alpha) {
+                    alpha = bestValue;
+                }
             }
 
             board->undoMove(move);
@@ -337,10 +337,10 @@ std::pair<int, Move> GameState::alphaBeta(int depth, int alpha, int beta, Player
             if (pair.first < bestValue) {
                 bestValue = pair.first;
                 bestMove = move;
-            }
 
-            if (bestValue < beta) {
-                beta = bestValue;
+                if (bestValue < beta) {
+                    beta = bestValue;
+                }
             }
 
             board->undoMove(move);
