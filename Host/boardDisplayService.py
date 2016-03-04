@@ -45,4 +45,5 @@ class BoardDisplayService:
                             cv2.circle(self.frame, (50*i+25, 50*j+25), 20, (0,0,0), 5)
 
         cv2.imshow('boardClass', self.frame)
+        cv2.waitKey(20)
 

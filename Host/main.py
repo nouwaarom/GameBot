@@ -6,6 +6,7 @@ import time
 import random
 import argparse
 
+from game                import Game
 from board               import Board
 from arbitrator          import Arbitrator
 from aiConnector         import AIConnector
@@ -17,40 +18,6 @@ from busConnector        import BusConnector
 
 from recognizerConnector import RecognizerConnector
 from controllerConnector import ControllerConnector
-from outputManager       import OutputManager
-
-AI_PLAYER = 0
-USER_PLAYER = 1
-
-def takeTurn(board, player, arbitrator, ai, user):
-
-    if player == AI_PLAYER:
-        move = ai.getMove()
-    else:
-        move = user.getMove(board)
-
-    if arbitrator.isMoveLegal(board, move):
-        board.doMove(move)
-
-        if player == AI_PLAYER:
-            user.setMove(move)
-        else:
-            ai.setMove(move)
-
-        if arbitrator.didWin(board, player):
-            if player == AI_PLAYER:
-                print("The AI won the game")
-            else:
-                print("The User won the game")
-            sys.exit()
-    else:
-        print("Illegal move")
-
-        # Let the user try again
-        if player == AI_PLAYER:
-           return takeTurn(board, player, arbitrator, ai, user)
-
-    return
 
 def playGame(bus, startai, boardsize):
     print("Welcome, I am Hansel, I am the host for this game")
@@ -58,9 +25,9 @@ def playGame(bus, startai, boardsize):
     userStarts = raw_input("Do you want to start?\n")
 
     if (userStarts == 'yes'):
-        player = USER_PLAYER
+        userStarts = 1
     elif (userStarts == 'no'):
-        player = AI_PLAYER
+        userStarts = 0
     else:
         print("Sorry, I dont understand you")
         return
@@ -74,13 +41,12 @@ def playGame(bus, startai, boardsize):
 
     board = Board(boardsize)
     board.setStartBoard()
-
     boardDisplayService = BoardDisplayService(boardsize)
 
     arbitrator = Arbitrator()
 
     print("Starting AI ...")
-    aiConnect = AIConnector(board, player, bus)
+    aiConnect = AIConnector(board, userStarts, bus)
 
     if startai:
         aiConnect.startAI()
@@ -88,26 +54,14 @@ def playGame(bus, startai, boardsize):
         print aiConnect.getCommand()
         raw_input()
 
-    userConnect = UserConnector(player)
+    userConnect = UserConnector(userStarts)
 
-    try:
-        # Start the game
-        while (True):
-            takeTurn(board, player, arbitrator, aiConnect, userConnect)
+    game = Game(board, boardDisplayService, arbitrator)
 
-            boardDisplayService.showBoard(board)
-
-            if player == USER_PLAYER:
-                player = AI_PLAYER
-            else:
-                player = USER_PLAYER
-
-            c = chr(cv2.waitKey(10) & 255)
-            if 'q' == c:
-                break
-    except Exception as e:
-        print "An error occured while playing game"
-        print e
+    if userStarts:
+        game.playGame(userConnect, aiConnect)
+    else:
+        game.playGame(aiConnect, userConnect)
 
     if startai:
         aiConnect.terminateAI()
@@ -146,14 +100,12 @@ def getArgs():
 def main():
     args = getArgs()
 
-    #config.output = OutputManager(args.withvoice)
-
     bus = startBus()
 
-    try:
-        playGame(bus, args.startai, args.boardsize)
-    except Exception as e:
-        print "An Error occured: %s" % e
+    #try:
+    playGame(bus, args.startai, args.boardsize)
+    #except Exception as e:
+    #    print "An Error occured: %s" % e
 
     bus.endBus()
     cv2.destroyAllWindows()

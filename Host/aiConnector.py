@@ -26,7 +26,7 @@ class AIConnector:
     def terminateAI(self):
         self.ai.kill()
 
-    def getMove(self):
+    def getMove(self, board):
         print "Requesting AI move ..."
         move_request = MoveMessage()
         move_request.requesttype = MoveMessage.GET_MOVE
@@ -35,8 +35,6 @@ class AIConnector:
         print "Recieved response"
 
         move_response = MoveMessage()
-        # Only drop last character if message is from c program
-        # Dunno if that's true, but this should work
         move_response.ParseFromString(response)
 
         print "AI response: "
