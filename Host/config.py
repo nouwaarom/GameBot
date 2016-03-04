@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import yaml
 import argparse
 
 from busConnector        import BusConnector
@@ -54,7 +55,7 @@ def startBus():
 
 def getArgs():
     # Argument parsing is actually quite usefull
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Gamebot configuring program")
     parser.add_argument("--boardtest", help="run board recognizer only", action="store_true")
     parser.add_argument("--armtest", help="run arm controller only", action="store_true")
 
@@ -68,12 +69,19 @@ def getArgs():
     if not args.boardsize:
         args.boardsize = 10
 
+    if (not args.boardtest) and (not args.armtest):
+        parser.print_help()
+        return
+
     return args
 
 def main():
-    print("Configuring stuff")
+    print("This program configures the gamebot setup")
 
     args = getArgs()
+
+    if not args:
+        return
 
     bus = startBus()
 

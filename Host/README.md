@@ -18,3 +18,6 @@ to make the board recognizer and arm controller work. (WIP)
 * Improve and standardize logging
 
 # Uses pyflite and flite for voice output (CURRENTLY DISABLED)
+
+# Development
+The idea is to work with behaviour driven development.

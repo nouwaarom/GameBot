@@ -1,13 +1,10 @@
 from behave import *
 
-@given('we have behave installed')
+# Arbitrator descisions
+@then('the arbitrator should refuse the move')
 def step_impl(context):
-    pass
+    assert True is False
 
-@when('we implement a test')
+@then('the arbitrator should allow the move')
 def step_impl(context):
-    assert True is not False
-
-@then('behave will test it for us!')
-def step_impl(context):
-    assert context.failed is False
+    assert True is False

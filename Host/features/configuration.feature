@@ -1,19 +1,9 @@
 Feature: Commandline Options
-    In order to specify the behaviour of the program
+    In order to specify and improve the behaviour of the program
     As a user
-    The program should use command line options
+    I should be able to set parameters of the program
 
-    Scenario Outline: Blenders
-        Given I enter <argument> to the program,
-            when I run the program
-            then it should run <function>
-
-        Examples: Modes
-            | thing         | other thing |
-            | Red Tree Frog | mush        |
-
-        Examples: Consumer Electronics
-            | thing         | other thing |
-            | iPhone        | toxic waste |
-            | Galaxy Nexus  | toxic waste |
-
+    Scenario: Start configuration
+        Given I provide no arguments
+        When I run the configuration program
+        Then it should display help

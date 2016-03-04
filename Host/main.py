@@ -11,6 +11,8 @@ from arbitrator          import Arbitrator
 from aiConnector         import AIConnector
 from userConnector       import UserConnector
 
+from boardDisplayService import BoardDisplayService
+
 from busConnector        import BusConnector
 
 from recognizerConnector import RecognizerConnector
@@ -72,7 +74,8 @@ def playGame(bus, startai, boardsize):
 
     board = Board(boardsize)
     board.setStartBoard()
-    board.showBoard()
+
+    boardDisplayService = BoardDisplayService(boardsize)
 
     arbitrator = Arbitrator()
 
@@ -91,7 +94,8 @@ def playGame(bus, startai, boardsize):
         # Start the game
         while (True):
             takeTurn(board, player, arbitrator, aiConnect, userConnect)
-            board.showBoard()
+
+            boardDisplayService.showBoard(board)
 
             if player == USER_PLAYER:
                 player = AI_PLAYER
