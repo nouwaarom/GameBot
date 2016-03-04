@@ -1,11 +1,7 @@
-
 #include <iostream>
 using namespace std;
 
 #include "zmq.hpp"
-
-#include "publish.hpp"
-#include "subscribe.hpp"
 
 int main(int argc, char** argv)
 {
