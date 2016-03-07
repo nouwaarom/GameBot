@@ -1,5 +1,6 @@
 from movemessage_pb2  import Move
 from board import Board
+from move_helper import helperGetOldPiece, helperGetRowColumn
 
 class Arbitrator:
 
@@ -9,6 +10,15 @@ class Arbitrator:
     def isMoveLegal(self, board, move):
         newPiece = move.newpiece
         removedPieces = move.removedpieces
+
+        # Check if the move is diagonal
+        newLocation = newPiece.location
+        oldLocation = helperGetOldPiece(newPiece, removedPieces).location
+        (newRow, newCol) = helperGetRowColumn(newLocation)
+        (oldRow, oldCol) = helperGetRowColumn(oldLocation)
+        if newRow == oldRow or newCol == oldCol:
+            print "Not a diagonal move!"
+            return False
 
         if board.getPiece(newPiece.location) != 'x':
             print "NewPiece location (%d) is not empty" % newPiece.location
@@ -36,4 +46,3 @@ class Arbitrator:
                 return False
 
         return True
-
