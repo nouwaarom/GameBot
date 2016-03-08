@@ -4,7 +4,7 @@ import subprocess
 
 class BusConnector:
 
-    PROGRAM_PATH = "../Bus/bus"
+    PROGRAM_PATH = "../Bus/main.py"
 
     def __init__(self, publishPort, subscribePort):
         self.context = zmq.Context()
@@ -12,7 +12,7 @@ class BusConnector:
         self.publishPort = publishPort
         self.subscribePort = subscribePort
 
-        self.command = [self.PROGRAM_PATH, str(self.publishPort), str(self.subscribePort)]
+        self.command = [self.PROGRAM_PATH]
 
     def startPublisher(self):
         self.publisher = self.context.socket(zmq.PUB)
