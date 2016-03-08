@@ -14,8 +14,13 @@ class Arbitrator:
         # Check if the move is diagonal
         newLocation = newPiece.location
         oldLocation = helperGetOldPiece(newPiece, removedPieces).location
-        (newRow, newCol) = helperGetRowColumn(newLocation)
-        (oldRow, oldCol) = helperGetRowColumn(oldLocation)
+
+        try:
+            (newRow, newCol) = helperGetRowColumn(newLocation)
+            (oldRow, oldCol) = helperGetRowColumn(oldLocation)
+        except:
+            print "Malformed move!"
+            return False
         if newRow == oldRow or newCol == oldCol:
             print "Not a diagonal move!"
             return False
