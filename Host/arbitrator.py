@@ -12,18 +12,24 @@ class Arbitrator:
         removedPieces = move.removedpieces
 
         # Check if the move is diagonal
-        newLocation = newPiece.location
-        oldLocation = helperGetOldPiece(newPiece, removedPieces).location
+        if len(removedPieces) < 3:
+            if newPiece is None:
+                return False
+            newLocation = newPiece.location
+            oldPiece = helperGetOldPiece(newPiece, removedPieces)
+            if oldPiece is None:
+                return False
+            oldLocation = oldPiece.location
 
-        try:
-            (newRow, newCol) = helperGetRowColumn(newLocation)
-            (oldRow, oldCol) = helperGetRowColumn(oldLocation)
-        except:
-            print "Malformed move!"
-            return False
-        if newRow == oldRow or newCol == oldCol:
-            print "Not a diagonal move!"
-            return False
+            try:
+                (newRow, newCol) = helperGetRowColumn(newLocation)
+                (oldRow, oldCol) = helperGetRowColumn(oldLocation)
+            except:
+                print "Malformed move!"
+                return False
+            if newRow == oldRow or newCol == oldCol:
+                print "Not a diagonal move!"
+                return False
 
         if board.getPiece(newPiece.location) != 'x':
             print "NewPiece location (%d) is not empty" % newPiece.location
