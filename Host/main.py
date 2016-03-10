@@ -14,7 +14,8 @@ from userConnector       import UserConnector
 
 from boardDisplayService import BoardDisplayService
 
-from busConnector        import BusConnector
+from Bus.busConnector    import BusConnector
+from Bus.bus             import Bus
 
 from recognizerConnector import RecognizerConnector
 from controllerConnector import ControllerConnector
@@ -68,27 +69,14 @@ def playGame(bus, startai, boardsize):
 
     return
 
-def startBus():
-    bus = BusConnector(5555, 5556)
-    bus.startBus()
-
-    # Start publisher and subscriber
-    bus.startPublisher()
-    bus.startSubscriber()
-
-    return bus
-
+# Argument parsing is actually quite usefull
 def getArgs():
-    # Argument parsing is actually quite usefull
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--startrecognizer", help="start recognizer program", action="store_true")
-    parser.add_argument("--startcontroller", help="start controller program", action="store_true")
-    parser.add_argument("--startai", help="run board recognizer only", action="store_true")
-
-    #parser.add_argument("--withvoice", help="enable voice config.output", action="store_true")
-
-    parser.add_argument("--boardsize", help="set the board size", type=int)
+    parser.add_argument("--startrecognizer", help="start recognizer program",  action="store_true")
+    parser.add_argument("--startcontroller", help="start controller program",  action="store_true")
+    parser.add_argument("--startai",         help="run board recognizer only", action="store_true")
+    parser.add_argument("--boardsize",       help="set the board size", type=int)
 
     args = parser.parse_args()
 
@@ -100,14 +88,23 @@ def getArgs():
 def main():
     args = getArgs()
 
-    bus = startBus()
+    bus = Bus()
+    bus.startBus()
 
-    #try:
-    playGame(bus, args.startai, args.boardsize)
-    #except Exception as e:
-    #    print "An Error occured: %s" % e
+    busCon = BusConnector(5555, 5556)
+    # Start publisher and subscriber
+    busCon.startPublisher()
+    busCon.startSubscriber()
+
+    try:
+        playGame(busCon, args.startai, args.boardsize)
+    except (KeyboardInterrupt, SystemExit):
+        print("Exiting application")
+    except Exception as e:
+        print "An Error occured: %s" % e
 
     bus.endBus()
+
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
