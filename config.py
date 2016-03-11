@@ -5,8 +5,7 @@ import argparse
 from Bus.busConnector import BusConnector
 from Bus.bus          import Bus
 
-from ArmController.controllerConnector import ControllerConnector
-
+from ArmController.controller   import Controller
 from BoardRecognizer.recognizer import Recognizer
 
 def testRecognizer(bus, boardsize):
@@ -21,20 +20,11 @@ def testRecognizer(bus, boardsize):
 
     return
 
-def testController(bus, startcontroller, boardsize):
+def testController(bus, boardsize):
     print("Testing my arm")
 
-    controller = ControllerConnector(bus, boardsize)
-
-    if startcontroller:
-        controller.startArmController()
-    else:
-        print controller.getCommand()
-        raw_input()
-
-    board = "wwwwwxxxxbbbbb"
-
-    controller.setBoardState(board)
+    controller = Controller()
+    controller.doMove("dummy")
 
     print "Terminating"
     return
@@ -44,8 +34,6 @@ def getArgs():
     parser = argparse.ArgumentParser(description="Gamebot configuring program")
     parser.add_argument("--boardtest", help="run board recognizer only", action="store_true")
     parser.add_argument("--armtest", help="run arm controller only", action="store_true")
-
-    parser.add_argument("--startcontroller", help="start controller program", action="store_true")
 
     parser.add_argument("--boardsize", help="set the board size", type=int)
 
@@ -80,7 +68,7 @@ def main():
 
     # Test arm controller
     elif args.armtest:
-        testController(busCon, args.startcontroller, args.boardsize)
+        testController(busCon, args.boardsize)
 
     bus.endBus()
 

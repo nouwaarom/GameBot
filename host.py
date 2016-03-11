@@ -16,8 +16,6 @@ from Host.aiConnector         import AIConnector
 from Bus.busConnector import BusConnector
 from Bus.bus          import Bus
 
-from ArmController.controllerConnector   import ControllerConnector
-
 def playGame(bus, startai, boardsize):
     print("Welcome, I am Hansel, I am the host for this game")
 
@@ -70,12 +68,8 @@ def playGame(bus, startai, boardsize):
 # Argument parsing is actually quite usefull
 def getArgs():
     parser = argparse.ArgumentParser()
-
-    parser.add_argument("--startrecognizer", help="start recognizer program",  action="store_true")
-    parser.add_argument("--startcontroller", help="start controller program",  action="store_true")
     parser.add_argument("--startai",         help="run board recognizer only", action="store_true")
     parser.add_argument("--boardsize",       help="set the board size", type=int)
-
     args = parser.parse_args()
 
     if not args.boardsize:

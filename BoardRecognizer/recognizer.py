@@ -1,13 +1,8 @@
-#!/usr/bin/env python
-
 import os
 import cv2
 import argparse
 
 from boardRecognizer  import BoardRecognizer
-from Bus.busConnector import BusConnector
-
-from boardmessage_pb2 import BoardMessage
 
 class Recognizer:
 
