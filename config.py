@@ -5,19 +5,14 @@ import argparse
 from Bus.busConnector import BusConnector
 from Bus.bus          import Bus
 
-from BoardRecognizer.recognizerConnector import RecognizerConnector
-from ArmController.controllerConnector   import ControllerConnector
+from ArmController.controllerConnector import ControllerConnector
 
-def testRecognizer(bus, startrecognizer, boardsize):
+from BoardRecognizer.recognizer import Recognizer
+
+def testRecognizer(bus, boardsize):
     print("Testing my eyesight")
 
-    recognizer = RecognizerConnector(bus, boardsize)
-
-    if startrecognizer:
-        recognizer.startBoardRecognizer()
-    else:
-        print recognizer.getCommand()
-        raw_input()
+    recognizer = Recognizer(boardsize)
 
     board = recognizer.getBoardState()
 
@@ -50,7 +45,6 @@ def getArgs():
     parser.add_argument("--boardtest", help="run board recognizer only", action="store_true")
     parser.add_argument("--armtest", help="run arm controller only", action="store_true")
 
-    parser.add_argument("--startrecognizer", help="start recognizer program", action="store_true")
     parser.add_argument("--startcontroller", help="start controller program", action="store_true")
 
     parser.add_argument("--boardsize", help="set the board size", type=int)
@@ -82,7 +76,7 @@ def main():
 
     # Test board recognizer program
     if args.boardtest:
-        testRecognizer(busCon, args.startrecognizer, args.boardsize)
+        testRecognizer(busCon, args.boardsize)
 
     # Test arm controller
     elif args.armtest:

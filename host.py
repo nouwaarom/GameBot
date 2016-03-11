@@ -16,7 +16,6 @@ from Host.aiConnector         import AIConnector
 from Bus.busConnector import BusConnector
 from Bus.bus          import Bus
 
-from BoardRecognizer.recognizerConnector import RecognizerConnector
 from ArmController.controllerConnector   import ControllerConnector
 
 def playGame(bus, startai, boardsize):
