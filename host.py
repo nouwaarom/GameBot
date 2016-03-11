@@ -6,19 +6,18 @@ import time
 import random
 import argparse
 
-from game                import Game
-from board               import Board
-from arbitrator          import Arbitrator
-from aiConnector         import AIConnector
-from userConnector       import UserConnector
+from Host.game                import Game
+from Host.board               import Board
+from Host.boardDisplayService import BoardDisplayService
+from Host.arbitrator          import Arbitrator
+from Host.userConnector       import UserConnector
+from Host.aiConnector         import AIConnector
 
-from boardDisplayService import BoardDisplayService
+from Bus.busConnector import BusConnector
+from Bus.bus          import Bus
 
-from Bus.busConnector    import BusConnector
-from Bus.bus             import Bus
-
-from recognizerConnector import RecognizerConnector
-from controllerConnector import ControllerConnector
+from BoardRecognizer.recognizerConnector import RecognizerConnector
+from ArmController.controllerConnector   import ControllerConnector
 
 def playGame(bus, startai, boardsize):
     print("Welcome, I am Hansel, I am the host for this game")
@@ -92,9 +91,6 @@ def main():
     bus.startBus()
 
     busCon = BusConnector(5555, 5556)
-    # Start publisher and subscriber
-    busCon.startPublisher()
-    busCon.startSubscriber()
 
     try:
         playGame(busCon, args.startai, args.boardsize)

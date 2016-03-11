@@ -2,7 +2,7 @@
 
 from serial import Serial
 
-from busConnector     import BusConnector
+from Bus.busConnector import BusConnector
 from boardmessage_pb2 import BoardMessage
 
 def main():

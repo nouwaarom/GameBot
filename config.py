@@ -2,10 +2,11 @@
 import yaml
 import argparse
 
-from busConnector        import BusConnector
+from Bus.busConnector import BusConnector
+from Bus.bus          import Bus
 
-from recognizerConnector import RecognizerConnector
-from controllerConnector import ControllerConnector
+from BoardRecognizer.recognizerConnector import RecognizerConnector
+from ArmController.controllerConnector   import ControllerConnector
 
 def testRecognizer(bus, startrecognizer, boardsize):
     print("Testing my eyesight")
@@ -43,16 +44,6 @@ def testController(bus, startcontroller, boardsize):
     print "Terminating"
     return
 
-def startBus():
-    bus = BusConnector(5555, 5556)
-    bus.startBus()
-
-    # Start publisher and subscriber
-    bus.startPublisher()
-    bus.startSubscriber()
-
-    return bus
-
 def getArgs():
     # Argument parsing is actually quite usefull
     parser = argparse.ArgumentParser(description="Gamebot configuring program")
@@ -83,18 +74,21 @@ def main():
     if not args:
         return
 
-    bus = startBus()
+    bus = Bus()
+    bus.startBus()
+
+    # Start publisher and subscriber
+    busCon = BusConnector(5555, 5556)
 
     # Test board recognizer program
     if args.boardtest:
-        testRecognizer(bus, args.startrecognizer, args.boardsize)
+        testRecognizer(busCon, args.startrecognizer, args.boardsize)
 
     # Test arm controller
     elif args.armtest:
-        testController(bus, args.startcontroller, args.boardsize)
+        testController(busCon, args.startcontroller, args.boardsize)
 
     bus.endBus()
 
-# TODO remove evil else (output is outputmanager object, see main.py)
 if __name__ == "__main__":
     main()
