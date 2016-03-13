@@ -1,24 +1,10 @@
 .PHONY: all clean
 
-MESSAGES=movemessage.proto boardmessage.proto
-
-all: $(MESSAGES) host config
+all: move_message
 
 clean:
-	rm -f host
 	rm -f *.pyc
+	rm -f movemessage_pb2.py
 
-$(MESSAGES):
-	protoc --python_out=. $@
-
-host: main.py
-	@echo "Writing shortcut script host..."
-	@echo '#! /bin/sh' > host
-	@echo './main.py "$$@"' >> host
-	@chmod +x host
-
-config: config.py
-	@echo "Writing shortcut script config..."
-	@echo '#! /bin/sh' > config
-	@echo './config.py "$$@"' >> config
-	@chmod +x config
+move_message:
+	protoc --python_out=. movemessage.proto
