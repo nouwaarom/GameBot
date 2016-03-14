@@ -6,6 +6,7 @@
 
 Host/host
 Host/protoc_middleman
+Host/movemessage_pb2.py
 
 CheckerAI/ai
 CheckerAI/protoc_middleman

@@ -3,12 +3,12 @@ import time
 import random
 import subprocess
 
-from movemessage_pb2 import MoveMessage
-from busConnector    import BusConnector
+from movemessage_pb2  import MoveMessage
+from Bus.busConnector import BusConnector
 
 class AIConnector:
 
-    PROGRAM_PATH = "../CheckerAI/ai"
+    PROGRAM_PATH = "CheckerAI/ai"
 
     def __init__(self, board, userStarts, bus):
         difficulty = random.randint(0,99)

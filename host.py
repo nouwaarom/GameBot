@@ -6,18 +6,15 @@ import time
 import random
 import argparse
 
-from game                import Game
-from board               import Board
-from arbitrator          import Arbitrator
-from aiConnector         import AIConnector
-from userConnector       import UserConnector
+from Host.game                import Game
+from Host.board               import Board
+from Host.boardDisplayService import BoardDisplayService
+from Host.arbitrator          import Arbitrator
+from Host.userConnector       import UserConnector
+from Host.aiConnector         import AIConnector
 
-from boardDisplayService import BoardDisplayService
-
-from busConnector        import BusConnector
-
-from recognizerConnector import RecognizerConnector
-from controllerConnector import ControllerConnector
+from Bus.busConnector import BusConnector
+from Bus.bus          import Bus
 
 def playGame(bus, startai, boardsize):
     print("Welcome, I am Hansel, I am the host for this game")
@@ -68,28 +65,11 @@ def playGame(bus, startai, boardsize):
 
     return
 
-def startBus():
-    bus = BusConnector(5555, 5556)
-    bus.startBus()
-
-    # Start publisher and subscriber
-    bus.startPublisher()
-    bus.startSubscriber()
-
-    return bus
-
+# Argument parsing is actually quite usefull
 def getArgs():
-    # Argument parsing is actually quite usefull
     parser = argparse.ArgumentParser()
-
-    parser.add_argument("--startrecognizer", help="start recognizer program", action="store_true")
-    parser.add_argument("--startcontroller", help="start controller program", action="store_true")
-    parser.add_argument("--startai", help="run board recognizer only", action="store_true")
-
-    #parser.add_argument("--withvoice", help="enable voice config.output", action="store_true")
-
-    parser.add_argument("--boardsize", help="set the board size", type=int)
-
+    parser.add_argument("--startai",         help="run board recognizer only", action="store_true")
+    parser.add_argument("--boardsize",       help="set the board size", type=int)
     args = parser.parse_args()
 
     if not args.boardsize:
@@ -100,14 +80,20 @@ def getArgs():
 def main():
     args = getArgs()
 
-    bus = startBus()
+    bus = Bus()
+    bus.startBus()
 
-    #try:
-    playGame(bus, args.startai, args.boardsize)
-    #except Exception as e:
-    #    print "An Error occured: %s" % e
+    busCon = BusConnector(5555, 5556)
+
+    try:
+        playGame(busCon, args.startai, args.boardsize)
+    except (KeyboardInterrupt, SystemExit):
+        print("Exiting application")
+    except Exception as e:
+        print "An Error occured: %s" % e
 
     bus.endBus()
+
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":

@@ -1,15 +1,26 @@
 import zmq
+import time
+import subprocess
 
 class BusConnector:
 
     def __init__(self, publishPort, subscribePort):
-        context = zmq.Context()
+        self.context = zmq.Context()
 
-        self.publisher = context.socket(zmq.PUB)
+        self.publisher = self.context.socket(zmq.PUB)
         self.publisher.connect("tcp://127.0.0.1:5555")
 
-        self.subscriber = context.socket(zmq.SUB)
+        self.subscriber = self.context.socket(zmq.SUB)
         self.subscriber.connect("tcp://127.0.0.1:5556")
+
+    # Send a request and return response
+    def sendRequest(self, reciever, message):
+        self.subscriber.setsockopt(zmq.SUBSCRIBE, reciever + "_response")
+
+        self.publisher.send_multipart([reciever + "_request ", message])
+
+        [adress, content] = self.subscriber.recv_multipart()
+        return content
 
     # Send a request and return response
     def getRequest(self, reciever):
