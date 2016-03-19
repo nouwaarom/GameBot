@@ -1,32 +1,42 @@
-import os
 import cv2
-import argparse
 
-from boardRecognizer  import BoardRecognizer
+from boardRecognizer import BoardRecognizer
+
 
 class Recognizer:
-
     def __init__(self, boardsize):
         self.boardsize = boardsize
+        self.mask = dict()
+        self.config = dict()
 
-    def test(self):
-        full_path = os.path.realpath(__file__)
-        path, filename = os.path.split(full_path)
+    def initboardrecognizer(self, capture):
+        self.recognizer = BoardRecognizer(capture, self.boardsize)
 
-        recognizer = BoardRecognizer(path + '/tests/test-1.avi')
+    def runtest(self):
+        self.recognizer.initdisplay()
+
+        self.recognizer.setmask(self.config['mask'])
+        self.recognizer.inittrackbar()
 
         while True:
-            print recognizer.getBoardState()
+            print self.recognizer.getboardstate()
 
             if cv2.waitKey(10) == ord('q'):
                 break
 
-    def getBoardState(self):
-        recognizer = BoardRecognizer(0)
+        self.recognizer.endcapture()
+        self.recognizer.enddisplay()
 
+    def getboardstate(self):
         try:
-            board = recognizer.getBoardState()
+            board = self.recognizer.getboardstate()
             return board
         except Exception as e:
-            print "An error occured"
+            print "An error occurred while getting board state"
             print e
+
+    def setconfig(self, config):
+        self.config = config
+
+    def getconfig(self):
+        return self.config

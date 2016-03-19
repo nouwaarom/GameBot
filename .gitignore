@@ -17,3 +17,5 @@ BoardRecognizer/recognizer
 BoardRecognizer/protoc_middleman
 
 Bus/bus
+
+.idea/

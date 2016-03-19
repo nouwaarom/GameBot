@@ -2,45 +2,45 @@
 import yaml
 import argparse
 
-from Bus.busConnector import BusConnector
-from Bus.bus          import Bus
-
-from ArmController.controller   import Controller
+from ArmController.controller import Controller
 from BoardRecognizer.recognizer import Recognizer
 
-def testRecognizer(bus, boardsize):
+
+# FIXME this should be a fancy config object
+config = dict()
+
+
+def testrecognizer(boardsize):
     print("Testing my eyesight")
 
     recognizer = Recognizer(boardsize)
+    recognizer.setconfig(config['recognizer'])
 
-    board = recognizer.getBoardState()
+    # Load the test movie
+    recognizer.initboardrecognizer('BoardRecognizer/tests/test-1.avi')
 
-    print board
-    print "Terminating"
+    recognizer.runtest()
 
-    return
+    config['recognizer'] = recognizer.getconfig()
 
-def testController(bus, boardsize):
+
+def testcontroller(boardsize):
     print("Testing my arm")
+    print(boardsize)
 
     controller = Controller()
     controller.doMove("dummy")
 
-    print "Terminating"
-    return
+    print("Terminating")
 
-def getArgs():
-    # Argument parsing is actually quite usefull
+
+def getargs():
+    # Argument parsing is actually quite useful
     parser = argparse.ArgumentParser(description="Gamebot configuring program")
     parser.add_argument("--boardtest", help="run board recognizer only", action="store_true")
     parser.add_argument("--armtest", help="run arm controller only", action="store_true")
 
-    parser.add_argument("--boardsize", help="set the board size", type=int)
-
     args = parser.parse_args()
-
-    if not args.boardsize:
-        args.boardsize = 10
 
     if (not args.boardtest) and (not args.armtest):
         parser.print_help()
@@ -48,29 +48,29 @@ def getArgs():
 
     return args
 
+
 def main():
+    global config
     print("This program configures the gamebot setup")
 
-    args = getArgs()
+    args = getargs()
 
     if not args:
+        print("Nothing to configure, terminating")
         return
 
-    bus = Bus()
-    bus.startBus()
+    configfile = open('config.yml', 'r')
+    config = yaml.load(configfile.read())
 
-    # Start publisher and subscriber
-    busCon = BusConnector(5555, 5556)
+    print(config)
 
     # Test board recognizer program
     if args.boardtest:
-        testRecognizer(busCon, args.boardsize)
+        testrecognizer(config['boardsize'])
 
     # Test arm controller
     elif args.armtest:
-        testController(busCon, args.boardsize)
-
-    bus.endBus()
+        testcontroller(config['boardsize'])
 
 if __name__ == "__main__":
     main()
