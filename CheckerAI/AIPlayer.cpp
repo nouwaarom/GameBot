@@ -35,25 +35,6 @@ Move AIPlayer::getMove()
     std::pair<int, Move> valuemove = state->alphaBeta(5, -581357, 581357, selfPlayer, selfPlayer);
 
     Move move = valuemove.second;
-    /*
-    std::vector<move> moves = state->getforcedmoves(selfplayer);
-
-    if (!moves.empty())
-    {
-        move = selectRandomly(moves);
-    }
-    else {
-        moves = state->getMoves(selfPlayer);
-
-        if (!moves.empty())
-        {
-            move =  selectRandomly(moves);
-        }
-        else {
-            std::cout << "I am Unable to make a move" << std::endl;
-        }
-    }
-    */
 
     state->doMove(move);
 
