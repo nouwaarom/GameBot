@@ -68,7 +68,7 @@ Move Board::createMove(int newPosition, int oldPosition)
 Move Board::createMove(int newRow, int newCol, int oldRow, int oldCol)
 {
     Move move;
-    // oldPiece goes to new location, gets crowned if it reached teh other side
+    // oldPiece goes to new location, gets crowned if it reached the other side
     pieceType oldPiece = getPiece(oldRow, oldCol);
     if ((oldPiece == pieceType::white) && newRow == 9) {
         oldPiece = pieceType::white_crown;
