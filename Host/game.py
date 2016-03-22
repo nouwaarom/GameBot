@@ -1,6 +1,8 @@
 from arbitrator          import Arbitrator
 from boardDisplayService import BoardDisplayService
 
+import sys
+
 class Game:
     def __init__(self, board, boardDisplayService, arbitrator):
         self.board               = board

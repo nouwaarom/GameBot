@@ -89,12 +89,10 @@ def main():
         playGame(busCon, args.startai, args.boardsize)
     except (KeyboardInterrupt, SystemExit):
         print("Exiting application")
-    except Exception as e:
-        print "An Error occured: %s" % e
+    finally:
+        bus.endBus()
 
-    bus.endBus()
-
-    cv2.destroyAllWindows()
+        cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     main()

@@ -90,32 +90,26 @@ std::vector<Move> GameState::getMovesAtPosition(int row, int col, Player* player
     bool isWhite   = vectorContains(player->getPieces(), pieceType::white);
     bool isBlack   = vectorContains(player->getPieces(), pieceType::black);
 
-    int i;
-    //check left down
-    for (i=1; (board->getPiece(row-i,col-i) == pieceType::empty) && (((i==1) && isBlack) || isCrowned); i++)
-    {
-        moves.push_back(board->createMove(row-i, col-i, row, col));
-    }
-
-    //check right down
-    for (i=1; (board->getPiece(row-i,col+i) == pieceType::empty) && (((i==1) && isBlack) || isCrowned); i++)
-    {
-        moves.push_back(board->createMove(row-i, col+i, row, col));
-    }
-
-    //check left up
-    for (i=1; (board->getPiece(row+i,col-i) == pieceType::empty) && (((i==1) && isWhite) || isCrowned); i++)
-    {
-        moves.push_back(board->createMove(row+i, col-i, row, col));
-    }
-
-    //check right
-    for (i=1; (board->getPiece(row+i,col+i) == pieceType::empty) && (((i==1) && isWhite) || isCrowned); i++)
-    {
-        moves.push_back(board->createMove(row+i, col+i, row, col));
-    }
+    getMovesInDirection(row, col, isWhite, true, !isCrowned, player, moves);
+    getMovesInDirection(row, col, isWhite, false, !isCrowned, player, moves);
 
     return moves;
+}
+
+void GameState::getMovesInDirection(int r, int c, bool up, bool right, bool oneStep, Player* player, std::vector<Move> &moves){
+    int row = r;
+    int col = c;
+
+    while(!oneStep || row == r){
+        if(up)  row++;
+        else    row--;
+
+        if(right) col++;
+        else      col--;
+        pieceType type = board->getPiece(row, col);
+        if(type != pieceType::empty) break;
+        moves.push_back(board->createMove(row, col, r, c));
+    }
 }
 
 std::vector<Move> GameState::getForcedMovesAtPosition(int row, int col, Player* player)
@@ -324,7 +318,7 @@ std::pair<int, Move> GameState::alphaBeta(int depth, int alpha, int beta, Player
         return std::make_pair(bestValue, bestMove);
     }
 
-    if (player != maximizingPlayer)
+    else
     {
         bestValue = 581357;
 

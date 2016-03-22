@@ -20,6 +20,8 @@ class GameState
         std::vector<Move> getForcedMovesAtPosition(int row, int col, Player* player);
         std::vector<Move> getSuccessiveForcedMoves(Move move, Player* player);
 
+        void getMovesInDirection(int r, int c, bool up, bool right, bool oneStep, Player* player, std::vector<Move> &moves);
+
         template <typename T>
         bool vectorContains(std::vector<T> v, T x);
 
