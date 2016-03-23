@@ -11,58 +11,13 @@ class BoardRecognizer:
 
         self.cap = cv2.VideoCapture()
         self.boardsize = boardsize
-        self.windowAvailable = True
         self.piecerecognizer = PieceRecognizer()
 
-        self.windowMask = 'mask'
-        self.windowFrame = 'frame'
 
         # Mask for filtering the board edges
         self.mask = dict()
 
         self.initcapture(capture)
-
-    def initcapture(self, n):
-        # initialize cap
-        cap = cv2.VideoCapture(n)
-
-        cap.set(cv2.cv.CV_CAP_PROP_FPS, 1)
-        cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 2000)
-        cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 2000)
-
-        print "Using Camera{}".format(n)
-        print "Frame Size: ", cap.get(3), "x", cap.get(4)
-
-        self.cap = cap
-        return cap.isOpened()
-
-    def initdisplay(self):
-        self.windowAvailable = True
-        cv2.namedWindow(self.windowFrame, cv2.WINDOW_AUTOSIZE)
-        cv2.namedWindow(self.windowMask, cv2.WINDOW_AUTOSIZE)
-
-    def inittrackbar(self):
-        cv2.createTrackbar('H', self.windowMask, 0, 255, self.ontrackbarchange)
-        cv2.createTrackbar('S', self.windowMask, 0, 255, self.ontrackbarchange)
-        cv2.createTrackbar('V', self.windowMask, 0, 255, self.ontrackbarchange)
-
-        # Set the trackbar to the right starting values
-        cv2.setTrackbarPos('H', self.windowMask, self.mask['H'])
-        cv2.setTrackbarPos('S', self.windowMask, self.mask['S'])
-        cv2.setTrackbarPos('V', self.windowMask, self.mask['V'])
-
-    def ontrackbarchange(self, _):
-        self.mask['H'] = cv2.getTrackbarPos('H', self.windowMask)
-        self.mask['S'] = cv2.getTrackbarPos('S', self.windowMask)
-        self.mask['v'] = cv2.getTrackbarPos('V', self.windowMask)
-
-    def endcapture(self):
-        # when everything is done release the frame
-        self.cap.release()
-
-    def enddisplay(self):
-        cv2.destroyWindow(self.windowFrame)
-        cv2.destroyWindow(self.windowMask)
 
     def getmask(self):
         return self.mask
@@ -70,13 +25,8 @@ class BoardRecognizer:
     def setmask(self, mask):
         self.mask = mask
 
-    def getboardstate(self):
+    def getboardstate(self, frame):
         pieces = "!"
-
-        cap = self.cap
-
-        # capture frame by frame
-        _, frame = cap.read()
 
         # Smoothing
         frame = cv2.bilateralFilter(frame, 12, 50, 50)
@@ -117,11 +67,4 @@ class BoardRecognizer:
             m = cv2.getPerspectiveTransform(points1, points2)
             board = cv2.warpPerspective(gray, m, (400, 400))
 
-            pieces = self.piecerecognizer.findPiecesOnBoard(board)
-
-        # display the resulting frame
-        if self.windowAvailable:
-            cv2.imshow('frame', frame)
-            cv2.imshow('mask', mask)
-
-        return pieces
+            return board
