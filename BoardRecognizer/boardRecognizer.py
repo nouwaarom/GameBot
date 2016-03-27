@@ -1,23 +1,12 @@
 import numpy as np
 import cv2
 
-from pieceRecognizer import PieceRecognizer
-
 
 class BoardRecognizer:
 
-    def __init__(self, capture, boardsize):
-        print "Initializing board recognizer"
-
-        self.cap = cv2.VideoCapture()
-        self.boardsize = boardsize
-        self.piecerecognizer = PieceRecognizer()
-
-
+    def __init__(self):
         # Mask for filtering the board edges
         self.mask = dict()
-
-        self.initcapture(capture)
 
     def getmask(self):
         return self.mask
@@ -25,9 +14,7 @@ class BoardRecognizer:
     def setmask(self, mask):
         self.mask = mask
 
-    def getboardstate(self, frame):
-        pieces = "!"
-
+    def processframe(self, frame):
         # Smoothing
         frame = cv2.bilateralFilter(frame, 12, 50, 50)
 
@@ -36,8 +23,8 @@ class BoardRecognizer:
 
         # Color filtering
         # was approximately 50 50 50
-        lower_green = np.array([self.mask['H'], self.mask['S'], self.mask['V']])
-        upper_green = np.array([85, 255, 255])
+        lower_green = np.array([self.mask['H'] - 10, self.mask['S'] - 20, self.mask['V'] - 20])
+        upper_green = np.array([self.mask['H'] + 10, 255, 255])
 
         mask = cv2.inRange(hsv, lower_green, upper_green)
 
@@ -65,6 +52,10 @@ class BoardRecognizer:
             points1 = np.float32(points)
             points2 = np.float32([[0, 0], [400, 0], [0, 400], [400, 400]])
             m = cv2.getPerspectiveTransform(points1, points2)
+
             board = cv2.warpPerspective(gray, m, (400, 400))
 
-            return board
+            return True, board
+        else:
+            return False, 0
+

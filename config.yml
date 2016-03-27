@@ -8,7 +8,7 @@ ai:
 
 recognizer:
   mask:
-    H: 50
+    H: 75
     S: 50
     V: 50
 

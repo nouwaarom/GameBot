@@ -17,9 +17,15 @@ def testrecognizer(boardsize):
     recognizer.setconfig(config['recognizer'])
 
     # Load the test movie
-    recognizer.initboardrecognizer('BoardRecognizer/tests/test-1.avi')
+    recognizer.initcapture('BoardRecognizer/tests/test-1.avi')
+    recognizer.initdisplay()
 
-    recognizer.runtest()
+    while True:
+        print recognizer.getboardstate()
+        recognizer.showdisplay()
+
+    recognizer.endcapture()
+    recognizer.enddisplay()
 
     config['recognizer'] = recognizer.getconfig()
 

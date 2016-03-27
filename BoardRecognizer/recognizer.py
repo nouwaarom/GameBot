@@ -1,25 +1,27 @@
 import cv2
+import numpy as np
 
 from boardRecognizer import BoardRecognizer
+from pieceRecognizer import PieceRecognizer
 
 
 class Recognizer:
     def __init__(self, boardsize):
         self.boardsize = boardsize
+
         self.mask = dict()
         self.config = dict()
 
-        self.windowMask = 'mask'
         self.windowFrame = 'frame'
         self.windowBoard = 'board'
 
-        self.boardRecognizer = BoardRecognizer(capture, self.boardsize)
+        self.boardRecognizer = BoardRecognizer()
+        self.pieceRecognizer = PieceRecognizer(self.boardsize)
 
     def initcapture(self, n):
-        # initialize cap
         cap = cv2.VideoCapture(n)
 
-        cap.set(cv2.cv.CV_CAP_PROP_FPS, 1)
+        # This settings are to always set webcam resolution to maximum
         cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 2000)
         cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 2000)
 
@@ -31,26 +33,26 @@ class Recognizer:
 
     def initdisplay(self):
         cv2.namedWindow(self.windowFrame, cv2.WINDOW_AUTOSIZE)
-        cv2.namedWindow(self.windowMask, cv2.WINDOW_AUTOSIZE)
         cv2.namedWindow(self.windowBoard, cv2.WINDOW_AUTOSIZE)
+        cv2.setMouseCallback(self.windowFrame, self.setmasktoposition)
 
-    def inittrackbar(self):
-        cv2.createTrackbar('H', self.windowMask, 0, 179, self.ontrackbarchange)
-        cv2.createTrackbar('S', self.windowMask, 0, 255, self.ontrackbarchange)
-        cv2.createTrackbar('V', self.windowMask, 0, 255, self.ontrackbarchange)
+    def setmasktoposition(self, event, x, y, flags, param):
+        if event == cv2.EVENT_LBUTTONDOWN:
+            mask = self.config["mask"]
 
-        # Set the trackbar to the right starting values
-        cv2.setTrackbarPos('H', self.windowMask, self.mask['H'])
-        cv2.setTrackbarPos('S', self.windowMask, self.mask['S'])
-        cv2.setTrackbarPos('V', self.windowMask, self.mask['V'])
+            # Convert RGB value to HSV
+            pixel = np.array(self.frame[y][x], ndmin=3)
+            hsv = cv2.cvtColor(pixel, cv2.COLOR_BGR2HSV)
+            hsv = hsv[0][0]
 
-    def ontrackbarchange(self, _):
-        self.mask['H'] = cv2.getTrackbarPos('H', self.windowMask)
-        self.mask['S'] = cv2.getTrackbarPos('S', self.windowMask)
-        self.mask['v'] = cv2.getTrackbarPos('V', self.windowMask)
+            mask['H'] = hsv[0]
+            mask['S'] = hsv[1]
+            mask['V'] = hsv[2]
+
+            self.config["mask"] = mask
+            self.boardRecognizer.setmask(mask)
 
     def endcapture(self):
-        # when everything is done release the frame
         self.cap.release()
 
     def enddisplay(self):
@@ -59,43 +61,20 @@ class Recognizer:
 
     def showdisplay(self):
         cv2.imshow(self.windowFrame, self.frame)
-        cv2.imshow(self.windowMask,  self.mask)
         cv2.imshow(self.windowBoard, self.board)
-
-    def getframe(self):
-        _, frame = self.cap.read()
-        return frame
-
-    def runtest(self):
-        self.recognizer.initdisplay()
-
-        self.recognizer.setmask(self.config['mask'])
-        self.recognizer.inittrackbar()
-
-        while True:
-            print self.recognizer.getboardstate()
-
-            if cv2.waitKey(10) == ord('q'):
-                break
-
-        self.recognizer.endcapture()
-        self.recognizer.enddisplay()
-
-    def getboardstate(self):
-        try:
-            frame = self.getframe()
-            self.boardRecognizer.processframe(frame)
-            if self.boardRecognizer.boardfound():
-                board = self.boardRecognizer.getboard()
-                pieces = self.pieceRecognizer.findpiecesonboard(board)
-                return pieces
-
-        except Exception as e:
-            print "An error occurred while getting board state"
-            print e
+        cv2.waitKey(20)
 
     def setconfig(self, config):
         self.config = config
+        self.boardRecognizer.setmask(config['mask'])
 
     def getconfig(self):
         return self.config
+
+    def getboardstate(self):
+        _, self.frame = self.cap.read()
+
+        boardfound, self.board = self.boardRecognizer.processframe(self.frame)
+        if boardfound:
+            pieces = self.pieceRecognizer.findpiecesonboard(self.board)
+            return pieces

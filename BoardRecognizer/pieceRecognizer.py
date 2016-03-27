@@ -4,26 +4,26 @@ import cv2
 
 class PieceRecognizer:
 
-    def __init__(self):
+    def __init__(self, boardsize):
         print "Initializing piece recognizer"
+        self.boardsize = boardsize
 
     def getrow(self, position):
-        return 2*(position % 4) + self.getcol(position) % 2
+        return 2*(position % (self.boardsize/2)) + self.getcol(position) % 2
 
     def getcol(self, position):
-        return position / 4
+        return position / (self.boardsize/2)
 
     def findpiecesonboard(self, board):
         # Split the board into pieces
-
         board_representation = []
         mean_black = 0
-        mean = [[0 for _ in range(8)] for _ in range(8)]
+        mean = [[0 for _ in range(self.boardsize)] for _ in range(self.boardsize)]
 
-        for i in range(8):
+        for i in range(self.boardsize):
             row = board[(i*50):((i+1)*50)]
-            for j in range(8):
-                tile = row[0:50,(j*50):((j+1)*50)]
+            for j in range(self.boardsize):
+                tile = row[0:50, (j*50):((j+1)*50)]
                 mean[i][j] = cv2.mean(tile)
 
                 if ((i+j) % 2) == 1:
