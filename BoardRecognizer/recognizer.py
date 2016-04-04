@@ -71,10 +71,14 @@ class Recognizer:
     def getconfig(self):
         return self.config
 
-    def getboardstate(self):
-        _, self.frame = self.cap.read()
+    def getframe(self):
+        _,frame = self.cap.read()
+        return frame
 
-        boardfound, self.board = self.boardRecognizer.processframe(self.frame)
+    def getboardstate(self, frame):
+        self.frame = frame
+
+        boardfound, self.board = self.boardRecognizer.processframe(frame)
         if boardfound:
             pieces = self.pieceRecognizer.findpiecesonboard(self.board)
             return pieces

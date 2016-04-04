@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import yaml
+import cv2
 import argparse
 
 from ArmController.controller import Controller
@@ -10,18 +11,34 @@ from BoardRecognizer.recognizer import Recognizer
 config = dict()
 
 
-def testrecognizer(boardsize):
+def configurerecognizerwithimage(boardsize, filename):
+    recognizer = Recognizer(boardsize)
+    recognizer.setconfig(config['recognizer'])
+
+    recognizer.initdisplay()
+    img = cv2.imread('BoardRecognizer/test/' + filename, 3)
+
+    print recognizer.getboardstate(img)
+
+    while True:
+        recognizer.showdisplay()
+
+    recognizer.enddisplay()
+
+
+def testrecognizer(boardsize, filename):
     print("Testing my eyesight")
 
     recognizer = Recognizer(boardsize)
     recognizer.setconfig(config['recognizer'])
 
     # Load the test movie
-    recognizer.initcapture('BoardRecognizer/tests/test-1.avi')
+    recognizer.initcapture('BoardRecognizer/tests/' + filename)
     recognizer.initdisplay()
 
     while True:
-        print recognizer.getboardstate()
+        frame = recognizer.getframe()
+        print recognizer.getboardstate(frame)
         recognizer.showdisplay()
 
     recognizer.endcapture()
@@ -43,8 +60,10 @@ def testcontroller(boardsize):
 def getargs():
     # Argument parsing is actually quite useful
     parser = argparse.ArgumentParser(description="Gamebot configuring program")
+    parser.add_argument("--boardconfigure", help="configure board recognizer", action="store_true")
     parser.add_argument("--boardtest", help="run board recognizer only", action="store_true")
     parser.add_argument("--armtest", help="run arm controller only", action="store_true")
+    parser.add_argument("--file", help="name of test image to load")
 
     args = parser.parse_args()
 
@@ -72,7 +91,10 @@ def main():
 
     # Test board recognizer program
     if args.boardtest:
-        testrecognizer(config['boardsize'])
+        testrecognizer(config['boardsize'], args.file)
+
+    elif args.boardconfigure:
+        configurerecognizerwithimage(config['boardsize'], args.file)
 
     # Test arm controller
     elif args.armtest:

@@ -1,6 +1,6 @@
 import numpy as np
+import decimal
 import cv2
-
 
 class PieceRecognizer:
 
@@ -36,9 +36,11 @@ class PieceRecognizer:
             x = self.getcol(i)
             y = self.getrow(i)
 
-            if mean[x][y][0] < mean_black - 50:
+            cv2.putText(board, str(round(mean[x][y][0], 1)), (x*50+25, y*50+25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0))
+
+            if mean[x][y][0] < 150:
                 board_representation.append('b')
-            elif mean[x][y][0] > mean_black + 50:
+            elif mean[x][y][0] > 200:
                 board_representation.append('w')
             else:
                 board_representation.append(' ')
