@@ -16,12 +16,16 @@ def configurerecognizerwithimage(boardsize, filename):
     recognizer.setconfig(config['recognizer'])
 
     recognizer.initdisplay()
-    img = cv2.imread('BoardRecognizer/test/' + filename, 3)
+    img = cv2.imread('BoardRecognizer/tests/' + filename)
 
     print recognizer.getboardstate(img)
 
     while True:
         recognizer.showdisplay()
+        key = cv2.waitKey(50)
+
+        if key == ord('q'):
+            break
 
     recognizer.enddisplay()
 
@@ -67,7 +71,8 @@ def getargs():
 
     args = parser.parse_args()
 
-    if (not args.boardtest) and (not args.armtest):
+    if not args:
+        print("Nothing to configure, terminating")
         parser.print_help()
         return
 
@@ -79,10 +84,6 @@ def main():
     print("This program configures the gamebot setup")
 
     args = getargs()
-
-    if not args:
-        print("Nothing to configure, terminating")
-        return
 
     configfile = open('config.yml', 'r')
     config = yaml.load(configfile.read())

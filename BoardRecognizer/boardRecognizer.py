@@ -47,10 +47,19 @@ class BoardRecognizer:
 
         # If the board is found we can try and recognize the pieces
         if len(points) == 4:
-            gray = frame[:, :, 2]
+            gray = frame[:, :, 1]
+
+            points.sort(key=lambda x: x[0])
+            lower = points[0:2]
+            lower.sort(key=lambda x: x[1])
+            upper = points[2:4]
+            upper.sort(key=lambda x: x[1])
+            points = lower + upper
+
+            print points
 
             points1 = np.float32(points)
-            points2 = np.float32([[0, 0], [400, 0], [0, 400], [400, 400]])
+            points2 = np.float32([[0, 0], [0, 400], [400, 0], [400, 400]])
             m = cv2.getPerspectiveTransform(points1, points2)
 
             board = cv2.warpPerspective(gray, m, (400, 400))

@@ -25,7 +25,7 @@ class Recognizer:
         cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 2000)
         cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 2000)
 
-        print "Using Camera{}".format(n)
+        print "Capturing from: {}".format(n)
         print "Frame Size: ", cap.get(3), "x", cap.get(4)
 
         self.cap = cap
@@ -72,7 +72,7 @@ class Recognizer:
         return self.config
 
     def getframe(self):
-        _,frame = self.cap.read()
+        _, frame = self.cap.read()
         return frame
 
     def getboardstate(self, frame):
