@@ -55,13 +55,14 @@ def playGame(bus, startai, boardsize):
 
     game = Game(board, boardDisplayService, arbitrator)
 
-    if userStarts:
-        game.playGame(userConnect, aiConnect)
-    else:
-        game.playGame(aiConnect, userConnect)
-
-    if startai:
-        aiConnect.terminateAI()
+    try:
+        if userStarts:
+            game.playGame(userConnect, aiConnect)
+        else:
+            game.playGame(aiConnect, userConnect)
+    finally:
+        if startai:
+            aiConnect.terminateAI()
 
     return
 
