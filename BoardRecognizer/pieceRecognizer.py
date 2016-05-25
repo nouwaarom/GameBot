@@ -14,36 +14,52 @@ class PieceRecognizer:
     def getcol(self, position):
         return position / (self.boardsize/2)
 
-    def findpiecesonboard(self, board):
+    def getmeansfromboard(self, board):
         # Split the board into pieces
-        board_representation = []
-        mean_black = 0
         mean = [[0 for _ in range(self.boardsize)] for _ in range(self.boardsize)]
+        #mean = [[0] * self.boardsize] * self.boardsize
+
+        print mean
 
         for i in range(self.boardsize):
             row = board[(i*50):((i+1)*50)]
             for j in range(self.boardsize):
                 tile = row[0:50, (j*50):((j+1)*50)]
-                mean[i][j] = cv2.mean(tile)
+                mean[i][j] = cv2.mean(tile)[0]
 
-                if ((i+j) % 2) == 1:
-                    mean_black += mean[i][j][0]
+        flatmean = []
+        for i in range(32):
+            x = self.getcol(i)
+            y = self.getrow(i)
 
-        mean_black /= (4 * 8)
+            flatmean.append(mean[x][y])
+
+        return flatmean
+
+    def findpiecesonboard(self, board):
+        mean = self.getmeansfromboard(board)
+
+        board_representation = []
+        board = cv2.cvtColor(board, cv2.COLOR_GRAY2RGB)
 
         # Determine the type of pieces
         for i in range(32):
             x = self.getcol(i)
             y = self.getrow(i)
 
-            cv2.putText(board, str(round(mean[x][y][0], 1)), (x*50+25, y*50+25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0))
+            print mean[i]
 
-            if mean[x][y][0] < 150:
-                board_representation.append('b')
-            elif mean[x][y][0] > 200:
-                board_representation.append('w')
+
+            if mean[i] < 80:
+                identifier = 'b'
+            elif mean[i] > 140:
+                identifier = 'w'
             else:
-                board_representation.append(' ')
+                identifier = 'x'
+
+            board_representation.append(identifier)
+
+            cv2.putText(board, str(round(mean[i], 1)) + ' ' + identifier, (y*50+25, x*50+25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0))
 
         cv2.imshow('board', board)
 

@@ -38,8 +38,11 @@ class BoardRecognizer:
         # Contour filter
         for contour in contours:
             area = cv2.contourArea(contour)
+            # Make sure the area is of significant size (and not some random group of pixels)
             if area > 500:
                 m = cv2.moments(contour)
+
+                # FIXME We have no clue what this actually does..
                 cx = int(m['m10']/m['m00'])
                 cy = int(m['m01']/m['m00'])
 
@@ -47,17 +50,24 @@ class BoardRecognizer:
 
         # If the board is found we can try and recognize the pieces
         if len(points) == 4:
+            # FIXME make this more clear
+            # Pick channel 1 (rGb, Green channel)
             gray = frame[:, :, 1]
 
-            points.sort(key=lambda x: x[0])
-            lower = points[0:2]
-            lower.sort(key=lambda x: x[1])
-            upper = points[2:4]
-            upper.sort(key=lambda x: x[1])
+
+            # FIXME Make this more efficient than sorting it thrice
+            # Sort on x coordinate
+            points.sort(key=lambda tup: tup[0])
+            # Pick first 2
+            lower = points[:2]
+
+            # Sort on y coordinate
+            lower.sort(key=lambda tup: tup[1])
+            upper = points[2:]
+            upper.sort(key=lambda tup: tup[1])
             points = lower + upper
 
-            print points
-
+            # Convert to numpy array
             points1 = np.float32(points)
             points2 = np.float32([[0, 0], [0, 400], [400, 0], [400, 400]])
             m = cv2.getPerspectiveTransform(points1, points2)
@@ -66,5 +76,5 @@ class BoardRecognizer:
 
             return True, board
         else:
+            # FIXME why must we pass 0 as second argument?
             return False, 0
-

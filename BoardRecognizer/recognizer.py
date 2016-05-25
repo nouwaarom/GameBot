@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import yaml
 
 from boardRecognizer import BoardRecognizer
 from pieceRecognizer import PieceRecognizer
@@ -31,6 +32,13 @@ class Recognizer:
         self.cap = cap
         return cap.isOpened()
 
+    def initrefdata(self, path):
+        file = open(path, 'r')
+        refdata = yaml.load(file.read())
+        self.refBoard = refdata['board']
+        print "Ref data:"
+        print refdata
+
     def initdisplay(self):
         cv2.namedWindow(self.windowFrame, cv2.WINDOW_AUTOSIZE)
         cv2.namedWindow(self.windowBoard, cv2.WINDOW_AUTOSIZE)
@@ -61,7 +69,7 @@ class Recognizer:
 
     def showdisplay(self):
         cv2.imshow(self.windowFrame, self.frame)
-        cv2.imshow(self.windowBoard, self.board)
+        #cv2.imshow(self.windowBoard, self.board)
         cv2.waitKey(20)
 
     def setconfig(self, config):
