@@ -5,22 +5,44 @@ import argparse
 
 from ArmController.controller import Controller
 from BoardRecognizer.recognizer import Recognizer
+from BoardRecognizer.display import Display
 
 
 # FIXME this should be a fancy config object
 config = dict()
 
+# FIXME this is very hacky
+boardsize = 8
+
+
+def getrow(position):
+    return 2 * (position % (boardsize / 2)) + getcol(position) % 2
+
+
+def getcol(position):
+    return position / (boardsize / 2)
+
+
+def annotateboard(board, means, pieces):
+    for i in range(32):
+        x = getcol(i)
+        y = getrow(i)
+        cv2.putText(board, str(round(means[i], 1)) + ' ' + pieces[i],
+                    (y * 50 + 25, x * 50 + 25),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0))
 
 def configurerecognizerwithimage(boardsize, filename):
     recognizer = Recognizer(boardsize)
     recognizer.setconfig(config['recognizer'])
 
-    recognizer.initdisplay()
+    display = Display()
+
+    display.initdisplay()
     img = cv2.imread('BoardRecognizer/tests/' + filename + '.png')
     recognizer.initrefdata('BoardRecognizer/tests/' + filename + '.yml')
 
     pieces = recognizer.getboardstate(img)
-    print pieces
+    print ''.join(pieces)
     checkPieces = []
     for row in recognizer.refBoard:
         for tile in row:
@@ -33,13 +55,15 @@ def configurerecognizerwithimage(boardsize, filename):
     print 'Reference: ' + ' '.join(checkPieces)
 
     while True:
-        recognizer.showdisplay()
-        key = cv2.waitKey(50)
+        display.showframe(img)
+        annotateboard(recognizer.board, recognizer.pieceRecognizer.means, pieces)
+        display.showboard(recognizer.board)
+        key = cv2.waitKey(0)
 
-        if key == ord('q'):
+        if key > 0:
             break
 
-    recognizer.enddisplay()
+    display.enddisplay()
 
 def iswhite(index, boardsize):
     row = index / boardsize
@@ -97,17 +121,20 @@ def testrecognizer(boardsize, filename):
     recognizer = Recognizer(boardsize)
     recognizer.setconfig(config['recognizer'])
 
+    display = Display()
+
     # Load the test movie
     recognizer.initcapture('BoardRecognizer/tests/' + filename + '.avi')
-    recognizer.initdisplay()
+    display.initdisplay()
 
     while True:
         frame = recognizer.getframe()
         print recognizer.getboardstate(frame)
-        recognizer.showdisplay()
+        display.showframe(frame)
+
 
     recognizer.endcapture()
-    recognizer.enddisplay()
+    display.enddisplay()
 
     config['recognizer'] = recognizer.getconfig()
 

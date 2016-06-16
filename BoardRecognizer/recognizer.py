@@ -13,9 +13,6 @@ class Recognizer:
         self.mask = dict()
         self.config = dict()
 
-        self.windowFrame = 'frame'
-        self.windowBoard = 'board'
-
         self.boardRecognizer = BoardRecognizer()
         self.pieceRecognizer = PieceRecognizer(self.boardsize)
 
@@ -39,38 +36,8 @@ class Recognizer:
         print "Ref data:"
         print refdata
 
-    def initdisplay(self):
-        cv2.namedWindow(self.windowFrame, cv2.WINDOW_AUTOSIZE)
-        cv2.namedWindow(self.windowBoard, cv2.WINDOW_AUTOSIZE)
-        cv2.setMouseCallback(self.windowFrame, self.setmasktoposition)
-
-    def setmasktoposition(self, event, x, y, flags, param):
-        if event == cv2.EVENT_LBUTTONDOWN:
-            mask = self.config["mask"]
-
-            # Convert RGB value to HSV
-            pixel = np.array(self.frame[y][x], ndmin=3)
-            hsv = cv2.cvtColor(pixel, cv2.COLOR_BGR2HSV)
-            hsv = hsv[0][0]
-
-            mask['H'] = hsv[0]
-            mask['S'] = hsv[1]
-            mask['V'] = hsv[2]
-
-            self.config["mask"] = mask
-            self.boardRecognizer.setmask(mask)
-
     def endcapture(self):
         self.cap.release()
-
-    def enddisplay(self):
-        cv2.destroyWindow(self.windowFrame)
-        cv2.destroyWindow(self.windowMask)
-
-    def showdisplay(self):
-        cv2.imshow(self.windowFrame, self.frame)
-        #cv2.imshow(self.windowBoard, self.board)
-        cv2.waitKey(20)
 
     def setconfig(self, config):
         self.config = config
@@ -88,5 +55,5 @@ class Recognizer:
 
         boardfound, self.board = self.boardRecognizer.processframe(frame)
         if boardfound:
-            pieces = self.pieceRecognizer.findpiecesonboard(self.board)
-            return pieces
+            self.pieceRecognizer.findpiecesonboard(self.board)
+            return self.pieceRecognizer.board_representation

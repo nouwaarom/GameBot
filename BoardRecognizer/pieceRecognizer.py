@@ -9,12 +9,9 @@ class PieceRecognizer:
     def __init__(self, boardsize):
         print "Initializing piece recognizer"
         self.boardsize = boardsize
-
-    def getrow(self, position):
-        return 2*(position % (self.boardsize/2)) + self.getcol(position) % 2
-
-    def getcol(self, position):
-        return position / (self.boardsize/2)
+        self.board_representation = []
+        self.means = []
+        self.board = None
 
     def getmeansfromboard(self, board):
         # Split the board into pieces
@@ -47,12 +44,6 @@ class PieceRecognizer:
 
         return row % 2 != col % 2
 
-    def getRow(self, i):
-        return i / self.boardsize
-
-    def getCol(self, i):
-        return i % self.boardsize
-
     def findpiecesonboard(self, board):
         mean = self.getmeansfromboard(board)
         # Browns
@@ -64,16 +55,10 @@ class PieceRecognizer:
             )
         )
 
-        board_representation = []
-        board = cv2.cvtColor(board, cv2.COLOR_GRAY2RGB)
+        self.board = cv2.cvtColor(board, cv2.COLOR_GRAY2RGB)
 
         # Determine the type of pieces
         for i in range(32):
-            x = self.getcol(i)
-            y = self.getrow(i)
-
-            print mean[i]
-
 
             if mean[i] < 80:
                 identifier = 'b'
@@ -82,10 +67,8 @@ class PieceRecognizer:
             else:
                 identifier = 'x'
 
-            board_representation.append(identifier)
+            self.board_representation.append(identifier)
 
-            cv2.putText(board, str(round(mean[i], 1)) + ' ' + identifier, (y*50+25, x*50+25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0))
+        self.means = mean
 
-        cv2.imshow('board', board)
-
-        return ''.join(board_representation)
+        return True
