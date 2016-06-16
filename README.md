@@ -61,5 +61,5 @@ Real documentation will come... someday...
 Just create an issue or pull request. All help is welcome
 
 ## Authors
-Elbert van de Put   -   elbert@t-matix.nl
-Daan de Graaf - daandegraaf9@gmail.com
+* Elbert van de Put   -   elbert@t-matix.nl
+* Daan de Graaf - daandegraaf9@gmail.com
