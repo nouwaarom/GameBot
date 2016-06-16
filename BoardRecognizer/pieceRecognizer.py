@@ -2,6 +2,8 @@ import numpy as np
 import decimal
 import cv2
 
+from filter import Filter
+
 class PieceRecognizer:
 
     def __init__(self, boardsize):
@@ -21,23 +23,46 @@ class PieceRecognizer:
 
         print mean
 
+        means = []
         for i in range(self.boardsize):
             row = board[(i*50):((i+1)*50)]
             for j in range(self.boardsize):
                 tile = row[0:50, (j*50):((j+1)*50)]
-                mean[i][j] = cv2.mean(tile)[0]
+                means.append(cv2.mean(tile)[0])
+        # flatmean = []
+        # for i in range(32):
+        #     x = self.getcol(i)
+        #     y = self.getrow(i)
 
-        flatmean = []
-        for i in range(32):
-            x = self.getcol(i)
-            y = self.getrow(i)
+        #    flatmean.append(mean[x][y])
 
-            flatmean.append(mean[x][y])
 
-        return flatmean
+        filter = Filter(self.boardsize)
+        filter.apply(means)
+        return means
+
+    def isWhite(self, index):
+        row = index / self.boardsize
+        col = index % self.boardsize
+
+        return row % 2 != col % 2
+
+    def getRow(self, i):
+        return i / self.boardsize
+
+    def getCol(self, i):
+        return i % self.boardsize
 
     def findpiecesonboard(self, board):
         mean = self.getmeansfromboard(board)
+        # Browns
+        mean = list(
+            map(lambda (_, x): x,
+                filter(lambda (x, _): not self.isWhite(x),
+                    enumerate(mean)
+                )
+            )
+        )
 
         board_representation = []
         board = cv2.cvtColor(board, cv2.COLOR_GRAY2RGB)

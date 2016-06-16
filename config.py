@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 import yaml
 import cv2
 import argparse
@@ -41,6 +41,12 @@ def configurerecognizerwithimage(boardsize, filename):
 
     recognizer.enddisplay()
 
+def isWhite(index, boardsize):
+    row = index / boardsize
+    col = index % boardsize
+
+    return row % 2 != col % 2
+
 def getthresholdsfromimg(boardsize, filename):
     recognizer = Recognizer(boardsize)
     recognizer.setconfig(config['recognizer'])
@@ -55,6 +61,15 @@ def getthresholdsfromimg(boardsize, filename):
             checkPieces.append(tile)
     _, board = recognizer.boardRecognizer.processframe(img)
     means = recognizer.pieceRecognizer.getmeansfromboard(board)
+    # Browns
+    means = list(
+        map(lambda (_, x): x,
+            filter(lambda (x, _): not isWhite(x, boardsize),
+                enumerate(means)
+            )
+        )
+    )
+
     blackThres = 0
     whiteThres = 255
     minEmpty = 255
