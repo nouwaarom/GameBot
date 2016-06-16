@@ -41,7 +41,7 @@ def configurerecognizerwithimage(boardsize, filename):
 
     recognizer.enddisplay()
 
-def isWhite(index, boardsize):
+def iswhite(index, boardsize):
     row = index / boardsize
     col = index % boardsize
 
@@ -64,29 +64,29 @@ def getthresholdsfromimg(boardsize, filename):
     # Browns
     means = list(
         map(lambda (_, x): x,
-            filter(lambda (x, _): not isWhite(x, boardsize),
-                enumerate(means)
-            )
+            filter(lambda (x, _): not iswhite(x, boardsize),
+                   enumerate(means)
+                   )
         )
     )
 
-    blackThres = 0
-    whiteThres = 255
-    minEmpty = 255
-    maxEmpty = 0
+    blackthres = 0
+    whitethres = 255
+    minempty = 255
+    maxempty = 0
     for i in range(32):
         print checkPieces[i] + ": " + str(means[i])
         piece = checkPieces[i]
         if piece == 'w':
-            whiteThres = means[i] if means[i] < whiteThres else whiteThres
+            whitethres = means[i] if means[i] < whitethres else whitethres
         elif piece == 'b':
-            blackThres = means[i] if means[i] > blackThres else blackThres
+            blackthres = means[i] if means[i] > blackthres else blackthres
         else:
-            minEmpty = means[i] if means[i] < minEmpty else minEmpty
-            maxEmpty = means[i] if means[i] > maxEmpty else maxEmpty
-    print 'blackThres: '+str(blackThres)
-    print 'whiteThres: '+str(whiteThres)
-    print 'Empty: '+str(minEmpty)+' - '+str(maxEmpty)
+            minempty = means[i] if means[i] < minempty else minempty
+            maxempty = means[i] if means[i] > maxempty else maxempty
+    print 'blackThres: '+str(blackthres)
+    print 'whiteThres: '+str(whitethres)
+    print 'Empty: '+str(minempty)+' - '+str(maxempty)
 
 
 
