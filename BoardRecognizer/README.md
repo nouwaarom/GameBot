@@ -10,3 +10,11 @@ This program is still pretty buggy and error prone, ideas on how to improve this
 
 ## TODO
 Create UI for changing mask
+
+Add K-means based clustering to detect different pieces
+
+## Description of the function of classes
+Recognizer gets frames and displays them.
+Boardrecognizer takes frame and returns if the frame contains a board
+    after that the board can bet fetched from the board recognizer
+PieceRecognizer takes a frame and returns the pieces on the board

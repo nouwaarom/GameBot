@@ -1,32 +1,92 @@
-import os
 import cv2
-import argparse
+import numpy as np
+import yaml
 
-from boardRecognizer  import BoardRecognizer
+from boardRecognizer import BoardRecognizer
+from pieceRecognizer import PieceRecognizer
+
 
 class Recognizer:
-
     def __init__(self, boardsize):
         self.boardsize = boardsize
 
-    def test(self):
-        full_path = os.path.realpath(__file__)
-        path, filename = os.path.split(full_path)
+        self.mask = dict()
+        self.config = dict()
 
-        recognizer = BoardRecognizer(path + '/tests/test-1.avi')
+        self.windowFrame = 'frame'
+        self.windowBoard = 'board'
 
-        while True:
-            print recognizer.getBoardState()
+        self.boardRecognizer = BoardRecognizer()
+        self.pieceRecognizer = PieceRecognizer(self.boardsize)
 
-            if cv2.waitKey(10) == ord('q'):
-                break
+    def initcapture(self, n):
+        cap = cv2.VideoCapture(n)
 
-    def getBoardState(self):
-        recognizer = BoardRecognizer(0)
+        # This settings are to always set webcam resolution to maximum
+        cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 2000)
+        cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 2000)
 
-        try:
-            board = recognizer.getBoardState()
-            return board
-        except Exception as e:
-            print "An error occured"
-            print e
+        print "Capturing from: {}".format(n)
+        print "Frame Size: ", cap.get(3), "x", cap.get(4)
+
+        self.cap = cap
+        return cap.isOpened()
+
+    def initrefdata(self, path):
+        file = open(path, 'r')
+        refdata = yaml.load(file.read())
+        self.refBoard = refdata['board']
+        print "Ref data:"
+        print refdata
+
+    def initdisplay(self):
+        cv2.namedWindow(self.windowFrame, cv2.WINDOW_AUTOSIZE)
+        cv2.namedWindow(self.windowBoard, cv2.WINDOW_AUTOSIZE)
+        cv2.setMouseCallback(self.windowFrame, self.setmasktoposition)
+
+    def setmasktoposition(self, event, x, y, flags, param):
+        if event == cv2.EVENT_LBUTTONDOWN:
+            mask = self.config["mask"]
+
+            # Convert RGB value to HSV
+            pixel = np.array(self.frame[y][x], ndmin=3)
+            hsv = cv2.cvtColor(pixel, cv2.COLOR_BGR2HSV)
+            hsv = hsv[0][0]
+
+            mask['H'] = hsv[0]
+            mask['S'] = hsv[1]
+            mask['V'] = hsv[2]
+
+            self.config["mask"] = mask
+            self.boardRecognizer.setmask(mask)
+
+    def endcapture(self):
+        self.cap.release()
+
+    def enddisplay(self):
+        cv2.destroyWindow(self.windowFrame)
+        cv2.destroyWindow(self.windowMask)
+
+    def showdisplay(self):
+        cv2.imshow(self.windowFrame, self.frame)
+        #cv2.imshow(self.windowBoard, self.board)
+        cv2.waitKey(20)
+
+    def setconfig(self, config):
+        self.config = config
+        self.boardRecognizer.setmask(config['mask'])
+
+    def getconfig(self):
+        return self.config
+
+    def getframe(self):
+        _, frame = self.cap.read()
+        return frame
+
+    def getboardstate(self, frame):
+        self.frame = frame
+
+        boardfound, self.board = self.boardRecognizer.processframe(frame)
+        if boardfound:
+            pieces = self.pieceRecognizer.findpiecesonboard(self.board)
+            return pieces

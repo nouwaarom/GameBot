@@ -32,7 +32,7 @@ Move AIPlayer::selectRandomly(std::vector<Move> v)
 
 Move AIPlayer::getMove()
 {
-    std::pair<int, Move> valuemove = state->alphaBeta(5, -581357, 581357, selfPlayer, selfPlayer);
+    std::pair<int, Move> valuemove = state->alphaBeta(8, -581357, 581357, selfPlayer, selfPlayer);
 
     Move move = valuemove.second;
 

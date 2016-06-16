@@ -1,0 +1,16 @@
+boardsize: 8
+
+host:
+  test: hello
+
+ai:
+  test: world
+
+recognizer:
+  mask:
+    H: 75
+    S: 50
+    V: 50
+
+controller:
+  number: 5
