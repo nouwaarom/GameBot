@@ -1,4 +1,5 @@
 boardsize: 8
+dest_path: ./export/
 
 host:
   test: hello

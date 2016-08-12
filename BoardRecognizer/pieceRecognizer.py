@@ -26,12 +26,6 @@ class PieceRecognizer:
             for j in range(self.boardsize):
                 tile = row[0:50, (j*50):((j+1)*50)]
                 means.append(cv2.mean(tile)[0])
-        # flatmean = []
-        # for i in range(32):
-        #     x = self.getcol(i)
-        #     y = self.getrow(i)
-
-        #    flatmean.append(mean[x][y])
 
 
         filter = Filter(self.boardsize)

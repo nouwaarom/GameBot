@@ -31,7 +31,7 @@ def playGame(bus, startai, boardsize):
 
     print("Starting Board Recognizer ...")
     # TODO start recognition program
-    # TODO check if pieces are on the right tiles and move them if neccessary
+    # TODO check if pieces are on the right tiles and move them if necessary
 
     print("Starting Arm Controller ...")
     # TODO start arm control program

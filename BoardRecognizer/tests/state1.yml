@@ -1,6 +1,6 @@
 board:
   - [x,w,x,x]
-  - [b,w,x,b]
+  - [b,w,x,x]
   - [x,b,w,w]
   - [x,w,b,x]
   - [b,w,x,b]

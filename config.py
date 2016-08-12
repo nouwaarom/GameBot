@@ -2,10 +2,12 @@
 import yaml
 import cv2
 import argparse
+import os
 
 from ArmController.controller import Controller
 from BoardRecognizer.recognizer import Recognizer
 from BoardRecognizer.display import Display
+from BoardRecognizer.boardSplitter import BoardSplitter
 
 
 # FIXME this should be a fancy config object
@@ -30,6 +32,7 @@ def annotateboard(board, means, pieces):
         cv2.putText(board, str(round(means[i], 1)) + ' ' + pieces[i],
                     (y * 50 + 25, x * 50 + 25),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0))
+
 
 def configurerecognizerwithimage(boardsize, filename):
     recognizer = Recognizer(boardsize)
@@ -64,6 +67,29 @@ def configurerecognizerwithimage(boardsize, filename):
             break
 
     display.enddisplay()
+
+def saveboard(boardsize, img_path, dest_path):
+    recognizer = Recognizer(boardsize)
+    recognizer.setconfig(config['recognizer'])
+
+    img = cv2.imread('BoardRecognizer/tests/' + img_path + '.png')
+    recognizer.initrefdata('BoardRecognizer/tests/' + img_path + '.yml')
+    recognizer.getboardstate(img)
+    splitter = BoardSplitter(boardsize)
+    refBoard = recognizer.refBoard
+    tiles = splitter.get_tiles(recognizer.board)
+
+    # Empty the directory
+    files = [f for f in os.listdir(dest_path) if f.endswith(".jpg")]
+    for f in files:
+        os.remove(dest_path+str(f))
+
+    for i in range(32):
+        x = getcol(i)
+        y = getrow(i)
+        cv2.imwrite(dest_path + str(x) + '-' + str(y) + '-' + str(refBoard[i//4][i%4]) + ".jpg", tiles[x][y])
+
+
 
 def iswhite(index, boardsize):
     row = index / boardsize
@@ -157,6 +183,7 @@ def getargs():
     parser.add_argument('--thresholds', help="calculate thresholds for recognition", action="store_true")
     parser.add_argument("--armtest", help="run arm controller only", action="store_true")
     parser.add_argument("--file", help="name of test image to load")
+    parser.add_argument("--saveboard", help="name of test image to load, destination path for board", action="store_true")
 
     args = parser.parse_args()
 
@@ -192,6 +219,9 @@ def main():
     # Test arm controller
     elif args.armtest:
         testcontroller(config['boardsize'])
+
+    elif args.saveboard:
+        saveboard(config['boardsize'], args.file, config["dest_path"])
 
 if __name__ == "__main__":
     main()
