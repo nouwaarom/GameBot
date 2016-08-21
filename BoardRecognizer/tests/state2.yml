@@ -1,9 +1,9 @@
 board:
   - [x,w,x,x]
-  - [x,w,x,x]
-  - [x,b,x,w]
-  - [x,x,b,x]
+  - [b,w,x,x]
+  - [x,b,w,w]
+  - [x,w,b,x]
   - [b,w,x,b]
-  - [b,x,b,x]
+  - [b,w,b,x]
   - [x,x,b,x]
   - [x,x,w,x]
