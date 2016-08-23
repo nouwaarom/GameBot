@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 import yaml
+import numpy as np
 import cv2
 import argparse
 import os
@@ -79,16 +80,31 @@ def saveboard(boardsize, img_path, dest_path):
     refBoard = recognizer.refBoard
     tiles = splitter.get_tiles(recognizer.board)
 
-    # Empty the directory
-    files = [f for f in os.listdir(dest_path) if f.endswith(".jpg")]
-    for f in files:
-        os.remove(dest_path+str(f))
-
     for i in range(32):
         x = getcol(i)
         y = getrow(i)
-        cv2.imwrite(dest_path + str(x) + '-' + str(y) + '-' + str(refBoard[i//4][i%4]) + ".jpg", tiles[x][y])
+        cv2.imwrite(dest_path + str(img_path) + ' ' + str(x) + '-' + str(y) + '-' + str(refBoard[i//4][i%4]) + ".jpg", tiles[x][y])
 
+
+def remove_images_from_dir(path):
+    # Empty the directory
+    files = [f for f in os.listdir(path) if f.endswith(".jpg")]
+    for f in files:
+        os.remove(path+str(f))
+
+
+def export_all_tiles(board_size, destination_path):
+    print("Cleaning destination directory")
+    remove_images_from_dir(destination_path)
+
+    img_path = 'BoardRecognizer/tests/'
+
+    print("exporting tiles ...")
+    # Empty the directory
+    files = [f for f in os.listdir(img_path) if f.endswith(".png")]
+    for f in files:
+        print(str(f[:-4]))
+        saveboard(board_size, f[:-4], destination_path)
 
 
 def iswhite(index, boardsize):
@@ -182,8 +198,8 @@ def getargs():
     parser.add_argument("--boardtest", help="run board recognizer only", action="store_true")
     parser.add_argument('--thresholds', help="calculate thresholds for recognition", action="store_true")
     parser.add_argument("--armtest", help="run arm controller only", action="store_true")
-    parser.add_argument("--file", help="name of test image to load")
     parser.add_argument("--saveboard", help="name of test image to load, destination path for board", action="store_true")
+    parser.add_argument("--file", help="name of test image to load")
 
     args = parser.parse_args()
 
@@ -221,7 +237,7 @@ def main():
         testcontroller(config['boardsize'])
 
     elif args.saveboard:
-        saveboard(config['boardsize'], args.file, config["dest_path"])
+        export_all_tiles(config['boardsize'], config["dest_path"])
 
 if __name__ == "__main__":
     main()
