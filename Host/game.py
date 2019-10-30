@@ -13,6 +13,8 @@ class Game:
     def playGame(self, whitePlayer, blackPlayer):
         isWhiteTurn = True
 
+        self.boardDisplayService.showBoard(self.board)
+
         while (True):
             if isWhiteTurn:
                 self.takeTurn(whitePlayer, blackPlayer)

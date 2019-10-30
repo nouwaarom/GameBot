@@ -32,7 +32,13 @@ This software is licensed under GPLv3. See LICENSE
 ### Linux
 * install libzmq3-dev and python-zmq
 * install protobuf
+  ```
+    sudo apt install libprotobuf-dev python-protobuf protobuf-compiler 
+  ```
 * install boost program options
+  ```
+    sudo apt install libboost-program-options-dev
+  ```
 * install flite-dev and pyflite
 
 * execute make in Host, CheckerAI and BoardRecognizer directories

@@ -10,6 +10,8 @@ Host/movemessage_pb2.py
 
 CheckerAI/ai
 CheckerAI/protoc_middleman
+CheckerAI/movemessage.pb.h
+CheckerAI/movemessage.pb.cpp
 
 ArmController/controller
 ArmController/protoc_middleman

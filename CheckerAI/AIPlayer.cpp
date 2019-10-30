@@ -1,5 +1,6 @@
 #include "AIPlayer.h"
 
+#include <random>
 #include <utility>
 #include <algorithm>
 #include <iostream>

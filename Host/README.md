@@ -19,5 +19,11 @@ to make the board recognizer and arm controller work. (WIP)
 
 # Uses pyflite and flite for voice output (CURRENTLY DISABLED)
 
+# Building protocol buffers
+```
+$ protoc --python_out=. movemessage.proto
+$ pip2 install -U numpy
+```
+
 # Development
 The idea is to work with behaviour driven development.
