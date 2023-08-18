@@ -4,6 +4,8 @@
 #include <string>
 #include "Move.h"
 
+typedef std::array<pieceType, 100> board_t;
+
 /*
  Class that handles the data for the board
  init: creates a board with standard setup
@@ -12,16 +14,16 @@
 class Board
 {
 private:
-    int getPosition(int row, int col);
+    static int getPosition(int row, int col);
 protected:
     //Board is actually 10 by 10 but half of the tiles are always empty
-	std::vector<pieceType> board;
+	board_t board;
 
 public:
-    Board(std::string representation);
+    explicit Board(std::string representation);
 
-    std::vector<pieceType>::iterator getBegin();
-    std::vector<pieceType>::iterator getEnd();
+    board_t::iterator getBegin();
+    board_t::iterator getEnd();
 
     pieceType getPiece(int position);
     pieceType getPiece(int row, int col);

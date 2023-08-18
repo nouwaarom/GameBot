@@ -12,6 +12,7 @@ CheckerAI/ai
 CheckerAI/protoc_middleman
 CheckerAI/movemessage.pb.h
 CheckerAI/movemessage.pb.cpp
+CheckerAI/cmake-build-*
 
 ArmController/controller
 ArmController/protoc_middleman
@@ -22,4 +23,5 @@ BoardRecognizer/protoc_middleman
 Bus/bus
 
 .idea/
+.ccls-cache/*
 export/

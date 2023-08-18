@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.4)
 project(CheckerAI)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+find_package(Protobuf REQUIRED)
+find_package(Boost 1.74 REQUIRED COMPONENTS program_options)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS movemessage.proto)
 
 set(SOURCE_FILES
     AIPlayer.cpp
@@ -15,14 +20,12 @@ set(SOURCE_FILES
     HostConnector.cpp
     HostConnector.h
     main.cpp
-    Makefile
     Move.cpp
     Move.h
-    movemessage.pb.cpp
-    movemessage.pb.h
-    movemessage.proto
     Player.cpp
-    Player.h
-    README.md)
+    Player.h)
 
-add_executable(CheckerAI ${SOURCE_FILES})
+add_executable(CheckerAI ${SOURCE_FILES} ${PROTO_SRCS} ${PROTO_HDRS})
+
+target_include_directories(CheckerAI PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+target_link_libraries(CheckerAI ${Protobuf_LIBRARIES} Boost::program_options zmq)

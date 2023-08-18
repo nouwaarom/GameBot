@@ -14,7 +14,7 @@ class GameState
         Board* board;
 
         std::vector<Move> mergeMoves(Move first, std::vector<Move> second);
-        std::vector<Move> appendMoves(std::vector<Move> first, std::vector<Move> second);
+        static std::vector<Move> appendMoves(std::vector<Move> first, std::vector<Move> second);
 
         std::vector<Move> getMovesAtPosition(int row, int col, Player* player);
         std::vector<Move> getForcedMovesAtPosition(int row, int col, Player* player);
@@ -29,7 +29,7 @@ class GameState
         int getScore(Player* maximizingPlayer);
 
     public:
-        GameState(Board* startBoard);
+        explicit GameState(Board* startBoard);
 
         std::vector<Move> getForcedMoves(Player* player);
         std::vector<Move> getUnforcedMoves(Player* player);

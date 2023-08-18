@@ -1,7 +1,7 @@
 #include "GameState.h"
 
 #include <algorithm>
-#include <iostream>
+#include <utility>
 
 template <typename T>
 bool GameState::vectorContains(std::vector<T> v, T x)
@@ -34,8 +34,8 @@ std::vector<Move> GameState::mergeMoves(Move first, std::vector<Move> second)
         std::vector<Move>::iterator moveIt;
         for (moveIt = second.begin(); moveIt < second.end(); moveIt++)
         {
-            //Dont merge moves if they cancel eachother
-            if (false == vectorContains(firstRemovedPositions, moveIt->getNewPiece().position))
+            //Don't merge moves if they cancel eachother
+            if (!vectorContains(firstRemovedPositions, moveIt->getNewPiece().position))
             {
                 Move move;
                 move.setNewPiece(moveIt->getNewPiece());
@@ -182,8 +182,7 @@ std::vector<Move> GameState::getUnforcedMoves(Player* player)
 
     std::vector<pieceType> playerPieces = player->getPieces();
 
-    std::vector<pieceType>::iterator tile;
-    for (tile = board->getBegin(); tile < board->getEnd(); tile++)
+    for (auto tile = board->getBegin(); tile < board->getEnd(); tile++)
     {
         int key = std::distance(board->getBegin(), tile);
 
@@ -207,8 +206,7 @@ std::vector<Move> GameState::getForcedMoves(Player* player)
 
     std::vector<pieceType> playerPieces = player->getPieces();
 
-    std::vector<pieceType>::iterator tile;
-    for (tile = board->getBegin(); tile < board->getEnd(); tile++)
+    for (auto tile = board->getBegin(); tile < board->getEnd(); tile++)
     {
         int key = std::distance(board->getBegin(), tile);
 
@@ -227,16 +225,14 @@ std::vector<Move> GameState::getForcedMoves(Player* player)
 
 void GameState::doMove(Move move)
 {
-    board->doMove(move);
-
-    return;
+    board->doMove(std::move(move));
 }
 
 std::vector<Move> GameState::getMoves(Player* player)
 {
     std::vector<Move> moves = getForcedMoves(player);
 
-    if (moves.size() > 0) {
+    if (!moves.empty()) {
         return moves;
     }
 

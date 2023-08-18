@@ -37,6 +37,7 @@ class Game:
                 print("Someone won the game")
                 sys.exit()
         else:
+            # TODO, notify player.
             print("Illegal move")
             return False
 

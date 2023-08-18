@@ -31,7 +31,7 @@ class Move
 
     public:
         Move();
-        Move(const aiconnector::Move& move);
+        explicit Move(const aiconnector::Move& move);
 
         Move(Piece newPiece, std::vector<Piece> removedPieces);
 

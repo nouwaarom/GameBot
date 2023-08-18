@@ -2,19 +2,18 @@
 
 Board::Board(std::string representation)
 {
+    int index = 0;
     for (char& c : representation) {
-        board.push_back(static_cast<pieceType>(c));
+        board[index++] = (static_cast<pieceType>(c));
     }
 }
 
-std::vector<pieceType>::iterator Board::getBegin()
-{
-    return board.begin();
+board_t::iterator Board::getBegin() {
+  return board.begin();
 }
 
-std::vector<pieceType>::iterator Board::getEnd()
-{
-    return board.end();
+board_t::iterator Board::getEnd() {
+  return board.end();
 }
 
 int Board::getPosition(int row, int col)
