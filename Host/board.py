@@ -1,5 +1,5 @@
-from movemessage_pb2 import Move
-from move_helper import helperCreateMove
+from .movemessage_pb2 import Move
+from .move_helper import helperCreateMove
 
 class Board:
 
@@ -26,7 +26,7 @@ class Board:
         newPiece = move.newpiece
         removedPieces = move.removedpieces
 
-        self.board[newPiece.location] = newPiece.type
+        self.board[newPiece.location] = newPiece.type.decode()
 
         for removedPiece in removedPieces:
             self.board[removedPiece.location] = 'x'

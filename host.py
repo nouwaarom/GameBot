@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import cv2
 import sys
@@ -19,7 +19,7 @@ from Bus.bus          import Bus
 def playGame(bus, startai, boardsize):
     print("Welcome, I am Hansel, I am the host for this game")
 
-    userStarts = raw_input("Do you want to start?\n")
+    userStarts = input("Do you want to start?\n")
 
     if (userStarts == 'yes'):
         userStarts = 1
@@ -42,14 +42,14 @@ def playGame(bus, startai, boardsize):
 
     arbitrator = Arbitrator()
 
-    print("Starting AI ...")
+    print("Starting communication to AI ...")
     aiConnect = AIConnector(board, userStarts, bus)
 
     if startai:
         aiConnect.startAI()
     else:
-        print aiConnect.getCommand()
-        raw_input()
+        print("To start the AI, execute: {}".format(aiConnect.getCommand()))
+        input()
 
     userConnect = UserConnector(userStarts)
 
@@ -69,7 +69,7 @@ def playGame(bus, startai, boardsize):
 # Argument parsing is actually quite usefull
 def getArgs():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--startai",         help="run board recognizer only", action="store_true")
+    parser.add_argument("--startai",         help="Start the AI", action="store_true")
     parser.add_argument("--boardsize",       help="set the board size", type=int)
     args = parser.parse_args()
 

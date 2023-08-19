@@ -1,11 +1,12 @@
 import cv2
 import numpy as np
 
-from board import Board
+from .board import Board
 
 class BoardDisplayService:
     blue = (255 ,80 ,80)
     white = (255,255,255)
+    red = (0,0,255)
 
     def __init__(self, boardsize):
         # Create new window for the board
@@ -33,18 +34,16 @@ class BoardDisplayService:
 
                         if (char == 'b'):
                             cv2.circle(self.frame, (50*i+25, 50*j+25), 20, self.blue, 2)
-
                         elif (char == 'w'):
                             cv2.circle(self.frame, (50*i+25, 50*j+25), 20, self.white, 2)
-
                         elif (char == 'B'):
                             cv2.circle(self.frame, (50*i+25, 50*j+25), 20, self.blue, 5)
-
                         elif (char == 'W'):
                             cv2.circle(self.frame, (50*i+25, 50*j+25), 20, self.white, 5)
-
-                        else:
+                        elif (char == 'x'):
                             cv2.circle(self.frame, (50*i+25, 50*j+25), 20, (0,0,0), 5)
+                        else:
+                            cv2.circle(self.frame, (50*i+25, 50*j+25), 20, self.red, 5)
 
         cv2.imshow('boardClass', self.frame)
         cv2.waitKey(20)

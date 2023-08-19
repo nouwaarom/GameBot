@@ -1,5 +1,5 @@
-from arbitrator          import Arbitrator
-from boardDisplayService import BoardDisplayService
+from .arbitrator          import Arbitrator
+from .boardDisplayService import BoardDisplayService
 
 import sys
 
@@ -17,9 +17,11 @@ class Game:
 
         while (True):
             if isWhiteTurn:
+                print("White's turn")
                 self.takeTurn(whitePlayer, blackPlayer)
                 isWhiteTurn = False
             else:
+                print("Blacks turn")
                 self.takeTurn(blackPlayer, whitePlayer)
                 isWhiteTurn = True
 
@@ -28,6 +30,7 @@ class Game:
     def takeTurn(self, activePlayer, passivePlayer):
         move = activePlayer.getMove(self.board)
 
+        # TODO, take into account that the active player can only move their pieces
         if self.arbitrator.isMoveLegal(self.board, move):
             self.board.doMove(move)
 

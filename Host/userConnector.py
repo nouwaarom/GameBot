@@ -1,7 +1,7 @@
 import random
 
-from board       import Board
-from move_helper import helperCreateMoveFromLocations
+from .board       import Board
+from .move_helper import helperCreateMoveFromLocations
 
 class UserConnector:
 
@@ -17,8 +17,8 @@ class UserConnector:
         print("You need to make a move")
 
         try:
-            oldLocation = int(raw_input("Old location: "))
-            newLocation = int(raw_input("New location: "))
+            oldLocation = int(input("Old location: "))
+            newLocation = int(input("New location: "))
         except ValueError:
             print("Invalid input")
             return self.getMove(board)

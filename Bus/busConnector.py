@@ -15,19 +15,19 @@ class BusConnector:
 
     # Send a request and return response
     def sendRequest(self, reciever, message):
-        self.subscriber.setsockopt(zmq.SUBSCRIBE, reciever + "_response")
+        self.subscriber.setsockopt(zmq.SUBSCRIBE, (reciever + "_response").encode())
 
-        self.publisher.send_multipart([reciever + "_request ", message])
+        self.publisher.send_multipart([(reciever + "_request ").encode(), message])
 
         [adress, content] = self.subscriber.recv_multipart()
         return content
 
     # Send a request and return response
     def getRequest(self, reciever):
-        self.subscriber.setsockopt(zmq.SUBSCRIBE, reciever + "_request")
+        self.subscriber.setsockopt(zmq.SUBSCRIBE, (reciever + "_request").encode())
 
         [adress, content] =  self.subscriber.recv_multipart()
         return content
 
     def sendResponse(self, reciever, message):
-        self.publisher.send_multipart([reciever + "_response ", message])
+        self.publisher.send_multipart([(reciever + "_response ").encode(), message])

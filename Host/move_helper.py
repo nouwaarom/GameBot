@@ -1,22 +1,22 @@
 from __future__ import division
-from movemessage_pb2 import Move
+from .movemessage_pb2 import Move
 
 def helperCreateMove(newPiece, removedPieces):
     move = Move()
     move.newpiece.location = newPiece[0]
-    move.newpiece.type     = newPiece[1]
+    move.newpiece.type     = newPiece[1].encode()
 
     for removedPiece in removedPieces:
         removedpiece  = move.removedpieces.add()
         removedpiece.location = removedPiece[0]
-        removedpiece.type     = removedPiece[1]
+        removedpiece.type     = removedPiece[1].encode()
 
     return move
 
 def helperCreateMoveFromLocations(newLocation, oldLocation, board):
     move = Move()
     move.newpiece.location = newLocation
-    move.newpiece.type     = board.getPiece(oldLocation)
+    move.newpiece.type     = board.getPiece(oldLocation).encode()
 
     (oldRow, oldCol) = helperGetRowColumn(oldLocation)
     (newRow, newCol) = helperGetRowColumn(newLocation)
@@ -33,9 +33,9 @@ def helperCreateMoveFromLocations(newLocation, oldLocation, board):
 
         location = (5*row)+(col//2)
         removedPiece.location = location
-        removedPiece.type     = board.getPiece(location)
+        removedPiece.type     = board.getPiece(location).encode()
 
-        print "Removed: %d" % location
+        print("Removed: %d" % location)
 
     return move
 
@@ -43,7 +43,7 @@ def helperGetOldPiece(newPiece, removedPieces):
     for removedPiece in removedPieces:
         if removedPiece.type == newPiece.type:
             return removedPiece
-    print "Could not find old piece, this move smells..."
+    print("Could not find old piece, this move smells...", newPiece, removedPieces)
 
 def helperGetRowColumn(location):
     row = location // 5

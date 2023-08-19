@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
 
-    cout << "Hello, I am you opponent" << endl;
+    cout << "Hello, I am your opponent" << endl;
 
     if (vm.count("help")) {
         cout << desc << endl;
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     }
 
     if (!vm.count("board")) {
-        cout << "Without a board I cant play" << endl;
+        cout << "Without a board I cannot play" << endl;
         return 1;
     }
 

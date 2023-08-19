@@ -1,11 +1,11 @@
-from movemessage_pb2  import Move
-from board import Board
-from move_helper import helperGetOldPiece, helperGetRowColumn
+from .movemessage_pb2  import Move
+from .board import Board
+from .move_helper import helperGetOldPiece, helperGetRowColumn
 
 class Arbitrator:
 
     def __init__(self):
-        print "Arbitrator Initializing"
+        print("Arbitrator Initializing")
 
     def isMoveLegal(self, board, move):
         newPiece = move.newpiece
@@ -25,19 +25,19 @@ class Arbitrator:
                 (newRow, newCol) = helperGetRowColumn(newLocation)
                 (oldRow, oldCol) = helperGetRowColumn(oldLocation)
             except:
-                print "Malformed move!"
+                print("Malformed move!")
                 return False
             if newRow == oldRow or newCol == oldCol:
-                print "Not a diagonal move!"
+                print("Not a diagonal move!")
                 return False
 
         if board.getPiece(newPiece.location) != 'x':
-            print "NewPiece location (%d) is not empty" % newPiece.location
+            print("NewPiece location (%d) is not empty" % newPiece.location)
             return False
 
         for removedPiece in removedPieces:
-            if board.getPiece(removedPiece.location) != removedPiece.type:
-                print "RemovedPiece type is not correct"
+            if board.getPiece(removedPiece.location) != removedPiece.type.decode():
+                print("RemovedPiece type is not correct")
                 return False
 
         return True

@@ -30,16 +30,21 @@ This software is licensed under GPLv3. See LICENSE
 
 ## Setup and Installation
 ### Linux
-* install libzmq3-dev and python-zmq
+* install libzmq3-dev and python3-zmq
 * install protobuf
   ```
-    sudo apt install libprotobuf-dev python-protobuf protobuf-compiler 
+    sudo apt install libprotobuf-dev python3-protobuf protobuf-compiler 
   ```
 * install boost program options
   ```
     sudo apt install libboost-program-options-dev
   ```
 * install flite-dev and pyflite
+
+* Install pyhon3-opencv
+  ```
+  sudo apt install python3-opencv
+  ```
 
 * execute make in Host, CheckerAI and BoardRecognizer directories
 
@@ -57,6 +62,8 @@ that they may not be killed correctly in case of an exception.
 * write documentation
 * make tests
 * Create a design for the robot arm
+
+## DONE
 * move to python3?
 
 ## Documentation
