@@ -239,6 +239,7 @@ std::vector<Move> GameState::getMoves(Player* player)
     return getUnforcedMoves(player);
 }
 
+// TODO, move alphabeta code to separate alphabeta class
 int GameState::getScore(Player* maximizingPlayer)
 {
     int score = 0;

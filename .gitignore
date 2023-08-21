@@ -23,5 +23,5 @@ BoardRecognizer/protoc_middleman
 Bus/bus
 
 .idea/
-.ccls-cache/*
+**/.ccls-cache
 export/
