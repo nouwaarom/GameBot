@@ -22,12 +22,6 @@ class GameState
 
         void getMovesInDirection(int r, int c, bool up, bool right, bool oneStep, Player* player, std::vector<Move> &moves);
 
-        template <typename T>
-        bool vectorContains(std::vector<T> v, T x);
-
-    protected:
-        int getScore(Player* maximizingPlayer);
-
     public:
         explicit GameState(Board* startBoard);
 
@@ -36,9 +30,14 @@ class GameState
 
         std::vector<Move> getMoves(Player* player);
 
-        void doMove(Move move);
+        void doMove(const Move& move);
+        void undoMove(const Move& move);
 
-        std::pair<int, Move> alphaBeta(int depth, int alpha, int beta, Player* player, Player* maximizingPlayer);
+        Board* getBoard() const;
+
+        // TODO, move to utilities file.
+        template <typename T>
+        bool vectorContains(std::vector<T> v, T x);
 };
 
 #endif

@@ -35,8 +35,8 @@ public:
     Move createMove(int newPosition, int oldPosition);
     Move createMove(int newRow, int newCol, int oldRow, int oldCol);
 
-    void doMove(Move move);
-    void undoMove(Move move);
+    void doMove(const Move& move);
+    void undoMove(const Move& move);
 };
 
 #endif

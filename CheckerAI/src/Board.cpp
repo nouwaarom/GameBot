@@ -93,7 +93,7 @@ Move Board::createMove(int newRow, int newCol, int oldRow, int oldCol)
     return move;
 }
 
-void Board::doMove(Move move)
+void Board::doMove(const Move& move)
 {
     Piece newPiece = move.getNewPiece();
     std::vector<Piece> removedPieces = move.getRemovedPieces();
@@ -108,7 +108,7 @@ void Board::doMove(Move move)
     return;
 }
 
-void Board::undoMove(Move move)
+void Board::undoMove(const Move& move)
 {
     Piece newPiece = move.getNewPiece();
     std::vector<Piece> removedPieces = move.getRemovedPieces();

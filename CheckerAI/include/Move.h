@@ -35,10 +35,10 @@ class Move
 
         Move(Piece newPiece, std::vector<Piece> removedPieces);
 
-        Piece getNewPiece();
+        Piece getNewPiece() const;
         void setNewPiece(Piece piece);
 
-        std::vector<Piece> getRemovedPieces();
+        std::vector<Piece> getRemovedPieces() const;
         void setRemovedPieces(std::vector<Piece> pieces);
         void addRemovedPiece(Piece piece);
 

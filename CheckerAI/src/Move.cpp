@@ -24,13 +24,13 @@ Move::Move(const aiconnector::Move& move)
     }
 }
 
-Move::Move(Piece newPiece, std::vector<Piece> removedPieces)
+Move::Move(Piece _newPiece, std::vector<Piece> _removedPieces)
 {
-    newPiece = newPiece;
-    removedPieces = removedPieces;
+    newPiece = _newPiece;
+    removedPieces = _removedPieces;
 }
 
-Piece Move::getNewPiece()
+Piece Move::getNewPiece() const
 {
     return newPiece;
 }
@@ -41,7 +41,7 @@ void Move::setNewPiece(Piece piece)
     newPiece = piece;
 }
 
-std::vector<Piece> Move::getRemovedPieces()
+std::vector<Piece> Move::getRemovedPieces() const
 {
     return removedPieces;
 }

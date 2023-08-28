@@ -88,7 +88,7 @@ std::vector<Move> GameState::getMovesAtPosition(int row, int col, Player* player
 
     bool isCrowned = (piece == pieceType::white_crown) || (piece == pieceType::black_crown);
     bool isWhite   = vectorContains(player->getPieces(), pieceType::white);
-    bool isBlack   = vectorContains(player->getPieces(), pieceType::black);
+    //bool isBlack   = vectorContains(player->getPieces(), pieceType::black);
 
     getMovesInDirection(row, col, isWhite, true, !isCrowned, player, moves);
     getMovesInDirection(row, col, isWhite, false, !isCrowned, player, moves);
@@ -223,9 +223,14 @@ std::vector<Move> GameState::getForcedMoves(Player* player)
     return moves;
 }
 
-void GameState::doMove(Move move)
+void GameState::doMove(const Move& move)
 {
-    board->doMove(std::move(move));
+    board->doMove(move);
+}
+
+void GameState::undoMove(const Move& move)
+{
+    board->undoMove(move);
 }
 
 std::vector<Move> GameState::getMoves(Player* player)
@@ -239,107 +244,9 @@ std::vector<Move> GameState::getMoves(Player* player)
     return getUnforcedMoves(player);
 }
 
-// TODO, move alphabeta code to separate alphabeta class
-int GameState::getScore(Player* maximizingPlayer)
-{
-    int score = 0;
-
-    int position;
-    for (position=0; position<50; position++)
-    {
-        int row = board->getRow(position);
-        int col = board->getCol(position);
-
-        int pieceScore = 0;
-        pieceType piece = board->getPiece(position);
-
-        // Piece Count
-        if (vectorContains(maximizingPlayer->getPieces(), piece)) {
-            pieceScore = 10;
-        }
-        if (vectorContains(maximizingPlayer->getOpponentPieces(), piece)) {
-            pieceScore = -10;
-        }
-
-        // King Count
-        if ((piece == pieceType::white_crown) || (piece == pieceType::black_crown)) {
-            pieceScore *= 3;
-        }
-
-        // Weigthing using Grid
-        pieceScore *= std::max(abs(row-5), abs(col-5));
-
-        score += pieceScore;
-    }
-
-    return score;
+Board* GameState::getBoard() const {
+    return board;
 }
 
-std::pair<int, Move> GameState::alphaBeta(int depth, int alpha, int beta, Player* player, Player* maximizingPlayer)
-{
-    int bestValue;
-    Move bestMove;
 
-    std::vector<Move> moves = getMoves(player);
 
-    if (depth == 0 || moves.size() == 0)
-    {
-        return std::make_pair(getScore(maximizingPlayer), Move());
-    }
-
-    if (player == maximizingPlayer)
-    {
-        bestValue = -581357;
-
-        for (Move move : moves)
-        {
-            board->doMove(move);
-
-            std::pair <int, Move> pair = alphaBeta(depth - 1, alpha, beta, player->getOpponent(), maximizingPlayer);
-
-            if (pair.first > bestValue) {
-                bestValue = pair.first;
-                bestMove = move;
-
-                if (bestValue > alpha) {
-                    alpha = bestValue;
-                }
-            }
-
-            board->undoMove(move);
-
-            if (beta <= alpha) {
-                break;
-            }
-        }
-        return std::make_pair(bestValue, bestMove);
-    }
-
-    else
-    {
-        bestValue = 581357;
-
-        for (Move move : moves)
-        {
-            board->doMove(move);
-
-            std::pair <int, Move> pair = alphaBeta(depth - 1, alpha, beta, player->getOpponent(), maximizingPlayer);
-
-            if (pair.first < bestValue) {
-                bestValue = pair.first;
-                bestMove = move;
-
-                if (bestValue < beta) {
-                    beta = bestValue;
-                }
-            }
-
-            board->undoMove(move);
-
-            if (beta <= alpha) {
-                break;
-            }
-        }
-        return std::make_pair(bestValue, bestMove);
-    }
-}

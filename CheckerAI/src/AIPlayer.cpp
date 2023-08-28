@@ -8,6 +8,7 @@
 AIPlayer::AIPlayer(Board* startBoard, std::vector<pieceType> friendPieces, std::vector<pieceType> enemyPieces)
 {
     state = new GameState(startBoard);
+    alpha_beta = new AlphaBeta(state);
 
     selfPlayer = new Player(friendPieces, enemyPieces);
     opponentPlayer = new Player(enemyPieces, friendPieces);
@@ -33,7 +34,7 @@ Move AIPlayer::selectRandomly(std::vector<Move> v)
 
 Move AIPlayer::getMove()
 {
-    std::pair<int, Move> valuemove = state->alphaBeta(8, -581357, 581357, selfPlayer, selfPlayer);
+    std::pair<int, Move> valuemove = alpha_beta->alphaBeta(8, -581357, 581357, selfPlayer, selfPlayer);
 
     Move move = valuemove.second;
 

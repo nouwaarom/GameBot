@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "GameState.h"
+#include "AlphaBeta.h"
 #include "Player.h"
 #include "Move.h"
 
@@ -11,6 +12,7 @@ class AIPlayer
 {
     private:
         GameState* state;
+        AlphaBeta* alpha_beta;
 
         Player* selfPlayer;
         Player* opponentPlayer;
