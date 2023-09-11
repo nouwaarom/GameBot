@@ -9,21 +9,24 @@
 
 class HostConnector
 {
-    private:
-        AIPlayer* ai;
-        BusConnector* bus;
+public:
+    HostConnector();
 
-    protected:
-        void handleSetMove(aiconnector::MoveMessage& request);
-        void handleGetMove(aiconnector::MoveMessage& request);
+    void setAI(AIPlayer* aiPlayer);
 
-    public:
-        HostConnector();
+    // Blocks until request arrives, then handles it
+    void getRequest();
 
-        void setAI(AIPlayer* aiPlayer);
+protected:
+    void handleSetMove(aiconnector::MoveMessage& request);
+    void handleGetMove(aiconnector::MoveMessage& request);
 
-        // Blocks until request arrives, then handles it
-        void getRequest();
+private:
+    Move createMoveFromProtobuf(const aiconnector::Move& protobuf);
+    void serializeMoveToProtobuf(const Move& move, aiconnector::Move* protobuf);
+
+    AIPlayer* ai;
+    BusConnector* bus;
 };
 
 #endif

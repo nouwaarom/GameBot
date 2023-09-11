@@ -9,20 +9,26 @@ set(CMAKE_CXX_STANDARD 17)
 
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS movemessage.proto)
 
-set(SOURCE_FILES
+
+set(CORE_SOURCE_FILES
     src/AIPlayer.cpp
     src/Board.cpp
-    src/BusConnector.cpp
     src/GameState.cpp
-    src/HostConnector.cpp
-    src/main.cpp
     src/Move.cpp
     src/AlphaBeta.cpp
     src/Player.cpp)
 
+add_library(CheckerAICore ${CORE_SOURCE_FILES})
+target_include_directories(CheckerAICore PUBLIC include)
+
+set(SOURCE_FILES
+    src/BusConnector.cpp
+    src/HostConnector.cpp
+    src/main.cpp)
+
 add_executable(CheckerAI ${SOURCE_FILES} ${PROTO_SRCS} ${PROTO_HDRS})
 
 target_include_directories(CheckerAI PRIVATE include ${CMAKE_CURRENT_BINARY_DIR})
-target_link_libraries(CheckerAI ${Protobuf_LIBRARIES} Boost::program_options zmq)
+target_link_libraries(CheckerAI CheckerAICore ${Protobuf_LIBRARIES} Boost::program_options zmq)
 
 add_subdirectory(test)

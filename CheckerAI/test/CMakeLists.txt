@@ -13,9 +13,9 @@ target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
 add_executable(gamestate_test GameState_test.cpp)
 
-# TODO, add used source files and include directories.
 target_link_libraries(gamestate_test
     PRIVATE
+    CheckerAICore
     GTest::GTest)
 
 add_test(unit_tests gamestate_test)

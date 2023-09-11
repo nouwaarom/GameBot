@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-#include "movemessage.pb.h"
-
 enum pieceType : char
 {
     white = 'w',
@@ -31,7 +29,6 @@ class Move
 
     public:
         Move();
-        explicit Move(const aiconnector::Move& move);
 
         Move(Piece newPiece, std::vector<Piece> removedPieces);
 
@@ -41,8 +38,6 @@ class Move
         std::vector<Piece> getRemovedPieces() const;
         void setRemovedPieces(std::vector<Piece> pieces);
         void addRemovedPiece(Piece piece);
-
-        void serialize(aiconnector::Move* move);
 };
 
 #endif

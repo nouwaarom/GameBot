@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "GameState.h"
 
 class GameStateTest: public ::testing::Test {
 protected:
@@ -14,11 +15,20 @@ protected:
     }
 };
 
-TEST(GameStateTests, TestGetMoves)
+TEST(GameStateTests, TestGetBoard)
 {
-    const auto expected = 0;
-    const auto actual = 1;
-    ASSERT_EQ(actual, expected);
+    Board* startBoard = new Board("xxxx");
+    GameState gameState(startBoard);
+
+    ASSERT_EQ(startBoard, gameState.getBoard());
+}
+
+TEST(GameStateTests, TestGetBoard2)
+{
+    Board* startBoard = new Board("xxxx");
+    GameState gameState(startBoard);
+
+    ASSERT_NE(startBoard, gameState.getBoard());
 }
 
 int main(int argc, char** argv)

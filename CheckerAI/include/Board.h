@@ -1,6 +1,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include <array>
 #include <string>
 #include "Move.h"
 

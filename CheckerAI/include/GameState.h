@@ -10,34 +10,35 @@
 
 class GameState
 {
-    private:
-        Board* board;
+public:
+    explicit GameState(Board* startBoard);
 
-        std::vector<Move> mergeMoves(Move first, std::vector<Move> second);
-        static std::vector<Move> appendMoves(std::vector<Move> first, std::vector<Move> second);
+    std::vector<Move> getForcedMoves(Player* player);
+    std::vector<Move> getUnforcedMoves(Player* player);
 
-        std::vector<Move> getMovesAtPosition(int row, int col, Player* player);
-        std::vector<Move> getForcedMovesAtPosition(int row, int col, Player* player);
-        std::vector<Move> getSuccessiveForcedMoves(Move move, Player* player);
+    std::vector<Move> getMoves(Player* player);
 
-        void getMovesInDirection(int r, int c, bool up, bool right, bool oneStep, Player* player, std::vector<Move> &moves);
+    void doMove(const Move& move);
+    void undoMove(const Move& move);
 
-    public:
-        explicit GameState(Board* startBoard);
+    Board* getBoard() const;
 
-        std::vector<Move> getForcedMoves(Player* player);
-        std::vector<Move> getUnforcedMoves(Player* player);
+    // TODO, move to utilities file.
+    template <typename T>
+    bool vectorContains(std::vector<T> v, T x);
 
-        std::vector<Move> getMoves(Player* player);
+private:
 
-        void doMove(const Move& move);
-        void undoMove(const Move& move);
+    std::vector<Move> mergeMoves(Move first, std::vector<Move> second);
+    static std::vector<Move> appendMoves(std::vector<Move> first, std::vector<Move> second);
 
-        Board* getBoard() const;
+    std::vector<Move> getMovesAtPosition(int row, int col, Player* player);
+    std::vector<Move> getForcedMovesAtPosition(int row, int col, Player* player);
+    std::vector<Move> getSuccessiveForcedMoves(Move move, Player* player);
 
-        // TODO, move to utilities file.
-        template <typename T>
-        bool vectorContains(std::vector<T> v, T x);
+    void getMovesInDirection(int r, int c, bool up, bool right, bool oneStep, Player* player, std::vector<Move> &moves);
+
+    Board* board;
 };
 
 #endif
