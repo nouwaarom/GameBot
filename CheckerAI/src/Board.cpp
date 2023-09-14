@@ -1,4 +1,6 @@
 #include "Board.h"
+#include <stdexcept>
+#include <sstream>
 
 Board::Board(std::string representation)
 {
@@ -29,7 +31,10 @@ pieceType Board::getPiece(int row, int col)
         }
     }
 
-    return pieceType::invalid;
+    std::stringstream error_message;
+    error_message << "Attempt to get piece at invalid board position: (" << row << "," << col << ")";
+
+    throw std::runtime_error(error_message.str());
 }
 
 pieceType Board::getPiece(int position)

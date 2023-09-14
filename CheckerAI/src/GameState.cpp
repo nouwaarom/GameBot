@@ -9,7 +9,15 @@ bool GameState::vectorContains(std::vector<T> v, T x)
     return (find(v.begin(), v.end(), x) != v.end());
 }
 
-std::vector<Move> GameState::appendMoves(std::vector<Move> first, std::vector<Move> second)
+bool GameState::isValidRow(int row) {
+    return (row >= 0 && row < 10);
+}
+
+bool GameState::isValidColumn(int column) {
+    return (column >= 0 && column < 10);
+}
+
+std::vector<Move> GameState::appendMoves(std::vector<Move> first, const std::vector<Move>& second)
 {
     first.insert(first.end(), second.begin(), second.end());
 
@@ -68,8 +76,8 @@ std::vector<Move> GameState::getSuccessiveForcedMoves(Move move, Player* player)
     std::vector<Move> moves;
 
     int position = move.getNewPiece().position;
-    int row = position / 5;
-    int col = 2*(position % 5) + (row % 2);
+    int row = board->getRow(position);
+    int col = board->getCol(position);
 
     board->doMove(move);
     moves = getForcedMovesAtPosition(row, col, player);
@@ -106,8 +114,13 @@ void GameState::getMovesInDirection(int r, int c, bool up, bool right, bool oneS
 
         if(right) col++;
         else      col--;
+        if (!isValidRow(row) || !isValidColumn(col)) {
+            break;
+        }
         pieceType type = board->getPiece(row, col);
-        if(type != pieceType::empty) break;
+        if(type != pieceType::empty) {
+            break;
+        }
         moves.push_back(board->createMove(row, col, r, c));
     }
 }
@@ -119,60 +132,67 @@ std::vector<Move> GameState::getForcedMovesAtPosition(int row, int col, Player* 
 
     std::vector<pieceType> opponentPieces = player->getOpponent()->getPieces();
 
-    pieceType piece = board->getPiece(row,col);
+    pieceType piece = board->getPiece(row, col);
 
     bool isCrowned = (piece == pieceType::white_crown) || (piece == pieceType::black_crown);
 
-    int i, j;
-    //check left down
-    for (i=0; (i==0) || (isCrowned && (board->getPiece(row-i,col-i) == pieceType::empty)); i++)
-    {
-        if (vectorContains(opponentPieces, board->getPiece(row-i-1,col-i-1)))
-        {
-            for (j=2; (board->getPiece(row-i-j, col-i-j) == pieceType::empty) && ((j==2) || isCrowned); j++)
-            {
-                moves = appendMoves(moves, getSuccessiveForcedMoves(board->createMove(row-i-2,col-i-2, row, col), player));
-            }
-        }
-    }
-
-    //check right down
-    for (i=0; (i==0) || (isCrowned && (board->getPiece(row-i,col+i) == pieceType::empty)); i++)
-    {
-        if (vectorContains(opponentPieces, board->getPiece(row-i-1,col+i+1)))
-        {
-            for (j=2; (board->getPiece(row-i-j, col+i+j) == pieceType::empty) && ((j==2) || isCrowned); j++)
-            {
-                moves = appendMoves(moves, getSuccessiveForcedMoves(board->createMove(row-i-2,col+i+2, row, col), player));
-            }
-        }
-    }
-
-    //check left up
-    for (i=0; (i==0) || (isCrowned && (board->getPiece(row+i,col-i) == pieceType::empty)); i++)
-    {
-        if (vectorContains(opponentPieces, board->getPiece(row+i+1,col-i-1)))
-        {
-            for (j=2; (board->getPiece(row+i+j, col-i-j) == pieceType::empty) && ((j==2) || isCrowned); j++)
-            {
-                moves = appendMoves(moves, getSuccessiveForcedMoves(board->createMove(row+i+2,col-i-2, row, col), player));
-            }
-        }
-    }
-
-    //check right
-    for (i=0; (i==0) || (isCrowned && (board->getPiece(row+i,col+i) == pieceType::empty)); i++)
-    {
-        if (vectorContains(opponentPieces, board->getPiece(row+i+1,col+i+1)))
-        {
-            for (j=2; (board->getPiece(row+i+j, col+i+j) == pieceType::empty) && ((j==2) || isCrowned); j++)
-            {
-                moves = appendMoves(moves, getSuccessiveForcedMoves(board->createMove(row+i+2,col+i+2, row, col), player));
-            }
-        }
-    }
+    getForcedMovesInDirection(row, col, true, true, player, isCrowned, opponentPieces, moves);
+    getForcedMovesInDirection(row, col, false, true, player, isCrowned, opponentPieces, moves);
+    getForcedMovesInDirection(row, col, true, false, player, isCrowned, opponentPieces, moves);
+    getForcedMovesInDirection(row, col, false, false, player, isCrowned, opponentPieces, moves);
 
     return moves;
+}
+
+void GameState::getForcedMovesInDirection(
+        int row,
+        int col,
+        bool up,
+        bool right,
+        Player* player,
+        bool isCrowned,
+        std::vector<pieceType> opponentPieces,
+        std::vector<Move>& moves)
+{
+    int row_delta = up ? 1 : -1;
+    int col_delta =  right ? 1 : -1;
+
+    int steps_until_opponent = 1;
+    while (true) {
+        int row_pre = row + row_delta * steps_until_opponent; 
+        int col_pre = col + col_delta * steps_until_opponent; 
+        if (!isValidRow(row_pre) || !isValidColumn(col_pre)) {
+            break;
+        }
+        pieceType piece = board->getPiece(row_pre, col_pre);
+        if (vectorContains(opponentPieces, piece)) {
+            int steps_after_opponent = 1;
+            // Check if the next position is empty (or multiple for crowned pieces)
+            while (true) {
+                int row_post = row_pre + row_delta * steps_after_opponent; 
+                int col_post = col_pre + col_delta * steps_after_opponent; 
+                if (!isValidRow(row_post) || !isValidColumn(col_post)) {
+                    break;
+                }
+                if (board->getPiece(row_post, col_post) == pieceType::empty) {
+                    moves = appendMoves(moves, getSuccessiveForcedMoves(board->createMove(row_post, col_post, row, col), player));
+                } else {
+                    break;
+                }
+                if (isCrowned) {
+                    steps_after_opponent++;
+                } else {
+                    break;
+                }
+            }
+            break;
+        }
+        if (isCrowned && piece == pieceType::empty) {
+            steps_until_opponent++;
+        } else {
+            break;
+        }
+    }
 }
 
 std::vector<Move> GameState::getUnforcedMoves(Player* player)
