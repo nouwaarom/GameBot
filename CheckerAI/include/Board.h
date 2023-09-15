@@ -14,30 +14,35 @@ typedef std::array<pieceType, 100> board_t;
 */
 class Board
 {
-private:
-    static int getPosition(int row, int col);
-protected:
-    //Board is actually 10 by 10 but half of the tiles are always empty
-	board_t board;
-
 public:
     explicit Board(std::string representation);
 
-    board_t::iterator getBegin();
-    board_t::iterator getEnd();
+    int getNumberOfRows();
+    int getNumberOfColumns();
 
     pieceType getPiece(int position);
     pieceType getPiece(int row, int col);
     void setPiece(int position, pieceType type);
+    //! \brief Remove piece at position, if previous type is not correct throw an exception
+    void removePiece(int position, pieceType previous_type);
 
-    int getRow(int position);
-    int getCol(int position);
+    static int getRow(int position);
+    static int getCol(int position);
 
-    Move createMove(int newPosition, int oldPosition);
     Move createMove(int newRow, int newCol, int oldRow, int oldCol);
 
     void doMove(const Move& move);
     void undoMove(const Move& move);
+
+    //! \brief Print the state of the board.
+    void debugPrint();
+
+protected:
+    //Board is actually 10 by 10 but half of the tiles are always empty
+	board_t board;
+
+private:
+    static int getPosition(int row, int col);
 };
 
 #endif

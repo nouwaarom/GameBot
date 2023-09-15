@@ -10,12 +10,16 @@ FetchContent_MakeAvailable(googletest)
 add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
+set(TEST_SOURCES
+    Board_test.cpp
+    GameState_test.cpp)
 
-add_executable(gamestate_test GameState_test.cpp)
 
-target_link_libraries(gamestate_test
+add_executable(core_test ${TEST_SOURCES})
+
+target_link_libraries(core_test
     PRIVATE
     CheckerAICore
     GTest::GTest)
 
-add_test(unit_tests gamestate_test)
+add_test(unit_tests core_test)

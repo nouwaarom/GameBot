@@ -82,5 +82,4 @@ int main(int argc, char *argv[])
     cout << "Goodbye" << "\n";
 
     return 1;
-
 }

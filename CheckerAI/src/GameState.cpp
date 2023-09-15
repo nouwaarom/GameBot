@@ -202,17 +202,14 @@ std::vector<Move> GameState::getUnforcedMoves(Player* player)
 
     std::vector<pieceType> playerPieces = player->getPieces();
 
-    for (auto tile = board->getBegin(); tile < board->getEnd(); tile++)
-    {
-        int key = std::distance(board->getBegin(), tile);
+    for (int row = 0; row < board->getNumberOfRows(); row++) {
+        for (int col = 0; col < board->getNumberOfColumns(); col++) {
+            pieceType piece = board->getPiece(row, col);
 
-        int row = board->getRow(key);
-        int col = board->getCol(key);
-
-        if (vectorContains(playerPieces, *tile))
-        {
-            movesAtPosition = getMovesAtPosition(row, col, player);
-            moves.insert(moves.end(), movesAtPosition.begin(), movesAtPosition.end());
+            if (vectorContains(playerPieces, piece)) {
+                movesAtPosition = getMovesAtPosition(row, col, player);
+                moves.insert(moves.end(), movesAtPosition.begin(), movesAtPosition.end());
+            }
         }
     }
 
@@ -226,17 +223,14 @@ std::vector<Move> GameState::getForcedMoves(Player* player)
 
     std::vector<pieceType> playerPieces = player->getPieces();
 
-    for (auto tile = board->getBegin(); tile < board->getEnd(); tile++)
-    {
-        int key = std::distance(board->getBegin(), tile);
+    for (int row = 0; row < board->getNumberOfRows(); row++) {
+        for (int col = 0; col < board->getNumberOfColumns(); col++) {
+            pieceType piece = board->getPiece(row, col);
 
-        int row = board->getRow(key);
-        int col = board->getCol(key);
-
-        if (vectorContains(playerPieces, *tile))
-        {
-            movesAtPosition = getForcedMovesAtPosition(row, col, player);
-            moves.insert(moves.end(), movesAtPosition.begin(), movesAtPosition.end());
+            if (vectorContains(playerPieces, piece)) {
+                movesAtPosition = getForcedMovesAtPosition(row, col, player);
+                moves.insert(moves.end(), movesAtPosition.begin(), movesAtPosition.end());
+            }
         }
     }
 

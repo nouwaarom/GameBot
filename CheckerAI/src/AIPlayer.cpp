@@ -40,10 +40,16 @@ Move AIPlayer::getMove()
 
     state->doMove(move);
 
+    // TODO, set based on debug flag.
+    state->getBoard()->debugPrint();
+
     return move;
 }
 
 void AIPlayer::setOpponentMove(Move move)
 {
     state->doMove(move);
+
+    // TODO, set based on debug flag.
+    state->getBoard()->debugPrint();
 }

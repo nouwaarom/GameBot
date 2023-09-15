@@ -21,23 +21,23 @@ struct Piece {
 
 class Move
 {
-    private:
-        Piece newPiece;
-        std::vector<Piece> removedPieces;
+public:
+    Move();
 
-    protected:
+    Move(Piece newPiece, std::vector<Piece> removedPieces);
 
-    public:
-        Move();
+    Piece getNewPiece() const;
+    void setNewPiece(Piece piece);
 
-        Move(Piece newPiece, std::vector<Piece> removedPieces);
+    std::vector<Piece> getRemovedPieces() const;
+    void setRemovedPieces(std::vector<Piece> pieces);
+    void addRemovedPiece(Piece piece);
 
-        Piece getNewPiece() const;
-        void setNewPiece(Piece piece);
+protected:
 
-        std::vector<Piece> getRemovedPieces() const;
-        void setRemovedPieces(std::vector<Piece> pieces);
-        void addRemovedPiece(Piece piece);
+private:
+    Piece newPiece;
+    std::vector<Piece> removedPieces;
 };
 
 #endif
