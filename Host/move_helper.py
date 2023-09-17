@@ -1,5 +1,6 @@
 from __future__ import division
 from .movemessage_pb2 import Move
+from .player import PLAYER_BLACK, PLAYER_WHITE
 
 def helperCreateMove(newPiece, removedPieces):
     move = Move()
@@ -41,9 +42,17 @@ def helperCreateMoveFromLocations(newLocation, oldLocation, board):
 
 def helperGetOldPiece(newPiece, removedPieces):
     for removedPiece in removedPieces:
-        if removedPiece.type == newPiece.type:
+        if helperGetOwnerOfPiece(removedPiece) == helperGetOwnerOfPiece(newPiece):
             return removedPiece
     print("Could not find old piece, this move smells...", newPiece, removedPieces)
+
+def helperGetOwnerOfPiece(piece):
+    piece_type = piece.type.decode();
+    if piece_type == 'w' or piece_type == 'W':
+        return PLAYER_WHITE
+    if piece_type == 'b' or piece_type == 'B':
+        return PLAYER_BLACK
+    raise Exception("No player known for piece: {}".format(piece.type))
 
 def helperGetRowColumn(location):
     row = location // 5
