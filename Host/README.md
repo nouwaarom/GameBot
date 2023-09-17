@@ -27,3 +27,14 @@ $ pip2 install -U numpy
 
 # Development
 The idea is to work with behaviour driven development.
+
+## Running tests
+Install test requirements
+```
+$ sudo apt install python3-behave
+```
+Run the tests
+```
+$ behave
+```
+

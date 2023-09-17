@@ -7,6 +7,6 @@ https://en.wikipedia.org/wiki/Alpha-beta_pruning
 - [x] remove Move movemessage constructors and serializer from move class
 - [x] move alpha beta pruning and getscore to the AI
 - [x] Use gtest to create unittests.
-- [ ] Refine/tweak heuristics
+- [x] Add CLI interface to allow inspecting state while playing a game
 - [ ] Profile and optimize algorithm performance.
-- [ ] Add CLI interface to allow inspecting state while playing a game
+- [ ] Refine/tweak heuristics

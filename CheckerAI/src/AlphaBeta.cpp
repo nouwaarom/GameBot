@@ -7,6 +7,17 @@ AlphaBeta::AlphaBeta(GameState* game_state)
 }
 
 
+void AlphaBeta::reset_statistics()
+{
+    m_statistics.number_of_prunes = 0;
+    m_statistics.number_of_evaluations = 0;
+}
+
+const AlphaBetaStats& AlphaBeta::get_statistics() 
+{
+    return m_statistics;
+}
+
 std::pair<int, Move> AlphaBeta::alphaBeta(int depth, int alpha, int beta, Player* player, Player* maximizingPlayer)
 {
     int bestValue;
@@ -25,6 +36,7 @@ std::pair<int, Move> AlphaBeta::alphaBeta(int depth, int alpha, int beta, Player
 
         for (Move move : moves)
         {
+            m_statistics.number_of_evaluations++;
             m_game_state->doMove(move);
 
             std::pair <int, Move> pair = alphaBeta(depth - 1, alpha, beta, player->getOpponent(), maximizingPlayer);
@@ -41,6 +53,7 @@ std::pair<int, Move> AlphaBeta::alphaBeta(int depth, int alpha, int beta, Player
             m_game_state->undoMove(move);
 
             if (beta <= alpha) {
+                m_statistics.number_of_prunes++;
                 break;
             }
         }
@@ -53,6 +66,7 @@ std::pair<int, Move> AlphaBeta::alphaBeta(int depth, int alpha, int beta, Player
 
         for (Move move : moves)
         {
+            m_statistics.number_of_evaluations++;
             m_game_state->doMove(move);
 
             std::pair <int, Move> pair = alphaBeta(depth - 1, alpha, beta, player->getOpponent(), maximizingPlayer);
@@ -69,6 +83,7 @@ std::pair<int, Move> AlphaBeta::alphaBeta(int depth, int alpha, int beta, Player
             m_game_state->undoMove(move);
 
             if (beta <= alpha) {
+                m_statistics.number_of_prunes++;
                 break;
             }
         }
@@ -82,6 +97,7 @@ int AlphaBeta::getScore(Player* maximizingPlayer)
     int score = 0;
     Board* board = m_game_state->getBoard();
 
+    // TODO, add minimum or maximum score for winning condition.
     int position;
     for (position=0; position<50; position++)
     {

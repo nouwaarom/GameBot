@@ -63,8 +63,11 @@ that they may not be killed correctly in case of an exception.
 * make tests
 * Create a design for the robot arm
 
+* [ ] Fix winning condition detection of host
+* [ ] Fix moving crowned pieces by host.
+
 ## DONE
-* move to python3?
+* move to python3
 
 ## Documentation
 For short summaries of each project read the README's in the directories
