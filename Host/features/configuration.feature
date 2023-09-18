@@ -4,6 +4,6 @@ Feature: Commandline Options
     I should be able to set parameters of the program
 
     Scenario: Start configuration
-        Given I provide no arguments
-        When I run the configuration program
+        Given I add the help flag 
+        When I run the host 
         Then it should display help

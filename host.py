@@ -6,12 +6,12 @@ import time
 import random
 import argparse
 
-from Host.game                import Game
-from Host.board               import Board
-from Host.boardDisplayService import BoardDisplayService
-from Host.arbitrator          import Arbitrator
-from Host.userConnector       import UserConnector
-from Host.aiConnector         import AIConnector
+from Host.host.game                import Game
+from Host.host.board               import Board
+from Host.host.boardDisplayService import BoardDisplayService
+from Host.host.arbitrator          import Arbitrator
+from Host.host.userConnector       import UserConnector
+from Host.host.aiConnector         import AIConnector
 
 from Bus.busConnector import BusConnector
 from Bus.bus          import Bus

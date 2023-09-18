@@ -1,4 +1,3 @@
-from __future__ import division
 from .movemessage_pb2 import Move
 from .player import PLAYER_BLACK, PLAYER_WHITE
 
